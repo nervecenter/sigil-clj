@@ -3,3 +3,7 @@ sigil-clj.core/sigil-handler
 exit
 sigil-clj.core/sigil-handler
 exit
+sigil-clj.core/sigil-handler
+exit
+(run-jetty sigil-handler {:port 3000})
+exit

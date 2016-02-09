@@ -9,12 +9,18 @@
 
 (task-options! pom {:project 'sigil-clj
                     :version "0.5.0"}
-               repl {:init-ns sigil-clj.core})
+               repl {:init-ns 'sigil-clj.core})
+
+;;(require 'sigil-clj.core)
 
 (deftask build
   "Build the Sigil web server."
   []
   (comp (pom) (jar) (install)))
+
+;; Totally irrelevant, but if you want to test boot, run "boot repl" in the
+;; boot.user namespace, and you can run fib; you can also run "./build.boot n"
+;; from the terminal, where you want to print the nth Fibonacci number.
 
 (defn fib
   ([n]
