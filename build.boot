@@ -1,7 +1,7 @@
 #!/usr/bin/env boot
 
 (set-env! :source-paths #{"src"}
-          :resource-paths #{"res"}
+          :resource-paths #{"resources"}
           :dependencies '[[ring/ring-core "1.4.0"]
                           [ring/ring-jetty-adapter "1.4.0"]
                           [compojure "1.4.0"]
