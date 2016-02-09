@@ -1,4 +1,5 @@
-(ns sigil-clj.core)
+(ns sigil-clj.core
+  (:gen-class))
 (use 'ring.adapter.jetty)
 
 (defn sigil-handler [request]
