@@ -1,17 +1,18 @@
 #!/usr/bin/env boot
 
 (set-env! :source-paths #{"src"}
-          :resource-paths #{"src"}
+          :resource-paths #{"res"}
           :dependencies '[[ring/ring-core "1.4.0"]
                           [ring/ring-jetty-adapter "1.4.0"]
                           [compojure "1.4.0"]
-                          [hiccup "1.0.5"]])
+                          [hiccup "1.0.5"]
+                          [cheshire "5.5.0"]])
 
 (task-options! pom {:project 'sigil-clj
                     :version "0.5.0"}
-               repl {:init-ns 'sigil-clj.core})
+               repl {:init-ns 'sigil.core})
 
-;;(require 'sigil-clj.core)
+;;(require 'sigil.core)
 
 (deftask build
   "Build the Sigil web server."
