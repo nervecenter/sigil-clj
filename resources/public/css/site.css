@@ -281,7 +281,28 @@ textarea.org-feedback-input-box {
     margin: 0 auto;
 }
 
-.landing-blurbs {
+.landing-media-heading {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.landing-media-body {
+    font-size: 12px;
+}
+
+.landing-twitter-typeahead {
+    width: 100%;
+}
+
+.landing-navbar {
+    box-shadow: none;
+}
+
+.landing-header-link {
+    color: white;
+}
+
+/*.landing-blurbs {
     color: #FFF;
 }
 
@@ -298,7 +319,7 @@ textarea.org-feedback-input-box {
 .landing-blurb-text {
     text-align: center;
     max-width: 237px;
-}
+}*/
 
 .navbar.transparent.navbar-inverse .navbar-inner {
     border-width: 0px;

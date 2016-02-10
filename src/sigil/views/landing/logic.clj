@@ -1,6 +1,7 @@
 (ns sigil.views.landing.logic
   (:use hiccup.core
-        hiccup.page))
+        hiccup.page
+        hiccup.form))
 
 (def page
   (html5
@@ -9,17 +10,49 @@
     [:meta {:name "viewport" :content "width=device-width, initial-scale=1.0"}]
 
     [:link {:rel "shortcut icon" :href "images/favicon.png"}]
+    [:title "Sigil"]
 
     (include-js "js/jquery-1.11.3.js"
                 "js/jquery-ui-1.9.2.custom.min.js")
 
     (include-css "css/jquery-ui-1.9.2.custom.css"
                  "css/bootstrap-flatly.css"
-                 "css/site.css")
-
-
-
-    [:title "Sigil"]]
+                 "css/site.css")]
    [:body.page
-    [:div.page-header.page-header-landing
-     [:img {:src "sample.png"}]]]))
+
+    [:div.navbar.navbar-transparent.navbar-static-top
+     {:style "margin-bottom:-60px;"}
+     [:div.container-fluid
+      [:div#bs-example-navbar-collapse-1
+       [:ul.nav.navbar-nav.navbar-right
+        [:li.pull-right
+         [:a.header-link {:href "register"} "Sign Up"]]
+        [:li.pull-right
+         [:a.header-link {:href "login"} "Log In"]]]]]]
+
+    [:div.splash.splash-landing
+     [:div.container {:style "max-width:800px;"}
+      [:div.row {:style "margin-bottom:30px;"}
+       [:div.col-lg-12.col-centered {:style "max-width:350px;"}
+        [:img.img-responsive {:src "images/logo-600-beta.png"}]
+        [:h3 {:style "margin-top:0 auto 0;"} "A focal point for feedback."]]]
+      [:div.row
+       [:div.col-lg-12.col-centered.email-div
+        (form-to {:role "search" :style "width:100%;"} [:put "/search"]
+                 [:div.form-group {:style "width:100%;"}
+                  [:input#site-search-box.form-control
+                   {:type "text" :autocomplete "off"
+                    :placeholder "Search for a company, person, or product"
+                    :style "width:100%;"}]])]]
+      [:div.row.small-links
+       [:a {:href "features"} "See how Sigil can revamp feedback for your company"]
+       " | "
+       [:a {:href "register"} "Start giving your own feedback"]
+       " | "
+       [:a {:href "companies"} "See all the companies on Sigil"]]]]
+
+    [:div.container.landing-container
+     [:div.row
+      [:div#left-col.col-lg-4]
+      [:div#middle-col.col-lg-4]
+      [:div#right-col.col-lg-4]]]]))
