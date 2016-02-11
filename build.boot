@@ -6,7 +6,10 @@
                           [ring/ring-jetty-adapter "1.4.0"]
                           [compojure "1.4.0"]
                           [hiccup "1.0.5"]
-                          [cheshire "5.5.0"]])
+                          [cheshire "5.5.0"]
+                          ;;[korma "0.4.2"]
+                          [org.clojure/java.jdbc "0.4.2"]
+                          [postgresql/postgresql "9.1-901-1.jdbc4"]])
 
 (task-options! pom {:project 'sigil-clj
                     :version "0.5.0"}

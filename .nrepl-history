@@ -40,3 +40,39 @@ exit
 exit
 (start-server)
 exit
+(start-server)
+exit
+(start-server)
+exit
+(start-server)
+exit
+(start-server)
+exit
+(start-server)
+exit
+(start-server)
+exit
+(start-server)
+exit
+(start-server)
+exit
+(start-server)
+exit
+(start-server)
+exit
+(start-server)
+exit
+(start-server)
+exit
+(sigil.views.landing.logic/get-issues)
+(start-server)
+(def x (sigil.views.landing.logic/get-issues))
+x
+(count x)
+(for [i x] (println i))
+(use 'hiccup.core)
+(for [i x] (:p i))
+(for [i x] [:p i])
+(start-server)
+exit
+(start-server)

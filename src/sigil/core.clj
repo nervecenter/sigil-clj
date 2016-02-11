@@ -10,7 +10,7 @@
         ring.middleware.not-modified))
 
 (defroutes sigil-routes
-  (GET "/" [] landing/page)
+  (GET "/" req (landing/landing-handler req))
   (route/resources "/")
   (route/not-found "404"))
 

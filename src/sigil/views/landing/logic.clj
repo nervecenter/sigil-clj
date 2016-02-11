@@ -1,9 +1,17 @@
 (ns sigil.views.landing.logic
+  (:require [clojure.java.jdbc :as j]
+            ;;[korma.core :as kc]
+            ;;[korma.db :as kdb]
+            )
   (:use hiccup.core
         hiccup.page
-        hiccup.form))
+        hiccup.form
+        sigil.db.core))
 
-(def page
+(defn get-issues []
+  (set (j/query db ["SELECT DISTINCT ON (\"issue-id\") \"Issues\".\"title\", \"Users\".\"display-name\" FROM \"Issues\" LEFT JOIN \"Users\" ON (\"Issues\".\"user-id\" = \"Users\".\"user-id\");"])))
+
+(defn page [issues]
   (html5
    [:head
     [:meta {:charset "utf-8"}]
@@ -47,7 +55,11 @@
 
     [:div.container.landing-container
      [:div.row
-      [:div#left-col.col-lg-4 "Left column goes here."]
+      [:div#left-col.col-lg-4
+       [:div.panel.panel-default
+        [:div.panel-body
+         (for [i issues]
+           [:p (:title i) [:br] (:display-name i)])]]]
       [:div#middle-col.col-lg-4 "Left column goes here."]
       [:div#right-col.col-lg-4 "Left column goes here."]]]]
 
@@ -64,3 +76,7 @@
     (include-css "css/jquery-ui-1.9.2.custom.css"
                  "css/bootstrap-flatly.css"
                  "css/site.css")]))
+
+(defn landing-handler [req]
+  (let [issues (get-issues)]
+    (page issues)))
