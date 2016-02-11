@@ -12,15 +12,9 @@
     [:link {:rel "shortcut icon" :href "images/favicon.png"}]
     [:title "Sigil"]
 
-    (include-js "js/jquery-1.11.3.js"
-                "js/jquery-ui-1.9.2.custom.min.js")
-
-    (include-css "css/jquery-ui-1.9.2.custom.css"
-                 "css/bootstrap-flatly.css"
-                 "css/site.css")]
    [:body.page
 
-    [:div.navbar.navbar-transparent.navbar-static-top
+    [:div.navbar.navbar-transparent.navbar-static-top.landing-navbar
      {:style "margin-bottom:-60px;"}
      [:div.container-fluid
       [:div#bs-example-navbar-collapse-1
@@ -53,6 +47,20 @@
 
     [:div.container.landing-container
      [:div.row
-      [:div#left-col.col-lg-4]
-      [:div#middle-col.col-lg-4]
-      [:div#right-col.col-lg-4]]]]))
+      [:div#left-col.col-lg-4 "Left column goes here."]
+      [:div#middle-col.col-lg-4 "Left column goes here."]
+      [:div#right-col.col-lg-4 "Left column goes here."]]]]
+
+    [:div "Footer goes here!"]
+
+    (include-js "js/jquery-1.11.3.js"
+                "js/jquery-ui-1.9.2.custom.min.js"
+                "js/bootstrap.js"
+                "js/typeahead.js"
+                "js/voting.js"
+                "js/subscriptions.js"
+                "js/search.js")
+
+    (include-css "css/jquery-ui-1.9.2.custom.css"
+                 "css/bootstrap-flatly.css"
+                 "css/site.css")]))
