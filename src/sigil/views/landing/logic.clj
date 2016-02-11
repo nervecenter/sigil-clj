@@ -78,5 +78,9 @@
                  "css/site.css")]))
 
 (defn landing-handler [req]
+  ;; 1. Submit queries, wait for response data
+  ;; 2. Check data
+  ;; 3. Organize data if necessary
+  ;; 4. Pass data to page render, return rendered page
   (let [issues (get-issues)]
     (page issues)))
