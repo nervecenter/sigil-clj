@@ -2,7 +2,8 @@
 
 (set-env! :source-paths #{"src"}
           :resource-paths #{"resources"}
-          :dependencies '[[ring/ring-core "1.4.0"]
+          :dependencies '[[org.clojure/tools.namespace "0.2.11"]
+                          [ring/ring-core "1.4.0"]
                           [ring/ring-jetty-adapter "1.4.0"]
                           [compojure "1.4.0"]
                           [hiccup "1.0.5"]
@@ -13,10 +14,30 @@
 
 (task-options! pom {:project 'sigil-clj
                     :version "0.5.0"}
-               repl {:init-ns 'sigil.core})
+               ;;repl {:init-ns 'sigil.core}
+               )
 
-;;(require 'sigil.core)
+;; Let's define some utilities we can run in REPL
+;; First, we include core for access to server and repl
+;; for access to namespace reloading stuff
+(require 'sigil.core
+         '[clojure.tools.namespace.repl :as repl])
 
+;; Define dirs for reloading
+(def dirs (get-env :directories))
+(apply repl/set-refresh-dirs dirs)
+
+;; Define helpers for REPL
+;; Start the Ring Jetty server
+(defn start [] (.start sigil.core/server))
+;; Stop the server
+(defn stop [] (.stop sigil.core/server))
+;; Reload dirs with code changes
+(defn reload [] (repl/refresh))
+;; Do it all!
+(defn restart [] (stop) (reload) (start))
+
+;; Task to build the server jar using "boot build"
 (deftask build
   "Build the Sigil web server."
   []

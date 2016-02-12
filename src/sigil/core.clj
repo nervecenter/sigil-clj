@@ -20,4 +20,4 @@
       (wrap-content-type)
       (wrap-not-modified)))
 
-(defn start-server [] (jetty/run-jetty app {:port 3000}))
+(defonce server (jetty/run-jetty #'app {:port 3000 :join? false}))
