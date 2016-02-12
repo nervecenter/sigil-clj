@@ -9,7 +9,7 @@
         sigil.db.core))
 
 (defn get-issues []
-  (set (j/query db ["SELECT DISTINCT ON (\"issue-id\") \"Issues\".\"title\", \"Users\".\"display-name\" FROM \"Issues\" LEFT JOIN \"Users\" ON (\"Issues\".\"user-id\" = \"Users\".\"user-id\");"])))
+  (set (j/query db ["SELECT DISTINCT ON (issue_id) issues.title, users.display_name FROM issues LEFT JOIN users ON (issues.user_id = users.user_id);"])))
 
 (defn page [issues]
   (html5

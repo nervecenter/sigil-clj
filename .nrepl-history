@@ -100,3 +100,6 @@ exit
 (start)
 (restart)
 exit
+(start)
+(restart)
+exit
