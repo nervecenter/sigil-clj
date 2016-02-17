@@ -3,7 +3,8 @@
 
 (defn login-post
   "Handles POST requests to /login. Attempts to handle login and exchange a token with the client, redirecting to ."
-  [req])
+  [req]
+  )
 
 (defn login-get
   "Handles GET requests to /login. Returns the login page. If a post, attempts to handle login and token passing with the client."

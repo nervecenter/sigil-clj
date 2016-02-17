@@ -29,6 +29,7 @@
   (GET "/" req (landing/landing-handler req))
   (GET "/login" req (login/login-get req))
   (POST "/login" req (login/login-post req))
+  (GET "/printcookie" req (fn [req] (:cookies req)))
   (route/resources "/")
   (route/not-found "404"))
 
