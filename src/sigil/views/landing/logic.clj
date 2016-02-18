@@ -1,9 +1,20 @@
 (ns sigil.views.landing.logic
-  (:require [sigil.views.landing.render :as r])
-   (:use sigil.db.core))
+  (:require [clojure.string :refer [join]]
+            [sigil.views.landing.render :refer [page]]
+            [clojure.java.jdbc :refer [query]]
+            [sigil.db.core :refer [db]]))
+
+(def get-issues-query
+  (join " "
+        ["SELECT"
+         "DISTINCT ON (issue_id)"
+         "issues.title, users.display_name"
+         "FROM issues"
+         "LEFT JOIN users"
+         "ON (issues.user_id = users.user_id);"]))
 
 (defn get-issues []
-  (set (j/query db ["SELECT DISTINCT ON (issue_id) issues.title, users.display_name FROM issues LEFT JOIN users ON (issues.user_id = users.user_id);"])))
+  (set (query db [get-issues-query])))
 
 (defn landing-handler []
   ;; 1. Submit queries, wait for response data

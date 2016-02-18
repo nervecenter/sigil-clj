@@ -103,3 +103,233 @@ exit
 (start)
 (restart)
 exit
+(use buddy.hashers)
+(use 'buddy.hashers)
+(def myhash (encrypt "secretpassword"))
+myhash
+(check "secretpassword" myhash)
+(check "secretpasswoxrd" myhash)
+(reload)
+exit
+(start)
+(restart)
+(def n 3)
+n
+(n)
+exit
+(start)
+(sigil.views.landing.render/head)
+sigil.views.landing.render/head
+(reload)
+sigil.views.landing.render/head
+sigil.views.landing.render/navbar
+exit
+(use 'sigil.views.landing.render)
+head
+navbar
+splash
+(issue-section #{{:title "Hello" :display-name "Nerve"}{:title "Goodbye" :display-name "Whoever"}}
+)
+(page #{{:title "Hello" :display-name "Nerve"}{:title "Goodbye" :display-name "Whoever"}})
+(footer/partial)
+(sigil.views.partial.footer/partial)
+exit
+(use 'sigil.views.partial.footer)
+(partial)
+exit
+(use 'sigil.views.partial.footer)
+(partial)
+(partial one)
+(partial 3)
+(partial 0)
+(partial 1)
+partial
+(reload)
+exit
+(start)
+(restart)
+exit
+(start)
+(restart)
+exit
+(start)
+(def myreq {:identity nil, :ssl-client-cert nil, :protocol "HTTP/1.1", :cookies {}, :remote-addr "0:0:0:0:0:0:0:1", :params {}, :flash nil, :route-params {}, :headers {"cache-control" "max-age=0", "accept" "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8", "upgrade-insecure-requests" "1", "connection" "keep-alive", "user-agent" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.82 Safari/537.36 OPR/35.0.2066.37", "host" "localhost:3000", "accept-encoding" "gzip, deflate, lzma, sdch", "accept-language" "en-US,en;q=0.8"}, :server-port 3000, :content-length nil, :form-params {}, :compojure/route [:get "/printcookie"], :session/key nil, :query-params {}, :content-type nil, :character-encoding nil, :uri "/printcookie", :server-name "localhost", :query-string nil, :body #object[org.eclipse.jetty.server.HttpInputOverHTTP 0x4184d154 "HttpInputOverHTTP@4184d154"], :multipart-params {}, :scheme :http, :request-method :get, :session {}})
+(def myreq {:identity nil, :ssl-client-cert nil, :protocol "HTTP/1.1", :cookies {}, :remote-addr "0:0:0:0:0:0:0:1", :params {}, :flash nil, :route-params {}, :headers {"cache-control" "max-age=0", "accept" "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8", "upgrade-insecure-requests" "1", "connection" "keep-alive", "user-agent" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.82 Safari/537.36 OPR/35.0.2066.37", "host" "localhost:3000", "accept-encoding" "gzip, deflate, lzma, sdch", "accept-language" "en-US,en;q=0.8"}, :server-port 3000, :content-length nil, :form-params {}, :compojure/route [:get "/printcookie"], :session/key nil, :query-params {}, :content-type nil, :character-encoding nil, :uri "/printcookie", :server-name "localhost", :query-string nil, :body "<p>Hello, here's a request.</p>", :multipart-params {}, :scheme :http, :request-method :get, :session {}})
+myreq
+(:query-params myreq)
+((:query-params myreq) "return")
+exit
+(start)
+(use 'sigil.views.login.render)
+(body "/" "Hello" "Goodbye")
+(body "/")
+(reload)
+(body "/")
+exit
+(body "/")
+(sigil.views.login.render/body "/")
+(reload)
+(sigil.views.login.render/body "/")
+exit
+(sigil.views.login.render/body "/")
+(reload)
+(sigil.views.login.render/body "/")
+(reload)
+(sigil.views.login.render/body "/")
+exit
+(sigil.views.login.render/body "/")
+(for [m validation-messages]
+)
+(def validation-messages '("Hello" "Goodbye))
+)
+(
+)
+exit
+(def validation-messages '("Hello" "Goodbye))
+(def validation-messages '("Hello" "Goodbye"))
+(for [m validation-messages]
+           [:h4 m])
+(not-nil? validation-messages)
+(def not-nil? (complement nil?))
+(not-nil? validation-messages)
+exit
+(sigil.views.login.render/body "/")
+(def line         [:input {:type "hidden" :name "return" :id "return" :value return}]
+)
+(def line [:input {:type "hidden" :name "return" :id "return" :value "/"}]
+)
+line
+(def form        (form-to
+        {:role "form" :method "post" :action "/login"}
+        [:input {:type "hidden" :name "return" :id "return" :value return}]
+        [:div.form-group
+         [:label {:for "email"} "Email"]
+         [:textbox.form-control {:name "email"
+                                 :id "email"
+                                 :type "text"
+                                 :placeholder "Email"}]]
+        [:div.form-group
+         [:label {:for "password"} "Password"]
+         [:textbox.form-control {:name "password"
+                                 :id "password"
+                                 :type "password"
+                                 :placeholder "Password"}]]
+        [:div.login-page-remember {:style "margin-bottom:10px;"}
+         [:input {:name "remember"
+                  :id "remember"
+                  :type "checkbox"
+                  :value "true"}]
+         [:label {:for "remember"} "Remember me?"]]
+        [:div.btn-group.btn-group-justified
+         [:div.btn-group
+                       bt                       bt                       bt   btn-group
+          [:a.btn.btn-info {:href "register"} "Sign Up"]]])]]]]])
+(def my-form  (hiccup.form/form-to
+  {:role "form" :method "post" :action "/login"}
+  [:input {:type "hidden" :name "return" :id "return" :value return}]
+  [:div.form-group
+   [:label {:for "email"} "Email"]
+   [:textbox.form-control {:name "email"
+                           :id "email"
+                           :type "text"
+                           :placeholder "Email"}]]
+  [:div.form-group
+   [:label {:for "password"} "Password"]
+   [:textbox.form-control {:name "password"
+                           :id "password"
+                           :type "password"
+                           :placeholder "Password"}]]
+  [:div.login-page-remember {:style "margin-bottom:10px;"}
+   [:input {:name "remember"
+            :id "remember"
+            :type "checkbox"
+            :value "true"}]
+   [:label {:for "remember"} "Remember me?"]]
+  [:div.btn-group.btn-group-justified
+   [:div.btn-group
+    [:button.btn.btn-primary {:type "submit"} "Log In"]]
+   [:div.btn-group
+    [:a.btn.btn-info {:href "register"} "Sign Up"]]])
+)
+(def myform  (hiccup.form/form-to
+  {:role "form" :method "post" :action "/login"}
+  [:input {:type "hidden" :name "return" :id "return" :value "/"}]
+  [:div.form-group
+   [:label {:for "email"} "Email"]
+   [:textbox.form-control {:name "email"
+                           :id "email"
+                           :type "text"
+                           :placeholder "Email"}]]
+  [:div.form-group
+   [:label {:for "password"} "Password"]
+   [:textbox.form-control {:name "password"
+                           :id "password"
+                           :type "password"
+                           :placeholder "Password"}]]
+  [:div.login-page-remember {:style "margin-bottom:10px;"}
+   [:input {:name "remember"
+            :id "remember"
+            :type "checkbox"
+            :value "true"}]
+   [:label {:for "remember"} "Remember me?"]]
+  [:div.btn-group.btn-group-justified
+   [:div.btn-group
+    [:button.btn.btn-primary {:type "submit"} "Log In"]]
+   [:div.btn-group
+    [:a.btn.btn-info {:href "register"} "Sign Up"]]])
+)
+(use 'hiccup.form)
+         (label "email" "Email")
+         (text-field {:id "email" :placeholder "Email"} "email")
+         (check-box {:id "remember"} "checkbox" false true)
+         (check-box {:id "remember"} "checkbox" false "true")
+          (submit-button {:class "btn btn-primary"} "Log In")
+(sigil.views.login.render/body "/")
+exit
+(use 'hiccup.form)
+        (hidden-field {:id "return"} "return" return)
+        (hidden-field {:id "return"} "return" "/")
+(sigil.views.login.render/body "/")
+(sigil.views.login.render/body "/" "Hello" "Goodbye")
+(start)
+(reload)
+(start)
+exit
+(start)
+sigil.views.layout/scripts
+(use 'hiccup.core)
+(str
+   (include-js "js/jquery-1.11.3.js"
+               "js/jquery-ui-1.9.2.custom.min.js"
+               "js/bootstrap.js"
+               "js/input-listeners.js"
+               "js/voting.js"
+               "js/subscriptions.js"
+               "js/search.js"
+               "js/notifications.js")
+   (include-css "css/jquery-ui-1.9.2.custom.css"
+                "css/bootstrap-flatly.css"
+                "css/site.css"))
+(use 'hiccup.page)
+(str
+   (include-js "js/jquery-1.11.3.js"
+               "js/jquery-ui-1.9.2.custom.min.js"
+               "js/bootstrap.js"
+               "js/input-listeners.js"
+               "js/voting.js"
+               "js/subscriptions.js"
+               "js/search.js"
+               "js/notifications.js")
+   (include-css "css/jquery-ui-1.9.2.custom.css"
+                "css/bootstrap-flatly.css"
+                "css/site.css"))
+(include-js "js/jquery-1.11.3.js"
+               "js/jquery-ui-1.9.2.custom.min.js"
+               "js/bootstrap.js"
+               "js/input-listeners.js"
+               "js/voting.js"
+               "js/subscriptions.js"
+               "js/search.js"
+               "js/notifications.js")
+(restart)
+(start)
