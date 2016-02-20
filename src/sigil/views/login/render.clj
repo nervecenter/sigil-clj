@@ -1,10 +1,7 @@
 (ns sigil.views.login.render
   (:require [sigil.views.layout :as layout])
-  (:use hiccup.core
-        hiccup.page
-        hiccup.form))
+  (:use hiccup.form))
 
-(def not-nil? (complement nil?))
 
 (defn body [return & validation-messages]
   [:div.container.maxw-400
@@ -13,7 +10,7 @@
     [:div.col-lg-12
      [:div.panel-panel-default
       [:div.panel-body
-       (if (not-nil? validation-messages)
+       (if (some? validation-messages)
          (for [m validation-messages]
            [:h4 m])
          nil)

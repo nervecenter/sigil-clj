@@ -8,12 +8,9 @@
             [compojure.route :as route]
             [compojure.handler :as handler]
 
-            [buddy.auth.backends.token :refer [jwe-backend]]
-            [buddy.auth.middleware :refer [wrap-authentication]]
-            [buddy.core.keys :as keys]
-
-            [sigil.views.landing.logic :as landing]
-            [sigil.views.login.logic :as login]
+            [sigil.views.landing.logic :refer [landing-handler]]
+            [sigil.views.login.logic :refer [login-get login-post]]
+            [sigil.views.usertest :refer [usertest-handler]]
 
             [ring.middleware.resource :refer [wrap-resource]]
             [ring.middleware.content-type :refer [wrap-content-type]]
@@ -21,17 +18,12 @@
             [ring.middleware.cookies :refer [wrap-cookies]]
             [ring.middleware.params :refer [wrap-params]]))
 
-(def pubkey (keys/public-key "resources/private/pubkey.pem"))
-(def privkey (keys/private-key "resources/private/privkey.pem"))
-
-(def auth-backend (jwe-backend {:secret privkey
-                                :options {:alg :rsa}}))
-
 (defroutes sigil-routes
-  (GET "/" req (landing/landing-handler))
-  (GET "/login" req (login/login-get req))
-  (POST "/login" req (login/login-post req))
-  (GET "/printcookie" req (html [:p {} req]))
+  (GET "/" req (landing-handler))
+  (GET "/usertest" req (usertest-handler req))
+  (GET "/login" req (login-get req))
+  (POST "/login" req (login-post req))
+  (GET "/printrequest" req (html [:p {} req]))
   (route/resources "/")
   (route/not-found "404"))
 
@@ -41,7 +33,6 @@
       (wrap-content-type)
       (wrap-not-modified)
       (wrap-cookies)
-      (wrap-params)
-      (wrap-authentication auth-backend)))
+      (wrap-params)))
 
 (defonce server (jetty/run-jetty #'app {:port 3000 :join? false}))

@@ -23,7 +23,7 @@
       [:li.pull-right
        [:a.header-link {:href "register"} "Sign Up"]]
       [:li.pull-right
-       [:a.header-link {:href "login"} "Log In"]]]]]])
+       [:a.header-link {:href "login?return=/"} "Log In"]]]]]])
 
 (def splash
   [:div.splash.splash-landing

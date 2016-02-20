@@ -333,3 +333,81 @@ sigil.views.layout/scripts
                "js/notifications.js")
 (restart)
 (start)
+:user
+':user
+(str :user)
+(:user)
+(name :user)
+exit
+(start)
+(restart)
+exit
+(start)
+(use 'buddy.hashers)
+(encrypt "secretpassword")
+exit
+(start)
+exit
+(start)
+exit
+(start)
+exit
+(start)
+(use 'buddy.hashers)
+(def myuser (sigil.views.login.logic/get-user-by-email "nerve@site.com"))
+exit
+(start)
+(use 'buddy.hashers)
+(def myuser (sigil.views.login.logic/get-user-by-email "nerve@site.com"))
+myuser
+(check "secretpassword" (:pass_hash myuser))
+(restart)
+exit
+(start)
+exit
+(use 'sigil.helpers 'buddy.hashers)
+(require '[buddy.sign.jwe :as jwe])
+(jwe/encrypt {:user 1} pubkey)
+(jwe/encrypt {:user 1} pubkey {:alg :rsa-oaep-256 :enc :a256cbc-hs512})
+(def mytoken (jwe/encrypt {:user 1} pubkey {:alg :rsa-oaep-256 :enc :a256cbc-hs512}))
+mytoken
+(jwe/decrypt mytoken privkey)
+(def mytoken (jwe/encrypt {:user 1} pubkey {:alg :rsa-oaep :enc :a256cbc-hs512}))
+(jwe/decrypt mytoken privkey)
+(def mytoken (jwe/encrypt {:user 1} pubkey {:alg :rsa1_5 :enc :a256cbc-hs512}))
+(jwe/decrypt mytoken privkey)
+(def mytoken (jwe/encrypt {:user 1} pubkey {:alg :a256kw :enc :a256cbc-hs512}))
+exit
+(use 'sigil.helpers)
+(require '[buddy.sign.jwe :as jwe])
+(def mytoken (jwe/encrypt {:user 1} pubkey))
+(def mytoken (jwe/encrypt {:user 1} pubkey {}))
+(def mytoken (jwe/encrypt {:user 1} pubkey {:alg :rsa}))
+(def mytoken (jwe/encrypt {:user 1} pubkey))
+(def mytoken (jwe/encrypt {:user 1} pubkey {:alg ))
+(def mytoken (jwe/encrypt {:user 1} pubkey {:alg :rsa-oaep-256}))
+(jwe/decrypt mytoken privkey)
+(def mytoken (jwe/encrypt {:user 1} pubkey {:alg :rsa-oaep}))
+(jwe/decrypt mytoken privkey)
+(def mytoken (jwe/encrypt {:user 1} pubkey {:alg :rsa1_5}))
+(jwe/decrypt mytoken privkey)
+exit
+(use sigil.auth)
+(use 'sigil.auth)
+(require '[buddy.sign.jwe :as jwe])
+(def mytoken (jwe/encrypt {:user 1} pubkey encryption))
+(jwe/decrypt mytoken privkey)
+(jwe/decrypt mytoken privkey encryption)
+exit
+(start)
+(str "SELECT * FROM users WHERE email = " "nerve@site.com" ";")
+(restart)
+(get-user-by-id 1)
+(sigil.db.users/get-user-by-id 1)
+[:p (sigil.db.users/get-user-by-id 1)]
+(restart)
+exit
+(start)
+exit
+(start)
+exit
