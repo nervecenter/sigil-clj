@@ -10,6 +10,7 @@
 
             [sigil.views.landing.logic :refer [landing-handler]]
             [sigil.views.login.logic :refer [login-get login-post]]
+            [sigil.logout :refer [logout-handler]]
             [sigil.views.usertest :refer [usertest-handler]]
 
             [ring.middleware.resource :refer [wrap-resource]]
@@ -23,6 +24,7 @@
   (GET "/usertest" req (usertest-handler req))
   (GET "/login" req (login-get req))
   (POST "/login" req (login-post req))
+  (GET "/logout" req (logout-handler req))
   (GET "/printrequest" req (html [:p {} req]))
   (route/resources "/")
   (route/not-found "404"))
