@@ -12,16 +12,17 @@
   (jwe/encrypt {:user_id (:user_id user)} pubkey encryption))
 
 (defn extract-user-id [req]
-  (:user-id (jwe/decrypt (:value (:user (:cookies req)))
+  (:user_id (jwe/decrypt (:value ((:cookies req) "user"))
                          privkey
                          encryption)))
 
 (defn authenticated? [req]
-  (if (and (contains? (:cookies req) :user)
-           (map? (jwe/decrypt (:value (:user (:cookies req)))
-                              privkey
-                              encryption)))
-    true
+  (if (contains? (:cookies req) "user")
+    (if (map? (jwe/decrypt (:value ((:cookies req) "user"))
+                           privkey
+                           encryption))
+      true
+      false)
     false))
 
 (defn identity [req]

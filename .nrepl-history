@@ -411,3 +411,34 @@ exit
 exit
 (start)
 exit
+(sigil.db.users/get-user-by-email "nerve@site.com")
+(reoad)
+(reload)
+(sigil.db.users/get-user-by-email "nerve@site.com")
+exit
+(reload)
+(sigil.db.users/get-user-by-email "nerve@site.com")
+(start)
+exit
+(start)
+(reload)
+(start)
+exit
+(start)
+exit
+(start)
+exit
+(start)
+exit
+(start)
+(reload)
+exit
+(start)
+(reload)
+exit
+(start)
+exit
+(start)
+exit
+(start)
+exit
