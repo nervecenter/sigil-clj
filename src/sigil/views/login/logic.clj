@@ -1,5 +1,6 @@
 (ns sigil.views.login.logic
   (:require [sigil.views.login.render :as render]
+            [sigil.helpers :refer [get-return]]
             [buddy.hashers :refer [check]])
   (:use sigil.auth
         sigil.db.users))
@@ -33,8 +34,6 @@
 (defn login-get
   "Handles GET requests to /login. Returns the login page. If a post, attempts to handle login and token passing with the client."
   [req]
-  (let [return (if (some? ((:query-params req) "return"))
-                 ((:query-params req) "return")
-                 "/")
+  (let [return (get-return req)
         invalid? (if (= "t" ((:query-params req) "invalid")) true false)]
     (render/page return invalid?)))
