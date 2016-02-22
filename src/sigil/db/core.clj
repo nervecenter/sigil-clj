@@ -28,12 +28,6 @@
                       (officialres/official_response_model)
                       (error_model)))
 
-
-;; Clojure Vec to Postgres Array helpers -- http://stackoverflow.com/a/26048653
-
-(defn vec->postgresqlarray [array-vector]
-  (.createArrayOf (sql/get-connection db) "varchar" (into-array String array-vector)))
-
 ;; Error Logging
 (defn errors
   ([] (into [] (sql/query spec ["SELECT * FROM errors"])))

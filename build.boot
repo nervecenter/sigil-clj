@@ -12,7 +12,7 @@
                           [cheshire "5.5.0"]
                           ;;[korma "0.4.2"]
                           [org.clojure/java.jdbc "0.4.2"]
-                          [postgresql/postgresql "9.1-901-1.jdbc4"]])
+                          [org.postgresql/postgresql "9.4-1206-jdbc42"]])
 
 (task-options! pom {:project 'sigil-clj
                     :version "0.5.0"}
