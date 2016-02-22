@@ -3,16 +3,15 @@
   (:use hiccup.form))
 
 
-(defn body [return & validation-messages]
+(defn body [return invalid?]
   [:div.container.maxw-400
    [:h2 "Log in to Sigil"]
    [:div.row
     [:div.col-lg-12
      [:div.panel-panel-default
       [:div.panel-body
-       (if (some? validation-messages)
-         (for [m validation-messages]
-           [:h4 m])
+       (if invalid?
+         [:h3 {:style "color:red;"} "Invalid email or password."]
          nil)
        (form-to
         [:post "/login"]
@@ -38,5 +37,5 @@
 
 (defn page
   "Render the login page. Takes in a string representing the domain URI for the view to be returned to after login success, and an optional collection of validation messages to be rendered at the top of the form."
-  [return & validation-messages]
-  (layout/render "Sigil - Log In" (body return validation-messages)))
+  [return invalid?]
+  (layout/render "Sigil - Log In" (body return invalid?)))
