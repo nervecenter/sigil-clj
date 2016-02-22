@@ -14,7 +14,7 @@
          "ON (issues.user_id = users.user_id);"]))
 
 (defn get-issues []
-  (set (query db ["SELECT DISTINCT ON (issue_id) issues.title, users.display_name FROM issues LEFT JOIN users ON (issues.user_id = users.user_id);"])))
+  (set (query db ["SELECT DISTINCT ON (issue_id) issues.issue_title, users.username FROM issues LEFT JOIN users ON (issues.user_id = users.user_id);"])))
 
 (defn landing-handler []
   ;; 1. Submit queries, wait for response data

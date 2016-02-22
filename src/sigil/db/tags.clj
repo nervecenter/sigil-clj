@@ -12,6 +12,13 @@
   (into [] (sql/query db/spec ["SELECT * FROM tags WHERE org_id = ?;" org_id])))
 
 
+(defn create-tag
+  [tag_url tag_name org_id]
+  (sql/insert! db/spec
+               :tags
+               [:tag_url :tag_name :org_id]
+               [tag_url tag_name org_id]))
+
 (defn tags_model
   "Defines the tag model in the db"
   []

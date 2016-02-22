@@ -9,6 +9,13 @@
 (defn get-user-by-email [email]
   (first (sql/query db/spec ["SELECT * FROM users WHERE email = ?;" email])))
 
+(defn create-user
+  [email username pass_hash]
+  (sql/insert! db/spec
+               :users
+               [:email :username :pass_hash]
+               [email username pass_hash]))
+
 (defn users_model
   "Defines the user model in the db"
   []

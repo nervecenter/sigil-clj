@@ -12,7 +12,9 @@
             [sigil.views.login.logic :refer [login-get login-post]]
             [sigil.logout :refer [logout-handler]]
             [sigil.views.usertest :refer [usertest-handler]]
-
+            
+            [sigil.db.migrations :as migrations]
+            
             [ring.middleware.resource :refer [wrap-resource]]
             [ring.middleware.content-type :refer [wrap-content-type]]
             [ring.middleware.not-modified :refer [wrap-not-modified]]

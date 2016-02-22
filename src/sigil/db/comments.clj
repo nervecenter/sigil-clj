@@ -17,6 +17,13 @@
   (into [] (sql/query db/spec ["SELECT * FROM comments WHERE user_id = ?" id])))
 
 
+(defn create-comment
+  [issue_id user_id text]
+  (sql/insert! db/spec
+               :comments
+               [:issue_id :user_id :text]
+               [issue_id user_id text]))
+
 (defn comment_model
   "Defines the comments model table in the db"
   []

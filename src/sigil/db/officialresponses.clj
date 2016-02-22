@@ -7,16 +7,23 @@
 
 (defn get-official-response-by-id
   [id]
-  (first (sql/query db/spec ["SELECT * FROM comments WHERE comment_id = ?" id])))
+  (first (sql/query db/spec ["SELECT * FROM official_responses WHERE comment_id = ?" id])))
 
 (defn get-official-responses-by-issue
   [id]
-  (into [] (sql/query db/spec ["SELECT * FROM comments WHERE issue_id = ?" id])))
+  (into [] (sql/query db/spec ["SELECT * FROM official_responses WHERE issue_id = ?" id])))
 
 (defn get-official-responses-by-org
   [id]
-  (into [] (sql/query db/spec ["SELECT * FROM comments WHERE user_id = ?" id])))
+  (into [] (sql/query db/spec ["SELECT * FROM official_responses WHERE user_id = ?" id])))
 
+
+(defn create-official-response
+  [issue_id org_id user_id text]
+  (sql/insert! db/spec
+               :official_responses
+               [:issue_id :org_id :user_id :text]
+               [issue_id org_id user_id text]))
 
 (defn official_response_model
   "Defines the comments model table in the db"

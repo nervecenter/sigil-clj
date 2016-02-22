@@ -12,7 +12,7 @@
   (into [] (sql/query db/spec ["SELECT * FROM issues WHERE org_id = ?;" org_id])))
 
 
-(defn issue
+(defn create-issue
   [org_id user_id title text [tag_ids]]
   (try
     (sql/execute! db/spec
@@ -29,8 +29,8 @@
    [:issue_id :bigserial "PRIMARY KEY"]
    [:org_id :bigint "references orgs (org_id)"] ;; foriegn key to org
    [:user_id :bigint "references users (user_id)"]
-   [:issue_title :varchar "NOT NULL"]
-   [:issue_text :varchar "NOT NULL" "DEFAULT ''"]
+   [:title :varchar "NOT NULL"]
+   [:text :varchar "NOT NULL" "DEFAULT ''"]
    [:created_at :timestamp "NOT NULL" "DEFAULT CURRENT_TIMESTAMP"]
    [:total_votes :int "NOT NULL" "DEFAULT 1"]
    [:last_voted :timestamp "NOT NULL" "DEFAULT CURRENT_TIMESTAMP"]

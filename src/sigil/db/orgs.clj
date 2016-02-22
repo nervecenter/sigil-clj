@@ -13,7 +13,7 @@
   (first (sql/query db/spec ["SELECT * FROM orgs WHERE org_url = ?;" url])))
 
 
-(defn org
+(defn create-org
   "Creates a new org from passed in map."
   [org_url org_name website]
   (try
