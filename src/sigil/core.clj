@@ -1,5 +1,6 @@
 (ns sigil.core
   (:gen-class)
+  (:import [org.eclipse.jetty.server.handler StatisticsHandler])
   (:require [ring.adapter.jetty :as jetty]
 
             [hiccup.core :refer [html]]
@@ -13,12 +14,23 @@
             [sigil.views.usertest :refer [usertest-handler]]
 
             [sigil.actions.logout :refer [logout-handler]]
+            [sigil.db.migrations :as mig]
 
             [ring.middleware.resource :refer [wrap-resource]]
             [ring.middleware.content-type :refer [wrap-content-type]]
             [ring.middleware.not-modified :refer [wrap-not-modified]]
             [ring.middleware.cookies :refer [wrap-cookies]]
             [ring.middleware.params :refer [wrap-params]]))
+
+
+(defn server-conf
+  [s]
+  (let [stats-handler (StatisticsHandler.)
+        default-handler (.getHandler s)]
+    (.setHandler stats-handler default-handler)
+    (.setHandler s stats-handler)
+    (.setStopTimeout s 60000)
+    (.setStopAtShutdown s true)))
 
 (defroutes sigil-routes
   (GET "/" req (landing-handler))
@@ -38,4 +50,9 @@
       (wrap-cookies)
       (wrap-params)))
 
-(defonce server (jetty/run-jetty #'app {:port 3000 :join? false}))
+(defonce server (jetty/run-jetty #'app {:port 3000 :join? false :configurator server-conf}))
+
+
+(defn -main
+  []
+  ())

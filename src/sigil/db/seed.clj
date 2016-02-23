@@ -17,6 +17,6 @@
 
 (defn seed-db
   []
-  (do
-    (map #(create-org (get %1 0) (get %1 1) (get %1 2)) org_seed)))
+  (sql/with-db-transaction [db-conn db/spec]
+    (map #(create-org db-conn (get %1 0) (get %1 1) (get %1 2)) org_seed)))
 

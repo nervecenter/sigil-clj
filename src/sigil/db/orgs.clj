@@ -15,12 +15,11 @@
 
 (defn create-org
   "Creates a new org from passed in map."
-  [org_url org_name website]
-  (try
-    (sql/insert! db/spec
-                 :orgs
-                 [:org_url :org_name :website]
-                 [org_url org_name website])))
+  [db-conn org_url org_name website]
+  (sql/insert! db-conn
+               :orgs
+               [:org_url :org_name :website]
+               [org_url org_name website]))
 
 
 (defn orgs_model
@@ -29,13 +28,13 @@
   (sql/create-table-ddl
    :orgs
    [:org_id :bigserial "PRIMARY KEY"]
-   [:org_url :varchar "NOT NULL" "UNIQUE"]
-   [:org_name :varchar "NOT NULL" "UNIQUE"]
-   [:website :varchar ]
+   [:org_url :text "NOT NULL" "UNIQUE"]
+   [:org_name :text "NOT NULL" "UNIQUE"]
+   [:website :text ]
    [:created_at :timestamp "NOT NULL" "DEFAULT CURRENT_TIMESTAMP"]
-   [:icon_20 :varchar]
-   [:icon_100 :varchar]
-   [:banner :varchar]
+   [:icon_20 :text]
+   [:icon_100 :text]
+   [:banner :text]
    [:last_viewed :timestamp]
    [:times_viewed :int "NOT NULL" "DEFAULT 0"]
    [:subscription_level :int "NOT NULL" "DEFAULT 1"]

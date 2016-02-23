@@ -10,8 +10,8 @@
   (first (sql/query db/spec ["SELECT * FROM users WHERE email = ?;" email])))
 
 (defn create-user
-  [email username pass_hash]
-  (sql/insert! db/spec
+  [db-conn email username pass_hash]
+  (sql/insert! db-conn
                :users
                [:email :username :pass_hash]
                [email username pass_hash]))
@@ -22,16 +22,16 @@
   (sql/create-table-ddl
    :users
    [:user_id :bigserial "PRIMARY KEY"]
-   [:email :varchar "NOT NULL" "UNIQUE"]
-   [:username :varchar "NOT NULL" "UNIQUE"]
-   [:pass_hash :varchar "NOT NULL"]
+   [:email :text "NOT NULL" "UNIQUE"]
+   [:username :text "NOT NULL" "UNIQUE"]
+   [:pass_hash :text "NOT NULL"]
    [:created_at :timestamp "NOT NULL" "DEFAULT CURRENT_TIMESTAMP"]
-   [:image_icon :varchar]
-   [:roles :varchar "ARRAY" "NOT NULL" "DEFAULT ARRAY[]::varchar[]"]
+   [:icon_100 :text]
+   [:roles :text "ARRAY" "NOT NULL" "DEFAULT ARRAY[]::text[]"]
    [:last_login :timestamp]
    [:times_visited :int "NOT NULL" "DEFAULT 0"]
    [:org_id :bigint "NOT NULL" "DEFAULT 0"] ;; forigen key to orgs for admins
-   [:subscriptions :bigint "ARRAY" "DEFAULT ARRAY[]::bigint[]"]
+   [:tag_subscriptions :bigint "ARRAY" "DEFAULT ARRAY[]::bigint[]"]
    ))
 
 

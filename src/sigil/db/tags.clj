@@ -13,8 +13,8 @@
 
 
 (defn create-tag
-  [tag_url tag_name org_id]
-  (sql/insert! db/spec
+  [db-conn tag_url tag_name org_id]
+  (sql/insert! db-conn
                :tags
                [:tag_url :tag_name :org_id]
                [tag_url tag_name org_id]))
@@ -25,13 +25,12 @@
   (sql/create-table-ddl
    :tags
    [:tag_id :bigserial "PRIMARY KEY"]
-   [:tag_url :varchar "NOT NULL" "UNIQUE"]
-   [:tag_name :varchar "NOT NULL" "UNIQUE"]
+   [:tag_url :text "NOT NULL" "UNIQUE"]
+   [:tag_name :text "NOT NULL" "UNIQUE"]
    [:created_at :timestamp "NOT NULL" "DEFAULT CURRENT_TIMESTAMP"]
-   [:icon_20 :varchar]
+   [:icon_20 :text]
    [:times_viewed :int "NOT NULL" "DEFAULT 0"]
-   [:org_id :bigint "references orgs (org_id)"] ;; forgien key to orgs
-))
+   [:org_id :bigint "NOT NULL"]))
 
 
 

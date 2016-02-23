@@ -30,4 +30,5 @@
      (if (authenticated? req)
        ;; Logged in part
        ;; Not logged in part
+       ()
        )]]])
