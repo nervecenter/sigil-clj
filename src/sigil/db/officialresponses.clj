@@ -2,9 +2,6 @@
   (:require [clojure.java.jdbc :as sql]
             [sigil.db.core :as db]))
 
-
-
-
 (defn get-official-response-by-id
   [id]
   (first (sql/query db/spec ["SELECT * FROM official_responses WHERE comment_id = ?" id])))
@@ -12,6 +9,10 @@
 (defn get-official-responses-by-issue
   [id]
   (into [] (sql/query db/spec ["SELECT * FROM official_responses WHERE issue_id = ?" id])))
+
+(defn get-latest-official-response-by-issue
+  [id]
+  (first (into [] (sql/query db/spec ["SELECT * FROM official_responses WHERE issue_id = ? ORDER BY edited_at DESC LIMIT 1" id]))))
 
 (defn get-official-responses-by-org
   [id]

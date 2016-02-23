@@ -1,32 +1,46 @@
 (ns sigil.views.partials.issue
-  (:require [sigil.auth :refer [authenticated? identity]]
-            [sigil.db.votes :refer [user-voted-on-issue?]]))
+  (:require [sigil.db.votes :refer [user-voted-on-issue?]]
+            [sigil.db.officialresponses :refer [get-latest-official-response-by-issue]]
+            [sigil.helpers :refer [get-return]]))
 
 (declare issue-partial issue-panel issue-without-panel)
 
-(defn issue-partial [req issue in-panel?]
-  (if in-panel?
-    (issue-panel req issue)
-    (issue-without-panel req issue)))
+(defn issue-partial [req issue user in-panel?]
+  ;; We need: The issue, whether the user is authed, and whether they voted
+  (let [authenticated? (some? user)
+        user-voted? (if authenticated?
+                      (user-voted-on-issue? (:user_id user))
+                      false)]
+    (if in-panel?
+      ;; We need: a response
+      (issue-panel req
+                   issue
+                   authenticated?
+                   user-voted?
+                   (get-latest-official-response-by-issue (:issue_id issue)))
+      (issue-without-panel req issue authenticated? user-voted?))))
 
-(defn issue-panel [req issue]
-  (if {:responded issue}
+(defn issue-panel [req issue authenticated? user-voted? response]
+  (if (some? response)
     [:div.panel.panel-info.issue-panel-partial
-     (issue-without-panel req issue)
+     (issue-without-panel req issue authenticated? user-voted?)
      [:div.panel-footer
       [:b "Response: "]
-      (let [first-response (first {:responses issue})]
-        (if (> (count first-response) 100)
-          [:span (str (subs first-response 0 100) "...")]
-          [:span first-response]))]]
+      (if (> (count (:text response)) 100)
+        [:span (str (subs (:text response) 0 100) "...")]
+        [:span {:text response}])]]
     [:div.panel.panel-default.issue-panel-partial
-     (issue-without-panel req issue)]))
+     (issue-without-panel req issue authenticated? user-voted?)]))
 
-(defn issue-without-panel [req issue]
+(defn issue-without-panel [req issue authenticated? user-voted?]
   [:div.panel-body
    [:div.media
     [:div.media-object.pull-left.votebutton-box
-     (if (authenticated? req)
-       (if (user-voted-on-issue? (identity req) issue)
-         [:img.unvoteup {;;Get the most current source on this
-                         }]))]]])
+     (if authenticated?
+       (if user-voted?
+         [:img.unvoteup {:data-issueid (:issue_id issue)
+                         :src "images/voted.png"}]
+         [:img.voteup {:data-issueid (:issue_id issue)
+                       :src "images/notvoted.png"}])
+       [:a {:href (str "login?return=" (:uri req))}
+        [:img.votelogin {:src "images/notvoted.png"}]])]]])

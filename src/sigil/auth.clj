@@ -27,3 +27,6 @@
 
 (defn identity [req]
   (get-user-by-id (extract-user-id req)))
+
+(defn user-or-nil [req]
+  (if (authenticated? req) (identity req) nil))

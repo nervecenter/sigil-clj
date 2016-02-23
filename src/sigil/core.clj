@@ -11,6 +11,7 @@
             [sigil.views.landing :refer [landing-handler]]
             [sigil.views.login :refer [login-get login-post]]
             [sigil.views.usertest :refer [usertest-handler]]
+            [sigil.views.orgpage :refer [orgpage-handler]]
 
             [sigil.actions.logout :refer [logout-handler]]
 
@@ -27,6 +28,8 @@
   (POST "/login" req (login-post req))
   (GET "/logout" req (logout-handler req))
   (GET "/printrequest" req (html [:p {} req]))
+  (GET "/printrequest/:x" req (html [:p {} req]))
+  (GET "/:org_url" req (orgpage-handler req))
   (route/resources "/")
   (route/not-found "404"))
 
