@@ -1,4 +1,4 @@
-(ns sigil.views.partial.footer)
+(ns sigil.views.partials.footer)
 
 (def footer
   [:div.footer

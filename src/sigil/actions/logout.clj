@@ -1,4 +1,4 @@
-(ns sigil.logout
+(ns sigil.actions.logout
   (:require [sigil.helpers :refer [get-return]]))
 
 (defn logout-handler [req]

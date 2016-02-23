@@ -1,6 +1,6 @@
 (ns sigil.views.layout
-  (require [sigil.views.partial.navbar :as navbar]
-           [sigil.views.partial.footer :as footer])
+  (require [sigil.views.partials.navbar :as navbar]
+           [sigil.views.partials.footer :as footer])
   (use hiccup.core
        hiccup.page
        hiccup.form))
