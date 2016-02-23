@@ -1,8 +1,45 @@
-(ns sigil.views.landing.render
-  (:require [sigil.views.partial.footer :as footer])
-  (:use hiccup.core
-        hiccup.page
-        hiccup.form))
+(ns sigil.views.landing
+  (:require [clojure.java.jdbc :refer [query]]
+            [sigil.db.core :refer [db]]
+            [sigil.views.partials.footer :as footer]
+            [hiccup.page :refer [html5 include-css include-js]]
+            [hiccup.form :refer [form-to]]))
+
+(declare get-landing-issues landing-handler issue-section landing-page head navbar splash)
+
+(defn get-landing-issues []
+  (set (query db ["SELECT DISTINCT ON (issue_id) issues.title, users.display_name FROM issues LEFT JOIN users ON (issues.user_id = users.user_id);"])))
+
+(defn landing-handler []
+  (landing-page (get-landing-issues)))
+
+(defn landing-page [issues]
+  (html5
+   head
+   [:body.page
+    navbar
+    splash
+    (issue-section issues)
+    footer/footer
+
+    (include-js "js/jquery-1.11.3.js"
+                "js/jquery-ui-1.9.2.custom.min.js"
+                "js/bootstrap.js"
+                "js/typeahead.js"
+                "js/voting.js"
+                "js/subscriptions.js"
+                "js/search.js")]))
+
+(defn issue-section [issues]
+  [:div.container.landing-container
+   [:div.row
+    [:div#left-col.col-lg-4
+     [:div.panel.panel-default
+      [:div.panel-body
+       (for [i issues]
+         [:p (:title i) [:br] (:display-name i)])]]]
+    [:div#middle-col.col-lg-4 "Middle column goes here."]
+    [:div#right-col.col-lg-4 "Right column goes here."]]])
 
 (def head
   [:head
@@ -46,32 +83,3 @@
      [:a {:href "register"} "Start giving your own feedback"]
      " | "
      [:a {:href "companies"} "See all the companies on Sigil"]]]])
-
-(defn issue-section [issues]
-  [:div.container.landing-container
-   [:div.row
-    [:div#left-col.col-lg-4
-     [:div.panel.panel-default
-      [:div.panel-body
-       (for [i issues]
-         [:p (:title i) [:br] (:display-name i)])]]]
-    [:div#middle-col.col-lg-4 "Middle column goes here."]
-    [:div#right-col.col-lg-4 "Right column goes here."]]])
-
-(defn page [issues]
-  (html5
-   head
-   [:body.page
-    navbar
-    splash
-    (issue-section issues)
-    footer/footer
-
-    (include-js "js/jquery-1.11.3.js"
-                "js/jquery-ui-1.9.2.custom.min.js"
-                "js/bootstrap.js"
-                "js/typeahead.js"
-                "js/voting.js"
-                "js/subscriptions.js"
-                "js/search.js")]))
-

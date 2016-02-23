@@ -1,7 +1,8 @@
-(ns sigil.logout)
+(ns sigil.actions.logout
+  (:require [sigil.helpers :refer [get-return]]))
 
 (defn logout-handler [req]
-  (let [return ((:query-params req) "return")]
+  (let [return (get-return req)]
     {:status 302
      :headers {"Location" return}
      :body ""

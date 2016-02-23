@@ -8,13 +8,12 @@
             [compojure.route :as route]
             [compojure.handler :as handler]
 
-            [sigil.views.landing.logic :refer [landing-handler]]
-            [sigil.views.login.logic :refer [login-get login-post]]
-            [sigil.logout :refer [logout-handler]]
+            [sigil.views.landing :refer [landing-handler]]
+            [sigil.views.login :refer [login-get login-post]]
             [sigil.views.usertest :refer [usertest-handler]]
-            
-            [sigil.db.migrations :as migrations]
-            
+
+            [sigil.actions.logout :refer [logout-handler]]
+
             [ring.middleware.resource :refer [wrap-resource]]
             [ring.middleware.content-type :refer [wrap-content-type]]
             [ring.middleware.not-modified :refer [wrap-not-modified]]
