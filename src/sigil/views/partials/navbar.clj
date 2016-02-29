@@ -1,6 +1,9 @@
 (ns sigil.views.partials.navbar
-  (:require [sigil.auth :refer [authenticated? identity]]
-            [sigil.helpers :refer [user-has-role?]])
+  (:require [sigil.auth :refer [authenticated?
+                                identity
+                                is-user-site-admin?]]
+            [sigil.helpers :refer [user-has-role?]]
+            [hiccup.core :refer [html]])
   (:use hiccup.form))
 
 (declare navbar-partial navbar)
@@ -39,36 +42,38 @@
                    "search-term")])
      (if (some? user)
        ;; Logged in part
-       '([:ul.nav.navbar-nav.navbar-right
-          [:li
-           [:a {:href (str "/logout?return=" (:uri req))} "Log Out"]]]
-         [:ul.nav.navbar-nav.navbar-right
-          [:li
-           [:a {:href "/settings"} (:username user)]]]
-         [:ul.nav.navbar-nav.navbar-right.hidden-xs
-          [:li {:style "position:relative;"}
-           [:img#header-user-icon.img-rounded.img-responsive
-            {:src (:icon_100 user)
-             :style "height:40px;margin-top:10px;"}]
-           [:img#num-notes-back {:src "images/num-notes-back.png"}]
-           [:h5#num-notes]]]
-         (if (some? user-org)
-           [:ul.nav.navbar-nav.navbar-right
-            [:li
-             [:a {:href (:org_url user-org)} (str (:org_name user-org) " Page")]]]
-           [:ul.nav.navbar-nav.navbar-right
-            [:li
-             [:a {:href "/orgsettings"} (str (:org_name user-org) " Settings")]]]
-           nil)
-         (if (is-user-site-admin? user)
-           [:ul.nav.navbar-nav.navbar-right
-            [:li
-             [:a {:href "/sadmin"}]]]
-           nil))
+       (html
+        [:ul.nav.navbar-nav.navbar-right
+         [:li
+          [:a {:href (str "/logout?return=" (:uri req))} "Log Out"]]]
+        [:ul.nav.navbar-nav.navbar-right
+         [:li
+          [:a {:href "/settings"} (:username user)]]]
+        [:ul.nav.navbar-nav.navbar-right.hidden-xs
+         [:li {:style "position:relative;"}
+          [:img#header-user-icon.img-rounded.img-responsive
+           {:src (:icon_100 user)
+            :style "height:40px;margin-top:10px;"}]
+          [:img#num-notes-back {:src "images/num-notes-back.png"}]
+          [:h5#num-notes]]]
+        (if (some? user-org)
+          [:ul.nav.navbar-nav.navbar-right
+           [:li
+            [:a {:href (:org_url user-org)} (str (:org_name user-org) " Page")]]]
+          [:ul.nav.navbar-nav.navbar-right
+           [:li
+            [:a {:href "/orgsettings"} (str (:org_name user-org) " Settings")]]]
+          nil)
+        (if (is-user-site-admin? user)
+          [:ul.nav.navbar-nav.navbar-right
+           [:li
+            [:a {:href "/sadmin"}]]]
+          nil))
        ;; Not logged in part
-       '([:ul.nav.navbar-nav.navbar-right
-          [:li
-           [:a {:href (str "/register?return=" (:uri req))} "Sign Up"]]]
-         [:ul.nav.navbar-nav.navbar-right
-          [:li
-           [:a {:href (str "/login?return=" (:uri req))}]]]))]]])
+       (html
+        [:ul.nav.navbar-nav.navbar-right
+         [:li
+          [:a {:href (str "/register?return=" (:uri req))} "Sign Up"]]]
+        [:ul.nav.navbar-nav.navbar-right
+         [:li
+          [:a {:href (str "/login?return=" (:uri req))}]]]))]]])
