@@ -50,5 +50,5 @@
           [:option {:value (:tag_id t)} (:tag_name t)])]])]]
    [:div.issues
     (for [i issues]
-      (issue-partial req i user true))]]
+      (issue-partial (:uri req) i user true))]]
   (sidebar-partial org user))

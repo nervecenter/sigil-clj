@@ -1,4 +1,5 @@
-(ns sigil.views.org-register)
+(ns sigil.views.org-register
+  (:use hiccup.form))
 
 (defn org-register-body []
   [:div.container.maxw-1000

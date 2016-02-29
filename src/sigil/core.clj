@@ -9,6 +9,7 @@
             [compojure.route :as route]
             [compojure.handler :as handler]
 
+            [sigil.views.home :refer [home-handler]]
             [sigil.views.landing :refer [landing-handler]]
             [sigil.views.login :refer [login-get login-post]]
             [sigil.views.usertest :refer [usertest-handler]]
@@ -34,7 +35,9 @@
     (.setStopAtShutdown s true)))
 
 (defroutes sigil-routes
-  (GET "/" req (landing-handler))
+  (GET "/" req (if (authenticated? req)
+                 (home-handler req)
+                 (landing-handler)))
   (GET "/usertest" req (usertest-handler req))
   (GET "/login" req (login-get req))
   (POST "/login" req (login-post req))
