@@ -1,23 +1,24 @@
-(ns sigil.views.orgpage
+(ns sigil.views.org-page
   (:require [sigil.db.orgs :refer [get-org-by-url]]
             [sigil.auth :refer [user-or-nil]]
             [sigil.views.layout :as layout]
-            [sigil.db.issues :refer [get-hottest-issues-by-org]])
+            [sigil.db.issues :refer [get-hottest-issues-by-org]]
+            [sigil.partials.sidebar :refer [sidebar-partial]])
   (:use hiccup.form))
 
-(declare orgpage-handler orgpage-body)
+(declare org-page-handler org-page-body)
 
-(defn orgpage-handler [req]
+(defn org-page-handler [req]
   (let [user (user-or-nil req)
         org (get-org-by-url (:org_url (:route-params req)))
         tags (get-tags-by-org (:org_id org))]
     (if (some? org)
       (let [issues (get-hottest-issues-by-org (:org_id org))]
         (layout/render (str "Sigil - " (:org_name org))
-                       (orgpage-body req user org tags issues)))
+                       (org-page-body req user org tags issues)))
       ("404"))))
 
-(defn orgpage-body [req user org tags issues]
+(defn org-page-body [req user org tags issues]
   [:div#main-col.col-md-9.col-lg-9
    [:img.img-rounded.img-responsive.org-banner-small
     {:src (:banner org)}]
@@ -47,4 +48,5 @@
           [:option {:value (:tag_id t)} (:tag_name t)])]])]]
    [:div.issues
     (for [i issues]
-      (issue-partial req i user true))]])
+      (issue-partial req i user true))]]
+  (sidebar-partial org user))

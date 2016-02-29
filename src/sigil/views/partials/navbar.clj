@@ -6,7 +6,11 @@
 (declare navbar-partial navbar)
 
 (defn navbar-partial [req user]
-  (navbar req user))
+  ;; For navbar, we need:
+  ;; the request, for return URI
+  ;; the user, for user controls
+  ;; the user's org, for link to org settings if they're org admin
+  (navbar req user user-org))
 
 (defn navbar [req user user-org]
   [:div.navbar.navbar-fixed-top.navbar-default
@@ -47,6 +51,24 @@
             {:src (:icon_100 user)
              :style "height:40px;margin-top:10px;"}]
            [:img#num-notes-back {:src "images/num-notes-back.png"}]
-           [:h5#num-notes]]])
+           [:h5#num-notes]]]
+         (if (some? user-org)
+           [:ul.nav.navbar-nav.navbar-right
+            [:li
+             [:a {:href (:org_url user-org)} (str (:org_name user-org) " Page")]]]
+           [:ul.nav.navbar-nav.navbar-right
+            [:li
+             [:a {:href "/orgsettings"} (str (:org_name user-org) " Settings")]]]
+           nil)
+         (if (is-user-site-admin? user)
+           [:ul.nav.navbar-nav.navbar-right
+            [:li
+             [:a {:href "/sadmin"}]]]
+           nil))
        ;; Not logged in part
-       [:p "Not authenticated"])]]])
+       '([:ul.nav.navbar-nav.navbar-right
+          [:li
+           [:a {:href (str "/register?return=" (:uri req))} "Sign Up"]]]
+         [:ul.nav.navbar-nav.navbar-right
+          [:li
+           [:a {:href (str "/login?return=" (:uri req))}]]]))]]])
