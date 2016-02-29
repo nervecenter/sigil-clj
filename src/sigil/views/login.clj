@@ -62,11 +62,15 @@
 
         [:div.form-group
          (label "email" "Email")
-         (text-field {:id "email" :placeholder "Email"} "email")]
+         (text-field {:id "email"
+                      :placeholder "Email"
+                      :class "form-control"} "email")]
 
         [:div.form-group
-         (label "email" "Email")
-         (password-field {:id "password" :placeholder "Password"} "password")]
+         (label "password" "Password")
+         (password-field {:id "password"
+                          :placeholder "Password"
+                          :class "form-control"} "password")]
 
         [:div.login-page-remember {:style "margin-bottom:10px;"}
          (check-box {:id "remember"} "checkbox" false "true")
