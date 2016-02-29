@@ -20,8 +20,8 @@
 
 
 (defn create-official-response
-  [issue_id org_id user_id text]
-  (sql/insert! db/spec
+  [db-conn issue_id org_id user_id text]
+  (sql/insert! db-conn
                :official_responses
                [:issue_id :org_id :user_id :text]
                [issue_id org_id user_id text]))
@@ -32,12 +32,12 @@
   (sql/create-table-ddl
    :official_responses
    [:official_response_id :bigserial "PRIMARY KEY"]
-   [:issue_id :bigint "NOT NULL" "references issues (issue_id)"]
-   [:org_id :bigint "NOT NULL" "references orgs (org_id)"]
-   [:user_id :bigint "references users (user_id)"]
+   [:issue_id :bigint "NOT NULL"]
+   [:org_id :bigint "NOT NULL"]
+   [:user_id :bigint "NOT NULL"]
    [:created_at :timestamp "NOT NULL" "DEFAULT CURRENT_TIMESTAMP"]
-   [:edited_at :timestamp]
-   [:text :varchar "NOT NULL"]
+   [:edited_at :timestamp "NOT NULL" "DEFAULT CURRENT_TIMESTAMP"]
+   [:text :text "NOT NULL"]
    [:helpful_votes :int "NOT NULL" "DEFAULT 0"]
    [:unhelpful_votes :int "NOT NULL" "DEFAULT 0"]
    [:last_helpful :timestamp]

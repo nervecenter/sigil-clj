@@ -23,6 +23,7 @@
 ;; First, we include core for access to server and repl
 ;; for access to namespace reloading stuff
 (require 'sigil.core
+         'sigil.db.migrations
          '[clojure.tools.namespace.repl :as repl])
 
 ;; Define dirs for reloading

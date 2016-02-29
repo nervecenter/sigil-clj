@@ -18,8 +18,8 @@
 
 
 (defn create-comment
-  [issue_id user_id text]
-  (sql/insert! db/spec
+  [db-conn issue_id user_id text]
+  (sql/insert! db-conn
                :comments
                [:issue_id :user_id :text]
                [issue_id user_id text]))
@@ -30,10 +30,10 @@
   (sql/create-table-ddl
    :comments
    [:comment_id :bigserial "PRIMARY KEY"]
-   [:issue_id :bigint "references issues (issue_id)"]
-   [:user_id :bigint "references users (user_id)"]
+   [:issue_id :bigint "NOT NULL"]
+   [:user_id :bigint "NOT NULL"]
    [:created_at :timestamp "NOT NULL" "DEFAULT CURRENT_TIMESTAMP"]
    [:edited_at :timestamp]
-   [:text :varchar "NOT NULL"]
+   [:text :text "NOT NULL"]
    [:votes :bigint "NOT NULL" "DEFAULT 1"]
    [:last_voted :timestamp "NOT NULL" "DEFAULT CURRENT_TIMESTAMP"]))
