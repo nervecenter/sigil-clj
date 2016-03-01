@@ -9,6 +9,24 @@
 
 (def spec "postgresql://localhost:5432/sigildb") ;; I wanted to alias this ns in the other model files but I didn't want it to be db/db everywhere
 
+
+;;Postgres arrays to clojure vecs
+(extend-protocol sql/IResultSetReadColumn
+  org.postgresql.jdbc42.Jdbc42Array
+  (result-set-read-column [pgobj metadata i]
+    (vec (.getArray pgobj))))
+
+
+;;Clojure veccs to postgres arrays
+(defn vec->arr [array-vector]
+  (.createArrayOf (sql/get-connection spec) "long" (into-array Long array-vector)))
+
+(extend-protocol sql/ISQLValue
+    clojure.lang.IPersistentVector
+    (sql-value [v]
+    (vec->arr v)))
+
+
 ;; Error Logging
 (defn errors
   ([] (into [] (sql/query spec ["SELECT * FROM errors"])))
@@ -21,8 +39,7 @@
                   :errors
                   [:error_message :user_assoc :org_assoc :issue_assoc]
                   [msg (get error_assocs 0) (get error_assocs 1) (get error_assocs 2)])
-     (catch Exception e
-       (.getNextError e)))))
+     (catch Exception e))))
 
 (defn error_model
   "Defines the error model in the db"

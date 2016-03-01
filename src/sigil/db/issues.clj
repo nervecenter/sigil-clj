@@ -14,13 +14,16 @@
   [org_id]
   (into [] (sql/query db/spec ["SELECT * FROM issues WHERE org_id = ?;" org_id])))
 
+(defn get-landing-issues []
+  (set (sql/query db/spec ["SELECT DISTINCT ON (issue_id) issues.title, users.username FROM issues LEFT JOIN users ON (issues.user_id = users.user_id);"])))
 
 (defn create-issue
-  [db-conn org_id user_id title text [tag_ids]]
+  [db-conn org_id user_id title text]
   (try
-    (sql/execute! db-conn
-                 ["INSERT INTO issues (org_id user_id title text tags) VALUES (?,?,?,?,?)"
-                  org_id user_id title text tag_ids])
+    (sql/insert! db-conn
+                 :issues
+                 [:org_id :user_id :title :text]
+                 [org_id user_id title text])
     (catch Exception e
       (db/create-error e user_id org_id))))
 

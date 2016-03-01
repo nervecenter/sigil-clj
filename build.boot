@@ -24,6 +24,7 @@
 ;; for access to namespace reloading stuff
 (require 'sigil.core
          'sigil.db.migrations
+         'sigil.db.seed
          '[clojure.tools.namespace.repl :as repl])
 
 ;; Define dirs for reloading
@@ -39,6 +40,18 @@
 (defn reload [] (repl/refresh))
 ;; Do it all!
 (defn restart [] (stop) (reload) (start))
+
+(defn rebuild-and-seed
+  "Drops the current db tables and then rebuilds and seeds."
+  []
+  (sigil.db.seed/drop-create-seed))
+
+(defn build-and-seed
+  []
+  "Builds and seeds database tables"
+  (do
+    (sigil.db.migrations/create-db-tables)
+    (sigil.db.seed/seed-db)))
 
 ;; Task to build the server jar using "boot build"
 (deftask build

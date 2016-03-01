@@ -9,12 +9,17 @@
 (defn get-user-by-email [email]
   (first (sql/query db/spec ["SELECT * FROM users WHERE email = ?;" email])))
 
+(defn get-user-subscriptions [id]
+  (first (sql/query db/spec ["SELECT tag_subsctiptions FROM users WHERE user_id = ?" id])))
+
 (defn create-user
   [db-conn email username pass_hash]
   (sql/insert! db-conn
                :users
                [:email :username :pass_hash]
                [email username pass_hash]))
+
+
 
 (defn users_model
   "Defines the user model in the db"

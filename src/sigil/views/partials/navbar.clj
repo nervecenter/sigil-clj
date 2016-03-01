@@ -8,11 +8,12 @@
 
 (declare navbar-partial navbar)
 
-(defn navbar-partial [req user]
+(defn navbar-partial [req user user-org]
   ;; For navbar, we need:
   ;; the request, for return URI
   ;; the user, for user controls
   ;; the user's org, for link to org settings if they're org admin
+  
   (navbar req user user-org))
 
 (defn navbar [req user user-org]
@@ -40,8 +41,7 @@
                     :class "form-control typeahead"
                     :placeholder "Search for a company, person, or product"}
                    "search-term")])
-     (if (some? user)
-       ;; Logged in part
+     (if (some? user);; Logged in part
        (html
         [:ul.nav.navbar-nav.navbar-right
          [:li
@@ -59,8 +59,7 @@
         (if (some? user-org)
           [:ul.nav.navbar-nav.navbar-right
            [:li
-            [:a {:href (:org_url user-org)} (str (:org_name user-org) " Page")]]]
-          [:ul.nav.navbar-nav.navbar-right
+            [:a {:href (:org_url user-org)} (str (:org_name user-org) " Page")]]
            [:li
             [:a {:href "/orgsettings"} (str (:org_name user-org) " Settings")]]]
           nil)

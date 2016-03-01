@@ -30,3 +30,8 @@
 
 (defn user-or-nil [req]
   (if (authenticated? req) (identity req) nil))
+
+
+(defn is-user-site-admin?
+  [user]
+  true)

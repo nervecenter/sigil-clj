@@ -3,12 +3,10 @@
             [sigil.db.core :refer [db]]
             [sigil.views.partials.footer :as footer]
             [hiccup.page :refer [html5 include-css include-js]]
-            [hiccup.form :refer [form-to]]))
+            [hiccup.form :refer [form-to]]
+            [sigil.db.issues :refer [get-landing-issues]]))
 
-(declare get-landing-issues landing-handler issue-section landing-page head navbar splash)
-
-(defn get-landing-issues []
-  (set (query db ["SELECT DISTINCT ON (issue_id) issues.title, users.display_name FROM issues LEFT JOIN users ON (issues.user_id = users.user_id);"])))
+(declare  landing-handler issue-section landing-page head navbar splash)
 
 (defn landing-handler []
   (landing-page (get-landing-issues)))
@@ -37,7 +35,7 @@
      [:div.panel.panel-default
       [:div.panel-body
        (for [i issues]
-         [:p (:title i) [:br] (:display-name i)])]]]
+         [:p (:title i) [:br] (:text i)])]]]
     [:div#middle-col.col-lg-4 "Middle column goes here."]
     [:div#right-col.col-lg-4 "Right column goes here."]]])
 

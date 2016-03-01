@@ -19,3 +19,15 @@
                       (comment_model)
                       (official_response_model)
                       (db/error_model)))
+
+
+(defn drop-db-tables
+  []
+  (sql/db-do-commands db/spec
+                      (sql/drop-table-ddl :orgs)
+                      (sql/drop-table-ddl :users)
+                      (sql/drop-table-ddl :tags)
+                      (sql/drop-table-ddl :issues)
+                      (sql/drop-table-ddl :comments)
+                      (sql/drop-table-ddl :official_responses)
+                      (sql/drop-table-ddl :errors)))

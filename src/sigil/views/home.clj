@@ -1,13 +1,16 @@
 (ns sigil.views.home
-  (:require [sigil.partials.issue :refer [issue-partial]]))
+  (:require [sigil.views.partials.issue :refer [issue-partial]]
+            [sigil.views.layout :as layout]))
 
-(defn home-handler [req]
+(declare home-body home-handler)
+
+(defn home-handler [req user]
   ;; Home page expects user
   ;;
   (layout/render "Sigil"
-                 (home-body user)))
+                 (home-body user req)))
 
-(defn home-body []
+(defn home-body [user issues req]
   [:div.col-md-9.col-lg-9
    (if (> (count issues) 0)
      (for [i issues]

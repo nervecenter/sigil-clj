@@ -2,10 +2,11 @@
   (:require [sigil.db.orgs :refer [get-org-by-url]]
             [sigil.auth :refer [user-or-nil]]
             [sigil.views.layout :as layout]
+            [sigil.views.partials.issue :refer [issue-partial]]
             [sigil.db.orgs :refer [get-org-by-url]]
             [sigil.db.tags :refer [get-tags-by-org]]
             [sigil.db.issues :refer [get-hottest-issues-by-org]]
-            [sigil.partials.sidebar :refer [sidebar-partial]])
+            [sigil.views.partials.sidebar :refer [sidebar-partial]])
   (:use hiccup.form))
 
 (declare org-page-handler org-page-body)
