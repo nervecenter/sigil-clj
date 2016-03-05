@@ -13,11 +13,10 @@
 
 
 (defn create-tag
-  [db-conn tag_url tag_name org_id]
+  [db-conn {:keys [:tag_url :tag_name :org_id :icon_20] :as new-tag}]
   (sql/insert! db-conn
                :tags
-               [:tag_url :tag_name :org_id]
-               [tag_url tag_name org_id]))
+               new-tag))
 
 (defn tags_model
   "Defines the tag model in the db"

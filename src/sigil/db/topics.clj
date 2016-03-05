@@ -4,10 +4,9 @@
 
 
 (defn create-topic
-  [db-conn topic_url topic_name banner]
+  [db-conn {:keys [:topic_url :topic_name :banner] :as new-topic}]
   (sql/insert! db-conn :topics
-               [:topic_url :topic_name :banner]
-               [topic_url topic_name banner]))
+               new-topic))
 
 (defn topic_model
   []

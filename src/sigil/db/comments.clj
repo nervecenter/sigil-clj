@@ -18,11 +18,10 @@
 
 
 (defn create-comment
-  [db-conn issue_id user_id text]
+  [db-conn {:keys [:issue_id :user_id :text] :as new_comment}]
   (sql/insert! db-conn
                :comments
-               [:issue_id :user_id :text]
-               [issue_id user_id text]))
+               new_comment))
 
 (defn comment_model
   "Defines the comments model table in the db"

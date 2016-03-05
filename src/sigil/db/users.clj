@@ -13,11 +13,10 @@
   (first (sql/query db/spec ["SELECT tag_subsctiptions FROM users WHERE user_id = ?" id])))
 
 (defn create-user
-  [db-conn email username pass_hash]
+  [db-conn {:keys [:email :username :pass_hash :icon_100] :as new-user}]
   (sql/insert! db-conn
                :users
-               [:email :username :pass_hash]
-               [email username pass_hash]))
+               new-user))
 
 
 

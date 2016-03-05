@@ -18,13 +18,15 @@
 
 (defn create-org
   "Creates a new org from passed in map."
-  ([db-conn org_url org_name website]
-   (create-org db-conn org_url org_name website (rand-nth default_org_icon_20) (rand-nth default_org_icon_100) (rand-nth default_org_banner)))
-  ([db-conn org_url org_name website img20 img100 banner]
+  ;; ([db-conn [org_url org_name website]]
+  ;;  (create-org db-conn org_url org_name website (rand-nth default_org_icon_20) (rand-nth default_org_icon_100) (rand-nth default_org_banner)))
+  ([db-conn {:keys [:org_url :org_name :website :icon_20 :icon_100 :banner] :as new-org}]
    (sql/insert! db-conn
                 :orgs
-                [:org_url :org_name :website :icon_20 :icon_100 :banner]
-                [org_url org_name website img20 img100 banner])))
+                new-org
+                ;; [:org_url :org_name :website :icon_20 :icon_100 :banner]
+                ;; [(:org_url new-org) (:org_name new-org) (:website new-org) (:icon_20 new-org) (:icon_100 new-org) (:banner new-org)]
+                )))
 
 
 (defn orgs_model

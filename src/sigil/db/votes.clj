@@ -14,15 +14,9 @@
 
 
 (defn create-vote
-  ([db-conn user_id issue_id]
+  ([db-conn {:as new-vote}]
    (sql/insert! db-conn :votes
-                [:user_id :issue_id]
-                [user_id issue_id]))
-  ([db-conn user_id issue_id comment_id]
-   (sql/insert! db-conn :votes
-                [:user_id :issue_id :comment_id]
-                [user_id issue_id comment_id]
-    )))
+                new-vote)))
 
 (defn votes_model_table
   "Defines the vote model table in the db"

@@ -20,11 +20,10 @@
 
 
 (defn create-official-response
-  [db-conn issue_id org_id user_id text]
+  [db-conn {:keys [:issue_id :org_id :user_id :text] :as new-official}]
   (sql/insert! db-conn
                :official_responses
-               [:issue_id :org_id :user_id :text]
-               [issue_id org_id user_id text]))
+               new-official))
 
 (defn official_response_model
   "Defines the comments model table in the db"
