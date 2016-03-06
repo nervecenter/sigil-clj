@@ -19,12 +19,27 @@
   (into [] (sql/query db/spec ["SELECT * FROM official_responses WHERE user_id = ?" id])))
 
 
+(defn official-response-upvote
+  [db-conn [official_response_id]]
+  (sql/execute! db-conn ["UPDATE official_responses SET helpful_votes = helpful_votes + 1, last_helpful = LOCALTIMESTAMP WHERE official_response_id = ?" official_response_id]))
+
+(defn official-response-un-upvote
+  [db-conn [official_response_id]]
+  (sql/execute! db-conn ["UPDATE official_responses SET helpful_votes = helpful_votes - 1 WHERE official_response_id = ?" official_response_id]))
+
+(defn official-response-downvote
+  [db-conn [official_response_id]]
+  (sql/execute! db-conn ["UPDATE official_responses SET unhelpful_votes = unhelpful_votes + 1, last_unhelpful = LOCALTIMESTAMP WHERE official_response_id = ?" official_response_id]))
+
+(defn official-response-un-downvote
+  [db-conn [official_response_id]]
+  (sql/execute! db-conn ["UPDATE official_responses SET unhelpful_votes = unhelpful_votes - 1 WHERE official_response_id = ?" official_response_id]))
+
 (defn create-official-response
-  [db-conn issue_id org_id user_id text]
+  [db-conn {:keys [:issue_id :org_id :user_id :text] :as new-official}]
   (sql/insert! db-conn
                :official_responses
-               [:issue_id :org_id :user_id :text]
-               [issue_id org_id user_id text]))
+               new-official))
 
 (defn official_response_model
   "Defines the comments model table in the db"

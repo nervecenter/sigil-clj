@@ -3,11 +3,16 @@
             [sigil.db.core :as db]))
 
 
+(defn update-topic
+  [db-conn [topic_id updated-rows]]
+  (sql/update! db-conn :topics updated-rows ["topic_id = ?" topic_id]))
+
+
 (defn create-topic
-  [db-conn topic_url topic_name banner]
-  (sql/insert! db-conn :topics
-               [:topic_url :topic_name :banner]
-               [topic_url topic_name banner]))
+  [db-conn [new-topic]]
+  (sql/insert! db-conn
+               :topics
+               new-topic))
 
 (defn topic_model
   []

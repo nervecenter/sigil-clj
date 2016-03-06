@@ -16,15 +16,21 @@
   [url]
   (first (sql/query db/spec ["SELECT * FROM orgs WHERE org_url = ?;" url])))
 
+(defn org-visit-inc
+  "Called every time an org page is visited. "
+  [db-conn [org_id]]
+  (sql/execute! db-conn ["UPDATE orgs SET times_viewed = 1 + times_viewed, last_viewed = CURRENT_TIMESTAMP WHERE org_id = ?" org_id]))
+
+(defn update-org
+  [db-conn [org_id updated-rows]]
+  (sql/update! db-conn :orgs updated-rows ["org_id = ?" org_id]))
+
 (defn create-org
   "Creates a new org from passed in map."
-  ([db-conn org_url org_name website]
-   (create-org db-conn org_url org_name website (rand-nth default_org_icon_20) (rand-nth default_org_icon_100) (rand-nth default_org_banner)))
-  ([db-conn org_url org_name website img20 img100 banner]
-   (sql/insert! db-conn
-                :orgs
-                [:org_url :org_name :website :icon_20 :icon_100 :banner]
-                [org_url org_name website img20 img100 banner])))
+  [db-conn [new-org]]
+  (sql/insert! db-conn
+               :orgs
+               new-org))
 
 
 (defn orgs_model
@@ -35,12 +41,12 @@
    [:org_id :bigserial "PRIMARY KEY"]
    [:org_url :text "NOT NULL" "UNIQUE"]
    [:org_name :text "NOT NULL" "UNIQUE"]
-   [:website :text ]
+   [:website :text "NOT NULL" "DEFAULT '#'"]
    [:created_at :timestamp "NOT NULL" "DEFAULT CURRENT_TIMESTAMP"]
    [:icon_20 :text]
    [:icon_100 :text]
    [:banner :text]
-   [:last_viewed :timestamp]
+   [:last_viewed :timestamp "NOT NULL" "DEFAULT CURRENT_TIMESTAMP"]
    [:times_viewed :int "NOT NULL" "DEFAULT 0"]
    [:subscription_level :int "NOT NULL" "DEFAULT 1"]
    ))

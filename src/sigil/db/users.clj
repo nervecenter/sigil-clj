@@ -12,14 +12,23 @@
 (defn get-user-subscriptions [id]
   (first (sql/query db/spec ["SELECT tag_subsctiptions FROM users WHERE user_id = ?" id])))
 
+(defn add-user-tags
+  [db-conn [user_id & tag_ids]]
+  ())
+
+(defn user-login-inc
+  [db-conn [user_id]]
+  (sql/execute! db-conn ["UPDATE users SET last_login = LOCALTIMESTAMP, times_visited = times_visited + 1 WHERE user_id = ?" user_id]))
+
+(defn update-user
+  [db-conn [user_id updated-rows]]
+  (sql/update! db-conn :users updated-rows ["user_id = ?" user_id]))
+
 (defn create-user
-  [db-conn email username pass_hash]
+  [db-conn [new-user]]
   (sql/insert! db-conn
                :users
-               [:email :username :pass_hash]
-               [email username pass_hash]))
-
-
+               new-user))
 
 (defn users_model
   "Defines the user model in the db"
@@ -36,7 +45,4 @@
    [:last_login :timestamp]
    [:times_visited :int "NOT NULL" "DEFAULT 0"]
    [:org_id :bigint "NOT NULL" "DEFAULT 0"] ;; forigen key to orgs for admins
-   [:tag_subscriptions :bigint "ARRAY" "DEFAULT ARRAY[]::bigint[]"]
-   ))
-
-
+   [:tag_subscriptions :bigint "ARRAY" "DEFAULT ARRAY[]::bigint[]"]))
