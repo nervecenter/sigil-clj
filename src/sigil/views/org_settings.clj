@@ -1,10 +1,17 @@
 (ns sigil.views.org-settings
-  (:require [sigil.auth :refer [user-or-nil]]))
+  (:require [sigil.auth :refer [user-or-nil]]
+            [sigil.helpers :refer [user-is-org-admin?]]))
+
+(declare org-settings-handler org-settings-body)
 
 (defn org-settings-handler [req]
   (let [user (user-or-nil req)]
-    (if (user-has-role? user :org-admin)
-      (let [org (get-org-by-id user)]))))
+    (if (user-is-org-admin? user)
+      (let [org (get-org-by-id (:org_id user))
+            tags (get-tags-by-org-id (:org_id org))]
+        (layout/render (str "Sigil - " (:org_name org) " Settings")
+                       (org-settings-body org tags)))
+      "404")))
 
 (defn org-settings-body [org tags]
   (html

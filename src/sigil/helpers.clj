@@ -13,3 +13,9 @@
     (= role :site-admin) (if (contains? (:roles user) "site-admin")
                           true
                           false)))
+
+(defn user-is-org-admin? [user]
+  (and (user-has-role? user :org-admin) (not= 0 (:org_id user))))
+
+(defn user-is-admin-of-org? [user org]
+  (and (user-has-role? user :org-admin) (= (:org_id org) (:org_id user))))
