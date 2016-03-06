@@ -11,6 +11,7 @@
 
 (def spec "postgresql://localhost:5432/sigildb") ;; I wanted to alias this ns in the other model files but I didn't want it to be db/db everywhere
 
+(declare errors create-error)
 
 ;;Postgres arrays to clojure vecs
 (extend-protocol sql/IResultSetReadColumn
