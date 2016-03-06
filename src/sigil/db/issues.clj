@@ -17,8 +17,26 @@
 (defn get-landing-issues []
   (set (sql/query db/spec ["SELECT DISTINCT ON (issue_id) issues.title, users.username FROM issues LEFT JOIN users ON (issues.user_id = users.user_id);"])))
 
+(defn issue-view-inc
+  [db-conn [issue_id]]
+  (sql/execute! db-conn ["UPDATE issues SET views = array_append(views, LOCALTIMESTAMP), times_viewed = 1 + times_viewed WHERE issue_id = ?" issue_id]))
+
+(defn issue-voted
+  "Increments issues total_votes and sets last_voted to current time."
+  [db-conn [issue_id]]
+  (sql/execute! db-conn ["UPDATE issues SET last_voted = LOCALTIMESTAMP, total_votes = 1 + total_votes WHERE issue_id = ?" issue_id]))
+
+(defn issue-unvoted
+  "Decrements issues total_votes"
+  [db-conn [issue_id]]
+  (sql/execute! db-conn ["UPDATE issues SET total_votes = total_votes - 1 WHERE issue_id = ?" issue_id]))
+
+(defn update-issue
+  [db-conn [issue_id updated-rows]]
+  (sql/update! db-conn :issues updated-rows ["issue_id = ?" issue_id]))
+
 (defn create-issue
-  [db-conn {:keys [:org_id :user_id :title :text] :as new-issue}]
+  [db-conn [new-issue]]
   (sql/insert! db-conn
                :issues
                new-issue))
@@ -34,6 +52,7 @@
    [:title :text "NOT NULL"]
    [:text :text "NOT NULL" "DEFAULT ''"]
    [:created_at :timestamp "NOT NULL" "DEFAULT CURRENT_TIMESTAMP"]
+   [:edited_at :timestamp "NOT NULL" "DEFAULT CURRENT_TIMESTAMP"]
    [:total_votes :int "NOT NULL" "DEFAULT 1"]
    [:last_voted :timestamp "NOT NULL" "DEFAULT CURRENT_TIMESTAMP"]
    [:views :timestamp "ARRAY" "NOT NULL" "DEFAULT ARRAY[]::timestamp[]"]

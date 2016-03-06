@@ -7,6 +7,7 @@
         [sigil.db.comments]
         [sigil.db.tags]
         [sigil.db.comments]
+        [sigil.db.topics]
         [sigil.db.users]
         [sigil.db.officialresponses]))
 
@@ -42,7 +43,9 @@
                  :pass_hash "fuck"
                  :icon_100 (str (rand-nth default_org_icon_100))}])
 
-
+(def topic_seed [{:topic_url "testtopic"
+                  :topic_name "TestTopic"
+                  :banner (str (rand-nth default_org_banner))}])
 
 
 (defn seed-orgs
@@ -55,7 +58,8 @@
     (doall (map #(db/db-trans [create-org %]) org_seed))
     (doall (map #(db/db-trans [create-user %]) user_seed))
     (doall (map #(db/db-trans [create-tag %]) tag_seed))
-    (doall (map #(db/db-trans [create-issue %]) issue_seed))))
+    (doall (map #(db/db-trans [create-issue %]) issue_seed))
+    (doall (map #(db/db-trans [create-topic %]) topic_seed))))
 
 (defn drop-create-seed
   []

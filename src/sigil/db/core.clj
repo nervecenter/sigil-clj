@@ -1,6 +1,7 @@
 (ns sigil.db.core
   (:require [clojure.java.jdbc :as sql]
-            [sigil.db.core :as db]))
+            [sigil.db.core :as db])
+  (import java.sql.SQLException))
 
 (def postgres-debug-db {:subprotocol "postgresql"
                         :classname "org.postgresql.Driver"
@@ -33,15 +34,15 @@
                [sigil.db.orgs/create-org 'test1' 'test1' 'www.test1.com' 'img1' 'img2' 'img3'])"
   [& fs]
   (try
-    (sql/with-db-transaction [db-trans db/spec]
-      (if (= (count fs) (count (flatten (map (fn [[f a]]
-                                          (f db-trans a)) fs))))
+    (sql/with-db-transaction [db-conn db/spec]
+      (if (= (count fs) (count (flatten (map (fn [[& f]]
+                                               ((first f) db-conn (rest f))) fs))))
         :success
         :fail))
     (catch Exception e
       (do
         (create-error (str e))
-        (if (not (nil? (.getNextException e)))
+        (if (isa? (type e) SQLException)
           (create-error (str (.getNextException e))))
         :fail))))
 

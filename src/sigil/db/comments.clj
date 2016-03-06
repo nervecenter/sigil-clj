@@ -17,8 +17,16 @@
   (into [] (sql/query db/spec ["SELECT * FROM comments WHERE user_id = ?" id])))
 
 
+(defn comment-voted
+  [db-conn [comment_id]]
+  (sql/execute! db-conn ["UPDATE comments SET votes = 1 + votes, last_voted = LOCALTIMESTAMP WHERE comment_id = ?" comment_id]))
+
+(defn comment-unvoted
+  [db-conn [comment_id]]
+  (sql/execute! db-conn ["UPDATE comments SET votes = votes - 1 WHERE comment_id = ?" comment_id]))
+
 (defn create-comment
-  [db-conn {:keys [:issue_id :user_id :text] :as new_comment}]
+  [db-conn [new_comment]]
   (sql/insert! db-conn
                :comments
                new_comment))

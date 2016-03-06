@@ -6,6 +6,8 @@
             [sigil.db.users]
             [sigil.db.comments]
             [sigil.db.tags]
+            [sigil.db.votes]
+            [sigil.db.topics]
             [sigil.db.officialresponses]))
 
 
@@ -17,7 +19,9 @@
                       (tags_model)
                       (issues_model)
                       (comment_model)
+                      (votes_model)
                       (official_response_model)
+                      (topic_model)
                       (db/error_model)))
 
 
@@ -30,4 +34,6 @@
                       (sql/drop-table-ddl :issues)
                       (sql/drop-table-ddl :comments)
                       (sql/drop-table-ddl :official_responses)
-                      (sql/drop-table-ddl :errors)))
+                      (sql/drop-table-ddl :errors)
+                      (sql/drop-table-ddl :topics)
+                      (sql/drop-table-ddl :votes)))
