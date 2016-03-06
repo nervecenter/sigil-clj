@@ -14,9 +14,10 @@
             [sigil.views.login :refer [login-get login-post]]
             [sigil.views.usertest :refer [usertest-handler]]
             [sigil.views.org-page :refer [org-page-handler]]
+            [sigil.views.org-settings :refer [org-settings-handler]]
 
             [sigil.auth :refer [authenticated?]]
-            
+
             [sigil.actions.logout :refer [logout-handler]]
             [sigil.db.migrations :as mig]
 
@@ -44,6 +45,9 @@
   (GET "/login" req (login-get req))
   (POST "/login" req (login-post req))
   (GET "/logout" req (logout-handler req))
+  (GET "/orgsettings" req (if (authenticated? req)
+                            (org-settings-handler req)
+                            "404"))
   (GET "/printrequest" req (html [:p {} req]))
   (GET "/printrequest/:x" req (html [:p {} req]))
   (GET "/:org_url" req (org-page-handler req))
