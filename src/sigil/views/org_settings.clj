@@ -1,10 +1,14 @@
 (ns sigil.views.org-settings
-  (:require [sigil.auth :refer [user-or-nil]]))
+  (:require [sigil.auth :refer [user-or-nil]]
+            [sigil.helpers :refer [user-has-role?]]
+            [sigil.db.orgs :refer [get-org-by-id]]
+            [hiccup.core :refer [html]]
+            [hiccup.form :refer [form-to file-upload text-field submit-button]]))
 
 (defn org-settings-handler [req]
   (let [user (user-or-nil req)]
     (if (user-has-role? user :org-admin)
-      (let [org (get-org-by-id user)]))))
+      (let [org (get-org-by-id (:org_id user))]))))
 
 (defn org-settings-body [org tags]
   (html

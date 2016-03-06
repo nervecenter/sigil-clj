@@ -25,7 +25,7 @@
    (sql/insert! db-conn :votes
                 new-vote)))
 
-(defn votes_modelx
+(defn votes_model
   "Defines the vote model table in the db"
   []
   (sql/create-table-ddl

@@ -1,4 +1,5 @@
-(ns sigil.helpers)
+(ns sigil.helpers
+  (:require [sigil.db.orgs :as orgs]))
 
 (defn get-return [req]
   (if (some? ((:query-params req) "return"))
@@ -13,3 +14,15 @@
     (= role :site-admin) (if (contains? (:roles user) "site-admin")
                           true
                           false)))
+
+
+
+
+
+(defn search-all
+  [term]
+  (let [orgs (orgs/search-orgs-by-term term)]
+    orgs))
+
+
+(def memo-search-all (memoize search-all))

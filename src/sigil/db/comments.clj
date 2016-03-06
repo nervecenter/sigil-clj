@@ -8,14 +8,13 @@
   [id]
   (first (sql/query db/spec ["SELECT * FROM comments WHERE comment_id = ?" id])))
 
-(defn get-comments-by-issue
+(defn get-comments-by-issue-id
   [id]
   (into [] (sql/query db/spec ["SELECT * FROM comments WHERE issue_id = ?" id])))
 
-(defn get-comments-by-user
+(defn get-comments-by-user-id
   [id]
   (into [] (sql/query db/spec ["SELECT * FROM comments WHERE user_id = ?" id])))
-
 
 (defn comment-voted
   [db-conn [comment_id]]
