@@ -1,5 +1,8 @@
 (ns sigil.helpers
-  (:require [sigil.db.orgs :as orgs]))
+  (:require [sigil.db.orgs :as orgs]
+            [sigil.db.topics :as topics]
+            [sigil.db.tags :as tags]
+            [clojure.string :as str]))
 
 (defn get-return [req]
   (if (some? ((:query-params req) "return"))
@@ -15,14 +18,15 @@
                           true
                           false)))
 
-
-
-
-
-(defn search-all
+(defn match-orgs-tags-topics
   [term]
-  (let [orgs (orgs/search-orgs-by-term term)]
-    orgs))
+  (let [matched-orgs (filter #(str/starts-with? (:org_name %) term) (orgs/get-all-orgs))
+        matched-topics (filter #(str/starts-with? (:topic_name %) term) (topics/get-all-topics))
+        matched-tags (filter #(str/starts-with? (:tag_name %) term) (tags/get-all-tags))]
+    {:orgs matched-orgs
+     :topics matched-topics
+     :tags matched-tags}))
 
 
-(def memo-search-all (memoize search-all))
+
+

@@ -2,6 +2,9 @@
   (:require [clojure.java.jdbc :as sql]
             [sigil.db.core :as db]))
 
+(defn get-all-topics
+  []
+  (into [] (sql/query db/spec ["SELECT * FROM topics"])))
 
 (defn update-topic
   [db-conn [topic_id updated-rows]]

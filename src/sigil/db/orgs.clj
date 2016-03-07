@@ -11,9 +11,9 @@
   [id]
   (first (sql/query db/spec ["SELECT * FROM orgs WHERE org_id = ?;" id])))
 
-(defn search-orgs-by-term
-  [term]
-  (into [] (sql/execute! db/spec ["SELECT * FROM orgs WHERE sub_string(org_name from 1 for ?) = ?" (count term) term])))
+(defn get-all-orgs
+  []
+  (into [] (sql/query db/spec ["SELECT * FROM orgs"])))
 
 (defn get-org-by-url
   [url]

@@ -50,6 +50,7 @@
                             "404"))
   (GET "/printrequest" req (html [:p {} req]))
   (GET "/printrequest/:x" req (html [:p {} req]))
+  (GET "/search/:term" req ())
   (GET "/:org_url" req (org-page-handler req))
   (route/resources "/")
   (route/not-found "404"))
