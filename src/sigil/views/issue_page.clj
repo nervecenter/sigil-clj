@@ -15,22 +15,25 @@
   ;; List of responses to the issue
     ;; Each response should contain responding user for icon, name, etc.
   ;; List of comments on the issue
-    ;; Each comment should have commenting user for icon, name
-  (layout/render
-   (str "Sigil - " (:title issue))
-   (issue-page-body (user-or-nil req)
-                    (get-issue-with-user-and-org-by-id
-                     (:issue_id (:route-params req)))
-                    (some? user)
-                    (if (some? user)
-                      (user-voted-on-issue? (:user_id user))
-                      false)
-                    (get-responses-by-issue (:issue_id issue))
-                    (get-comments-by-issue (:issue_id issue)))))
+  ;; Each comment should have commenting user for icon, name
+  (let [issue (get-issue-with-poster-by-id (:issue_id (:route-params req)))
+        org (get-org-by-url (:org_url (:route-params req)))]
+    (layout/render
+     (str "Sigil - " (:title issue))
+     (issue-page-body (user-or-nil req)
+                      issue
+                      org
+                      (some? user)
+                      (if (some? user)
+                        (user-voted-on-issue? (:user_id user))
+                        false)
+                      (get-responses-with-responders-by-issue-id (:issue_id issue))
+                      (get-comments-with-commenters-by-issue-id (:issue_id issue))))))
 
 (defn issue-page-body
   [user
    issue
+   org
    authenticated?
    user-voted?
    responses
@@ -41,9 +44,85 @@
     {:src (:banner issue)}]
    [:div.btn-group.btn-group-sm.btn-group-justified
     {:style "margin-bottom:20px;"}
-    [:a.btn.btn-warning {:href (:org_url (:org issue))} "Main feed"]
-    [:a.btn.btn-info {:href (str (:org_url (:org issue)) "/responses")}]]
+    [:a.btn.btn-warning {:href (:org_url org)} "Main feed"]
+    [:a.btn.btn-info {:href (str (:org_url org) "/responses")}]]
    [:div.panel.panel-default.issue-panel-partial
     [:div.panel-body
      [:div.media
-      [:div.media-object.pull-left.votebutton-box]]]]])
+      [:div.media-object.pull-left.votebutton-box
+       (if authenticated?
+         [:img.votelogin {:src "images/notevoted.png"}]
+         (if user-voted?
+           [:img.unvoteup {:src "images/voted.png"
+                           :data-issueid (:issue_id issue)}]
+           [:img.voteup {:src "images/notvoted.png"
+                         :data-issueid (:issue_id issue)}]))
+       [:br]
+       [:span.voteamount
+        {:id (str "count-" (:issue_id issue))} (:votes issue)]]
+      [:div.media-body
+       [:h4.media-heading
+        [:a
+         {:href (str "/"
+                     (:org_url org) "/"
+                     (:issue_id issue) "/")}
+         (:title issue)]]
+       [:p.pull-left
+        [:img.issue-panel-icon {:src (:icon_30 org)}]
+        [:a {:href (:org_url org)} (:org_name org)]]
+       [:p.pull-right "Posted by " (:username (:poster issue))]]]]
+    [:div.panel-body (:text issue)]]
+   (for [r responses]
+     [:div.panel.panel-primary
+      [:div.panel-heading "Official Response"]
+      [:div.panel-body
+       [:div.media
+        [:div.pull-left
+         [:img.media-object {:src (:icon_100 (:responder r))}]]
+        [:div.media-body
+         [:h4.media-heading
+          (:username (:responder r))
+          [:small [:i "Posted some time ago"]]]
+         [:p (:text r)]]]]])
+   (if (user-is-admin-of-org? user org)
+     [:div.panel.panel-default
+      [:div.panel-heading "Make an official response"]
+      [:div.panel-body
+       (form-to
+        [:post]
+        [:div.form-group
+         (text-area
+          {:class "form-control panel-input-box"
+           :id "input-re"
+           :placeholder "Address this suggestion for your customers"}
+          "response")]
+        (submit-button {:class "btn btn-primary"}
+                       "submit-response"
+                       "Submit response"))]]
+     nil)
+   [:div.panel.panel-default
+    [:div.panel-heading "Comments"]
+    [:div.panel-body
+     (if (= 0 (count comments))
+       [:i "No comments yet."]
+       (for [c comments]
+         [:div.media
+          [:div.pull-left
+           [:img.media-object {:src (:icon_100 (:commenter c))}]]
+          [:div.media-body
+           [:h4.media-heading
+            (:username (:commenter c))
+            [:small [:i "Posted on some date"]]]
+           [:p (:text c)]]]))
+     (if (some? user)
+       (form-to
+        [:post]
+        {:class "issue-add-comment"}
+        [:div.form-group
+         (label "add-comment-label" "Add a comment")
+         (text-area {:class "form-control panel-input-box"
+                     :id "add-comment-box"
+                     :placeholder "What would you like to say?"}
+                    "add-comment-box")]
+        (submit-button {:class "btn btn-primary"} "submit-comment" "Submit comment"))
+       nil)]]])
