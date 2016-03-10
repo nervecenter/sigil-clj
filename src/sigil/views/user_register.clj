@@ -17,6 +17,7 @@
 
 (defn user-register-post [req]
   (let [register-data (:form-params req)
+        username (register-data "username")
         email (register-data "email")
         password (register-data "password")
         confirm-password (register-data "confirm-password")
@@ -34,6 +35,10 @@
       :else
       (do
         ;; Add the user
+        (sigil.db.users/register-user
+         {:username username
+          :email email
+          :pass_hash (buddy.hashers/encrypt password)})
         ;; Give them their token with a redirect to the return
         (let [user (get-user-by-email email)]
           {:status 302
