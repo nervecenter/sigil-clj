@@ -4,8 +4,8 @@
             [sigil.views.layout :as layout]
             [sigil.views.partials.issue :refer [issue-partial]]
             [sigil.db.orgs :refer [get-org-by-url]]
-            [sigil.db.tags :refer [get-tags-by-org]]
-            [sigil.db.issues :refer [get-hottest-issues-by-org]]
+            [sigil.db.tags :refer [get-tags-by-org-id]]
+            [sigil.db.issues :refer [get-hottest-issues-by-org-id]]
             [sigil.views.partials.sidebar :refer [sidebar-partial]])
   (:use hiccup.form))
 
@@ -14,9 +14,9 @@
 (defn org-page-handler [req]
   (let [user (user-or-nil req)
         org (get-org-by-url (:org_url (:route-params req)))
-        tags (get-tags-by-org (:org_id org))]
+        tags (get-tags-by-org-id (:org_id org))]
     (if (some? org)
-      (let [issues (get-hottest-issues-by-org (:org_id org))]
+      (let [issues (get-hottest-issues-by-org-id (:org_id org))]
         (layout/render (str "Sigil - " (:org_name org))
                        (org-page-body req user org tags issues)))
       ("404"))))

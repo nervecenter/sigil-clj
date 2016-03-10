@@ -1,5 +1,5 @@
 (ns sigil.views.partials.sidebar
-  (:require [sigil.db.tags :refer [get-tags-by-org]]
+  (:require [sigil.db.tags :refer [get-tags-by-org-id]]
             [sigil.db.users :refer [get-user-subscriptions]]
             [hiccup.core :refer [html]]))
 
@@ -7,7 +7,7 @@
   ([user]
    )
   ([user org]
-   (let [org-tags (get-tags-by-org (:org_id org))
+   (let [org-tags (get-tags-by-org-id (:org_id org))
          user-subs (get-user-subscriptions (:user_id user))]
      
      ))

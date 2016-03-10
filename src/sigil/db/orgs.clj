@@ -11,6 +11,9 @@
   [id]
   (first (sql/query db/spec ["SELECT * FROM orgs WHERE org_id = ?;" id])))
 
+(defn get-all-orgs
+  []
+  (into [] (sql/query db/spec ["SELECT * FROM orgs"])))
 
 (defn get-org-by-url
   [url]
