@@ -2,10 +2,11 @@
   (:require [hiccup.core :refer [html]]
             [sigil.auth :refer [user-or-nil]]
             [sigil.views.layout :as layout]
-            [sigil.db.users :refer [get-user-by-email]])
+            [sigil.db.users :refer [get-user-by-email]]
+            [sigil.helpers :refer [get-return]])
   (:use hiccup.form))
 
-(declare user-register-get user-register-post user-register-body)
+(declare user-register-get user-register-post user-register-body user-register-page)
 
 (defn user-register-get [req]
   (let [return (get-return req)

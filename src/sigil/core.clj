@@ -15,6 +15,7 @@
             [sigil.views.usertest :refer [usertest-handler]]
             [sigil.views.org-page :refer [org-page-handler]]
             [sigil.views.org-settings :refer [org-settings-handler]]
+            [sigil.views.user-register :refer [user-register-get user-register-post]]
 
             [sigil.auth :refer [authenticated?]]
 
@@ -48,6 +49,8 @@
   (GET "/orgsettings" req (if (authenticated? req)
                             (org-settings-handler req)
                             "404"))
+  ;; (GET "/register" req (user-register-get req))
+  ;; (POST "/register" req (user-register-post req))
   (GET "/printrequest" req (html [:p {} req]))
   (GET "/printrequest/:x" req (html [:p {} req]))
   (GET "/search/:term" req ())
