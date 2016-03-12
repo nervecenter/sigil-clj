@@ -1,5 +1,4 @@
-.nrepl-history
-.nrepl-port
+.nrepl-*
 
 pg
 target

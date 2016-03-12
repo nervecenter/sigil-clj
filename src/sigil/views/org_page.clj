@@ -17,39 +17,40 @@
         tags (get-tags-by-org-id (:org_id org))]
     (if (some? org)
       (let [issues (get-hottest-issues-by-org-id (:org_id org))]
-        (layout/render (str "Sigil - " (:org_name org))
+        (layout/render req user org (str "Sigil - " (:org_name org))
                        (org-page-body req user org tags issues)))
       ("404"))))
 
 (defn org-page-body [req user org tags issues]
   [:div#main-col.col-md-9.col-lg-9
-   [:img.img-rounded.img-responsive.org-banner-small
-    {:src (:banner org)}]
-   [:div.btn-group.btn-group-sm.btn-group-justified
-    {:style "margin-bottom:20px;"}
-    [:a.btn.btn-default.active "Main feed"]
-    [:a.btn.btn-info {:href (str "/" (:org_url org) "/responses")}]]
-   [:div.panel
-    [:div.panel-body
-     (form-to
-      {:id "issue-search-post-form"}
-      [:post "/postissue"]
-      [:div.form-group
-       (label {:id "suggest-label"} "title" "I suggest you...")
-       (text-area {:id "issues-by-org-search"
-                   :class "form-control org-feedback-input-box"
-                   :data-orgid (:org_id org)}
-                  "title")]
-      [:div#new-feedback-group.form-group
-       [:div#new-feedback-button.btn.btn-primary.pull-right
-        {:style "padding:4px 9px;"} "Submit this as new feedback"]
-       (label {:class "pull-right" :style "margin:5px 10px;"} "new-feedback" "Has nobody posted what you're suggesting?")]
-      [:div#tag-select-group.form-group
-       (label "tag-select" "Tag your feedback by product, department, or category:")
-       [:select#tag-select.form-control {:name "tag-select"}
-        (for [t tags]
-          [:option {:value (:tag_id t)} (:tag_name t)])]])]]
-   [:div.issues
-    (for [i issues]
-      (issue-partial (:uri req) i user true))]]
-  (sidebar-partial org user))
+     [:img.img-rounded.img-responsive.org-banner-small
+      {:src (:banner org)}]
+     [:div.btn-group.btn-group-sm.btn-group-justified
+      {:style "margin-bottom:20px;"}
+      [:a.btn.btn-default.active "Main feed"]
+      [:a.btn.btn-info {:href (str "/" (:org_url org) "/responses")}]]
+     [:div.panel
+      [:div.panel-body
+       (form-to
+        {:id "issue-search-post-form"}
+        [:post "/postissue"
+         [:div.form-group
+          (label {:id "suggest-label"} "title" "I suggest you...")
+          (text-area {:id "issues-by-org-search"
+                      :class "form-control org-feedback-input-box"
+                      :data-orgid (:org_id org)}
+                     "title")]
+         [:div#new-feedback-group.form-group
+          [:div#new-feedback-button.btn.btn-primary.pull-right
+           {:style "padding:4px 9px;"} "Submit this as new feedback"]
+          (label {:class "pull-right" :style "margin:5px 10px;"} "new-feedback" "Has nobody posted what you're suggesting?")]
+         [:div#tag-select-group.form-group
+          (label "tag-select" "Tag your feedback by product, department, or category:")
+          [:select#tag-select.form-control {:name "tag-select"}
+           (for [t tags]
+             [:option {:value (:tag_id t)} (:tag_name t)])]]])]]
+     [:div.issues
+      (for [i issues]
+        (issue-partial (:uri req) i user true))]]
+  ;(sidebar-partial user org)
+  )

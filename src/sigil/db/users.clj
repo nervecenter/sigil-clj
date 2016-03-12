@@ -10,7 +10,7 @@
   (first (sql/query db/spec ["SELECT * FROM users WHERE email = ?;" email])))
 
 (defn get-user-subscriptions [id]
-  (first (sql/query db/spec ["SELECT tag_subsctiptions FROM users WHERE user_id = ?" id])))
+  (first (sql/query db/spec ["SELECT tag_subscriptions FROM users WHERE user_id = ?" id])))
 
 (defn add-user-tags
   [db-conn [user_id & tag_ids]]
