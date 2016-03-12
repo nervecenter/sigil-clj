@@ -52,6 +52,10 @@
    [:last_viewed :timestamp "NOT NULL" "DEFAULT CURRENT_TIMESTAMP"]
    [:times_viewed :int "NOT NULL" "DEFAULT 0"]
    [:subscription_level :int "NOT NULL" "DEFAULT 1"]
+   [:address :text]
+   [:city :text]
+   [:state :text]
+   [:zip-code :text]
    ))
 
 

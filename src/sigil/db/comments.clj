@@ -24,6 +24,7 @@
   [db-conn [comment_id]]
   (sql/execute! db-conn ["UPDATE comments SET votes = votes - 1 WHERE comment_id = ?" comment_id]))
 
+
 (defn create-comment
   [db-conn [new_comment]]
   (sql/insert! db-conn
