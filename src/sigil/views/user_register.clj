@@ -3,7 +3,8 @@
             [sigil.auth :refer [user-or-nil]]
             [sigil.views.layout :as layout]
             [sigil.db.users :refer [get-user-by-email]]
-            [sigil.helpers :refer [get-return]])
+            [sigil.helpers :refer [get-return]]
+            [hiccup.page :refer [html5]])
   (:use hiccup.form))
 
 (declare user-register-get user-register-post user-register-body user-register-page)
@@ -11,10 +12,14 @@
 (defn user-register-get [req]
   (let [return (get-return req)
         validations ((:query-params req) "invalid")
-        passwords-not-match? (if (contains? validations "m") true false)
-        short-username? (if (contains? validations "u") true false)
-        short-password? (if (contains? validations "p") true false)]
-    (user-register-page return passwords-not-match? short-username? short-password?)))
+        passwords-not-match? (if (= validations "m") true false)
+        short-username? (if (= validations "u") true false)
+        short-password? (if (= validations "p") true false)]
+    (user-register-page req
+                        return
+                        passwords-not-match?
+                        short-username?
+                        short-password?)))
 
 (defn user-register-post [req]
   (let [register-data (:form-params req)
@@ -22,15 +27,15 @@
         email (register-data "email")
         password (register-data "password")
         confirm-password (register-data "confirm-password")
-        return (login-data "return")]
+        return (register-data "return")]
     (cond
       (not= password confirm-password)
       {:status 302
        :headers {"Location" (str "register?invalid=m&return=" return)}}
-      (< 6 (count username))
+      (< (count username) 5)
       {:status 302
        :headers {"Location" (str "register?invalid=u&return=" return)}}
-      (< 6 (count password))
+      (< (count password) 6)
       {:status 302
        :headers {"Location" (str "register?invalid=p&return=" return)}}
       :else
@@ -45,18 +50,33 @@
           {:status 302
            :headers {"Location" return}
            :body ""
-           :cookies {:user {:value (make-user-token user)
+           :cookies {:user {:value (sigil.auth/make-user-token user)
                             :max-age 2628000
                             ;;:secure true
                             ;;:http-only true
                             ;;:domain ".sigil.tech"
                             }}})))))
 
-(defn user-register-page [return passwords-not-match? short-username? short-password?]
-  (layout/render "Sigil - Register"
-                 (user-register-body return passwords-not-match? short-username? short-password?)))
+(defn user-register-page
+  [req
+   return
+   passwords-not-match?
+   short-username?
+   short-password?]
+  (html5
+   (layout/head "Sigil - Register")
+   [:body.page
+    [:div.wrap
+     (layout/navbar (:uri req))
+     [:div.container.main-container
+      [:div.row
+       (user-register-body req
+                           return
+                           passwords-not-match?
+                           short-username?
+                           short-password?)]]]]))
 
-(defn user-register-body [return passwords-not-match? short-username? short-password?]
+(defn user-register-body [req return passwords-not-match? short-username? short-password?]
   [:div.container.maxw-400
    [:h2 "Join Sigil today"]
    [:div.row
@@ -67,7 +87,7 @@
        (if passwords-not-match?
          [:h3 "Password confirmation does not match."] nil)
        (if short-username?
-         [:h3 "Username must be at least 6 characters."] nil)
+         [:h3 "Username must be at least 5 characters."] nil)
        (if short-password?
          [:h3 "Password must be at least 6 characters."] nil)
 

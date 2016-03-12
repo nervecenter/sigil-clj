@@ -1,7 +1,8 @@
 (ns sigil.views.login
   (:require [sigil.helpers :refer [get-return]]
             [buddy.hashers :refer [check]]
-            [sigil.views.layout :as layout])
+            [sigil.views.layout :as layout]
+            [hiccup.page :refer [html5]])
   (:use sigil.auth
         sigil.db.users
         hiccup.form))
@@ -13,11 +14,14 @@
    :headers {"Location" (str "login?invalid=t&return=" return)}})
 
 (defn login-get
-  "Handles GET requests to /login. Returns the login page."
+  "Handles GET requests to /login. Returns the login page. If the request is authenticated (the user is already logged in), redirects back to home."
   [req]
-  (let [return (get-return req)
-        invalid? (if (= "t" ((:query-params req) "invalid")) true false)]
-    (login-page return invalid?)))
+  (if (authenticated? req)
+    {:status 302
+     :headers {"Location" "/"}}
+    (let [return (get-return req)
+          invalid? (if (= "t" ((:query-params req) "invalid")) true false)]
+      (login-page (:uri req) return invalid?))))
 
 (defn login-post
   "Handles POST requests to /login. Attempts to handle login and exchange a token with the client, redirecting to the return address."
@@ -43,8 +47,17 @@
 
 (defn login-page
   "Render the login page. Takes in a string representing the domain URI for the view to be returned to after login success, and an optional collection of validation messages to be rendered at the top of the form."
-  [return invalid?]
-  (layout/render "Sigil - Log In" (login-body return invalid?)))
+  [uri return invalid?]
+  (html5
+   (layout/head "Sigil - Login")
+
+   [:body.page
+    [:div.wrap
+     (layout/navbar uri)
+     [:div.container.main-container
+      [:div.row
+       (login-body return
+                   invalid?)]]]]))
 
 (defn login-body [return invalid?]
   [:div.container.maxw-400

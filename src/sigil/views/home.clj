@@ -1,20 +1,25 @@
 (ns sigil.views.home
   (:require [sigil.views.partials.issue :refer [issue-partial]]
-            [sigil.views.layout :as layout]))
+            [sigil.views.layout :as layout]
+            [sigil.auth :refer [user-or-nil user-org-or-nil]]))
 
 (declare home-body home-handler)
 
-(defn home-handler [req user]
+(defn home-handler [req]
   ;; Home page expects user
-  ;;
-  (layout/render "Sigil"
-                 (home-body user req)))
+  (let [user (user-or-nil req)
+        user-org (user-org-or-nil user)]
+    (layout/render req
+                   user
+                   user-org
+                   "Sigil"
+                   (home-body (:uri req) user nil))))
 
-(defn home-body [user issues req]
+(defn home-body [uri user issues]
   [:div.col-md-9.col-lg-9
    (if (> (count issues) 0)
      (for [i issues]
-       (issue-partial (:uri req) i user true))
+       (issue-partial uri i user true))
      [:div.panel.panel-default
       [:div.panel-body
        [:h3 "Welcome, " (:username user) "! This is your" [:b "feed"] "."]
