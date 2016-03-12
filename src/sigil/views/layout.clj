@@ -88,22 +88,15 @@
   [req user user-org title body]
 
   (html5
-
    (head title)
-
    [:body.page
     [:div.wrap
-
      (navbar (:uri req) user user-org)
-
      [:div.container.main-container
       [:div.row
        body]]]
-
     [:br.clear]
-
     footer/footer
-
     (include-js "js/jquery-1.11.3.js"
                 "js/jquery-ui-1.9.2.custom.min.js"
                 "js/bootstrap.js"
