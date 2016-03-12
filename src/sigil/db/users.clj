@@ -33,7 +33,7 @@
 (defn register-user [user]
   (db/db-trans
    [create-user
-    (assoc user :icon_100 (rand-nth (sigil.db.orgs/default_org_icon_100)))]))
+    (assoc user :icon_100 (rand-nth sigil.db.orgs/default_org_icon_100))]))
 
 (defn users_model
   "Defines the user model in the db"

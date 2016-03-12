@@ -1,6 +1,11 @@
 (ns sigil.views.org-register
   (:use hiccup.form))
 
+(defn org-register-get [req]
+  ())
+
+(defn org-register-post [req])
+
 (defn org-register-body []
   [:div.container.maxw-1000
    [:div.row

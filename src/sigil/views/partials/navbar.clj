@@ -13,10 +13,12 @@
   ;; the request, for return URI
   ;; the user, for user controls
   ;; the user's org, for link to org settings if they're org admin
-  
   (navbar req user user-org))
 
-(defn navbar [req user user-org]
+(defn navbar
+  ([req]
+   (navbar req nil nil))
+  ([req user user-org]
   [:div.navbar.navbar-fixed-top.navbar-default
    [:div.container-fluid
     [:div.#navbar-header.navbar-header
@@ -75,4 +77,4 @@
           [:a {:href (str "/register?return=" (:uri req))} "Sign Up"]]]
         [:ul.nav.navbar-nav.navbar-right
          [:li
-          [:a {:href (str "/login?return=" (:uri req))}]]]))]]])
+          [:a {:href (str "/login?return=" (:uri req))}]]]))]]]))

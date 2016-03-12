@@ -26,8 +26,12 @@
     {:orgs matched-orgs
      :topics matched-topics
      :tags matched-tags}))
+
 (defn user-is-org-admin? [user]
   (and (user-has-role? user :org-admin) (not= 0 (:org_id user))))
 
 (defn user-is-admin-of-org? [user org]
   (and (user-has-role? user :org-admin) (= (:org_id org) (:org_id user))))
+
+(defn is-user-site-admin? [user]
+  (user-has-role? user :site-admin))

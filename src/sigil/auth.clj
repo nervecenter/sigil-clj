@@ -31,6 +31,9 @@
 (defn user-or-nil [req]
   (if (authenticated? req) (identity req) nil))
 
+;; TODO: Implement user-org-or-nil
+(defn user-org-or-nil [user]
+  nil)
 
 (defn is-user-site-admin?
   [user]

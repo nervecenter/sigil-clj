@@ -106,3 +106,18 @@ exit
 #with-db-transaction
 )
 (insert-issue test-issue-one)
+exit
+(start)
+exit
+(build-and-seed)
+exit
+(start)
+exit
+(start)
+(use 'sigil.views.user-register :reload)
+(rand-nth (sigil.db.orgs/default_org_icon_100))
+(rand-nth sigil.db.orgs/default_org_icon_100)
+(use 'sigil.db.users :reload)
+(> (count nil)0)
+(use 'sigil.views.home :reload)
+exit
