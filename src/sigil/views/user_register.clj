@@ -2,7 +2,7 @@
   (:require [hiccup.core :refer [html]]
             [sigil.auth :refer [user-or-nil]]
             [sigil.views.layout :as layout]
-            [sigil.db.users :refer [get-user-by-email]]
+            [sigil.actions.db :as db]
             [sigil.helpers :refer [get-return]]
             [hiccup.page :refer [html5]])
   (:use hiccup.form))
@@ -41,12 +41,12 @@
       :else
       (do
         ;; Add the user
-        (sigil.db.users/register-user
+        (db/register-user
          {:username username
           :email email
           :pass_hash (buddy.hashers/encrypt password)})
         ;; Give them their token with a redirect to the return
-        (let [user (get-user-by-email email)]
+        (let [user (sigil.db.users/get-user-by-email email)]
           {:status 302
            :headers {"Location" return}
            :body ""

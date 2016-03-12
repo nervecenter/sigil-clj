@@ -1,12 +1,84 @@
 (ns sigil.views.org-register
+  (:require [hiccup.core :refer [html]]
+            [sigil.auth :refer [user-or-nil]]
+            [sigil.views.layout :as layout]
+            [sigil.actions.db :as db]
+            [sigil.helpers :refer [get-return]]
+            [hiccup.page :refer [html5]])
   (:use hiccup.form))
 
+(declare org-register-get org-register-post org-register-body org-register-page)
+
 (defn org-register-get [req]
-  ())
+  (let [return (get-return req)
+        validations ((:query-params req) "invalid")
+        ;;check if valid
+]
+    (org-register-page req return false false false)))
 
-(defn org-register-post [req])
+(defn org-register-page
+  [req
+   return
+   passwords-not-match?
+   short-username?
+   short-password?]
+  (html5
+   (layout/head "Sigil - Org Register")
+   [:body.page
+    [:div.wrap
+     (layout/navbar (:uri req))
+     [:div.container.main-container
+      [:div.row
+       (org-register-body  req
+                           return
+                           ;passwords-not-match?
+                           ;short-username?
+                           ;short-password?
+        )]]]]))
 
-(defn org-register-body []
+(defn org-register-post [req]
+  (let [register-data (:form-params req)
+        org-name (register-data "org-name")
+        org-url (register-data "org-url")
+        website (register-data "website")
+        username (register-data "username")
+        email (register-data "email")
+        password (register-data "password")
+        confirm-password (register-data "confirm-password")
+        return (register-data "return")]
+    (cond
+      (not= password confirm-password)
+      {:status 302
+       :headers {"Location" (str "register?invalid=m&return=" return)}}
+      (< (count username) 5)
+      {:status 302
+       :headers {"Location" (str "register?invalid=u&return=" return)}}
+      (< (count password) 6)
+      {:status 302
+       :headers {"Location" (str "register?invalid=p&return=" return)}}
+      :else
+      (do
+        ;; Add the user
+        (db/register-org-and-admin
+         {:org_name org-name
+          :org_url org-url
+          :website website}
+         {:username username
+          :email email
+          :pass_hash (buddy.hashers/encrypt password)})
+        ;; Give them their token with a redirect to the return
+        (let [user (sigil.db.users/get-user-by-email email)]
+          {:status 302
+           :headers {"Location" return}
+           :body ""
+           :cookies {:user {:value (sigil.auth/make-user-token user)
+                            :max-age 2628000
+                            ;;:secure true
+                            ;;:http-only true
+                            ;;:domain ".sigil.tech"
+                            }}})))))
+
+(defn org-register-body [req return]
   [:div.container.maxw-1000
    [:div.row
     [:div.col-lg-12
@@ -15,6 +87,8 @@
       [:div.panel-body
        (form-to
         [:post "/orgregister"]
+        
+        (hidden-field {:id "return"} "return" return)
 
         [:div.form-group
          (label "org-name" "The name of your company.")
@@ -34,17 +108,17 @@
                       :placeholder "Company website"
                       :class "form-control"} "website")]
 
-        [:div.form-group
-         (label "website" "The URL of your company website.")
-         (text-field {:id "website"
-                      :placeholder "Company website"
-                      :class "form-control"} "website")]
+        ;; [:div.form-group
+        ;;  (label "website" "The URL of your company website.")
+        ;;  (text-field {:id "website"
+        ;;               :placeholder "Company website"
+        ;;               :class "form-control"} "website")]
 
-        [:div.form-group
-         (label "website" "The URL of your company website.")
-         (text-field {:id "website"
-                      :placeholder "Company website"
-                      :class "form-control"} "website")]
+        ;; [:div.form-group
+        ;;  (label "website" "The URL of your company website.")
+        ;;  (text-field {:id "website"
+        ;;               :placeholder "Company website"
+        ;;               :class "form-control"} "website")]
 
         [:h4 "Create the Sigil account for your company's first administrator."]
         [:div.form-group

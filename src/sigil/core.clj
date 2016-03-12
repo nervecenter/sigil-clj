@@ -16,6 +16,7 @@
             [sigil.views.org-page :refer [org-page-handler]]
             [sigil.views.org-settings :refer [org-settings-handler]]
             [sigil.views.user-register :refer [user-register-get user-register-post]]
+            [sigil.views.org-register :refer [org-register-get org-register-post]]
 
             [sigil.auth :refer [authenticated?]]
 
@@ -51,6 +52,8 @@
                             "404"))
   (GET "/register" req (user-register-get req))
   (POST "/register" req (user-register-post req))
+  (GET "/orgregister" req (org-register-get req))
+  (POST "/orgregister" req (org-register-post req)) 
   (GET "/printrequest" req (html [:p {} req]))
   (GET "/printrequest/:x" req (html [:p {} req]))
   (GET "/search/:term" req ())

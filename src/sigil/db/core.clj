@@ -2,11 +2,11 @@
   (:require [clojure.java.jdbc :as sql])
   (import java.sql.SQLException))
 
-(def postgres-debug-db {:subprotocol "postgresql"
-                        :classname "org.postgresql.Driver"
-                        :subname "//localhost:5432/sigildb"})
+;; (def postgres-debug-db {:subprotocol "postgresql"
+;;                         :classname "org.postgresql.Driver"
+;;                         :subname "//localhost:5432/sigildb"})
 
-(def db postgres-debug-db)
+;; (def db postgres-debug-db)
 
 (def spec "postgresql://localhost:5432/sigildb") ;; I wanted to alias this ns in the other model files but I didn't want it to be db/db everywhere
 

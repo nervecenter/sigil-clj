@@ -1,7 +1,5 @@
 (ns sigil.views.landing
-  (:require [clojure.java.jdbc :refer [query]]
-            [sigil.db.core :refer [db]]
-            [sigil.views.partials.footer :as footer]
+  (:require [sigil.views.partials.footer :as footer]
             [hiccup.page :refer [html5 include-css include-js]]
             [hiccup.form :refer [form-to]]
             [sigil.db.issues :refer [get-landing-issues]]))
