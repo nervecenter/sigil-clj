@@ -2,6 +2,8 @@
   (:require [clojure.java.jdbc :as sql]
             [sigil.db.core :as db]))
 
+;;-------------------------------------------------------------
+; Querys
 
 (defn get-user-by-id [id]
   (first (sql/query db/spec ["SELECT * FROM users WHERE user_id = ?;" id])))
@@ -11,6 +13,10 @@
 
 (defn get-user-subscriptions [id]
   (first (sql/query db/spec ["SELECT tag_subscriptions FROM users WHERE user_id = ?" id])))
+
+
+;;--------------------------------------------------------------
+; Updates/Inserts
 
 (defn add-user-tags
   [db-conn [user_id & tag_ids]]
@@ -30,6 +36,12 @@
                :users
                new-user))
 
+(defn delete-user
+  ([user] (delete-user user false))
+  ([user perm]
+   (if perm
+     (sql/delete! db/spec :users ["user_id = ?" (:user_id user)])
+     (sql/update! db/spec :users {:user_is_active false} ["user_id = ?" (:user_id user)]))))
 
 
 (defn users_model
@@ -47,4 +59,5 @@
    [:last_login :timestamp]
    [:times_visited :int "NOT NULL" "DEFAULT 0"]
    [:org_id :bigint "NOT NULL" "DEFAULT 0"] ;; forigen key to orgs for admins
-   [:tag_subscriptions :bigint "ARRAY" "DEFAULT ARRAY[]::bigint[]"]))
+   [:tag_subscriptions :bigint "ARRAY" "DEFAULT ARRAY[]::bigint[]"]
+   [:user_is_active :boolean "NOT NULL" "DEFAULT true"]))

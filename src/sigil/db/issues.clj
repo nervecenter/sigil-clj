@@ -1,6 +1,12 @@
 (ns sigil.db.issues
   (:require [clojure.java.jdbc :as sql]
-            [sigil.db.core :as db]))
+            [sigil.db.core :as db]
+            [clj-time.local :as time]
+            [clj-time.jdbc]))
+
+
+;;-----------------------------------------------------------------
+; Querys
 
 (defn get-issue-by-id
   [id]
@@ -17,6 +23,9 @@
 (defn get-landing-issues
   []
   (set (sql/query db/spec ["SELECT DISTINCT ON (issue_id) issues.title, users.username FROM issues LEFT JOIN users ON (issues.user_id = users.user_id);"])))
+
+;;------------------------------------------------------------------
+; Updates/Inserts
 
 (defn issue-view-inc
   [db-conn [issue_id]]
@@ -41,6 +50,14 @@
   (sql/insert! db-conn
                :issues
                new-issue))
+
+(defn delete-issue
+  ([issue] (delete-issue issue false))
+  ([issue perm]
+   (if perm
+     (sql/delete! db/spec :issues ["issue_id = ?" (:issue_id issue)])
+     (sql/update! db/spec :issues {:user_id 0
+                                   :edited_at (time/local-now)} ["issue_id = ?" (:issue_id issue)]))))
 
 (defn issues_model
   "Defines the tag model in the db"

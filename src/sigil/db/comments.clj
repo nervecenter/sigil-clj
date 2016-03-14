@@ -1,8 +1,11 @@
 (ns sigil.db.comments
   (:require [clojure.java.jdbc :as sql]
-            [sigil.db.core :as db]))
+            [sigil.db.core :as db]
+            [clj-time.local :as time]
+            [clj-time.jdbc]))
 
-
+;;---------------------------------------------------------------
+; Querys
 
 (defn get-comment-by-id
   [id]
@@ -15,6 +18,10 @@
 (defn get-comments-by-user-id
   [id]
   (into [] (sql/query db/spec ["SELECT * FROM comments WHERE user_id = ?" id])))
+
+
+;;----------------------------------------------------------------
+; Updates/Inserts/Deletes
 
 (defn comment-voted
   [db-conn [comment_id]]
@@ -29,6 +36,14 @@
   (sql/insert! db-conn
                :comments
                new_comment))
+
+(defn delete-comment
+  ([comment] (delete-comment comment false))
+  ([comment perm]
+   (if perm
+     (sql/delete! db/spec :comments ["comment_id = ?" (:comment_id comment)])
+     (sql/update! db/spec :comments {:user_id 0
+                                     :edited_at (time/local-now)} ["comment_id = ?" (:comment_id comment)]))))
 
 (defn comment_model
   "Defines the comments model table in the db"

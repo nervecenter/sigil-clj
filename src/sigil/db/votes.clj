@@ -2,11 +2,12 @@
   (:require [clojure.java.jdbc :as sql]
             [sigil.db.core :as db]))
 
+;;----------------------------------------------------------------
+; Querys
+
 (defn user-voted-on-issue?
   [user_id issue_id]
   (empty? (into [] (sql/query db/spec ["SELECT * FROM votes WHERE user_id = ? AND issue_id = ?" user_id issue_id] ))))
-
-
 
 (defn user-voted-on-comment?
   [user_id comment_id]
@@ -16,9 +17,13 @@
   [user_id]
   (into [] (sql/query db/spec ["SELECT * FROM votes WHERE user_id = ?" user_id])))
 
+
+;;----------------------------------------------------------------
+; Updates/Inserts/Deletes
+
 (defn delete-vote
-  ([db-conn [vote_id]]
-   (sql/delete! db-conn :votes ["vote_id = ?" vote_id])))
+  [vote]
+  (sql/delete! db/spec :votes ["vote_id = ?" (:vote_id vote)]))
 
 (defn create-vote
   ([db-conn [{:as new-vote}]]

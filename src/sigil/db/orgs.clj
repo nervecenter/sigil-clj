@@ -7,6 +7,10 @@
 (def default_org_icon_100 ["images/default/default100_1.png" "images/default/default100_2.png" "images/default/default100_3.png" "images/default/default100_4.png" "images/default/default100_5.png"])
 (def default_org_banner ["images/default/defaultbanner.png"])
 
+
+;;-----------------------------------------------------
+; Querys
+
 (defn get-org-by-id
   [id]
   (first (sql/query db/spec ["SELECT * FROM orgs WHERE org_id = ?;" id])))
@@ -18,6 +22,14 @@
 (defn get-org-by-url
   [url]
   (first (sql/query db/spec ["SELECT * FROM orgs WHERE org_url = ?;" url])))
+
+(defn get-org-by-user [user]
+  (if (= (:org_id user) 0)
+    nil 
+    (first (sql/query db/spec ["SELECT * FROM orgs WHERE org_id = ?" (:org_id user)]))))
+
+;;-----------------------------------------------------
+; Updates/Inserts
 
 (defn org-visit-inc
   "Called every time an org page is visited. "
@@ -35,6 +47,12 @@
                :orgs
                new-org))
 
+(defn delete-org
+  ([org] (delete-org org false))
+  ([org perm]
+   (if perm
+     (sql/delete! db/spec :orgs ["org_id = ?" (:org_id org)])
+     (sql/update! db/spec :orgs {:org_is_active false} ["org_id = ?" (:org_id org)]))))
 
 (defn orgs_model
   "Defines the org model in the db"
@@ -56,6 +74,7 @@
    [:city :text]
    [:state :text]
    [:zip-code :text]
+   [:org_is_active :boolean "NOT NULL" "DEFAULT true"]
    ))
 
 

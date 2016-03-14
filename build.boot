@@ -7,12 +7,13 @@
                           [ring/ring-jetty-adapter "1.4.0"]
                           [buddy/buddy-auth "0.9.0"]
                           [buddy/buddy-hashers "0.11.0"]
-                          [compojure "1.4.0"]
+                          [compojure "1.5.0"]
                           [hiccup "1.0.5"]
                           [cheshire "5.5.0"]
                           ;;[korma "0.4.2"]
                           [org.clojure/java.jdbc "0.4.2"]
-                          [org.postgresql/postgresql "9.4-1206-jdbc42"]])
+                          [org.postgresql/postgresql "9.4.1208"]
+                          [clj-time "0.11.0"]])
 
 (task-options! pom {:project 'sigil-clj
                     :version "0.5.0"}

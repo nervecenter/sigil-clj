@@ -14,7 +14,7 @@
 
 ;;Postgres arrays to clojure vecs
 (extend-protocol sql/IResultSetReadColumn
-  org.postgresql.jdbc42.Jdbc42Array
+  org.postgresql.jdbc.PgArray
   (result-set-read-column [pgobj metadata i]
     (vec (.getArray pgobj))))
 

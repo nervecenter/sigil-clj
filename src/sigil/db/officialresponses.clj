@@ -1,6 +1,11 @@
 (ns sigil.db.officialresponses
   (:require [clojure.java.jdbc :as sql]
-            [sigil.db.core :as db]))
+            [sigil.db.core :as db]
+            [clj-time.local :as time]
+            [clj-time.jdbc]))
+
+;;-------------------------------------------------------------
+; Querys
 
 (defn get-official-response-by-id
   [id]
@@ -18,6 +23,8 @@
   [id]
   (into [] (sql/query db/spec ["SELECT * FROM official_responses WHERE user_id = ?" id])))
 
+;;--------------------------------------------------------------
+; Inserts/Updates/Deletes
 
 (defn official-response-upvote
   [db-conn [official_response_id]]
@@ -40,6 +47,14 @@
   (sql/insert! db-conn
                :official_responses
                new-official))
+
+(defn delete-official-response
+  ([off_res] (delete-official-response off_res false))
+  ([off_res perm]
+   (if perm
+     (sql/delete! db/spec :official_responses ["official_response_id = ?" (:official_response_id off_res)])
+     (sql/update! db/spec :official_responses {:user_id 0
+                                               :edited_at (time/local-now)}))))
 
 (defn official_response_model
   "Defines the comments model table in the db"
