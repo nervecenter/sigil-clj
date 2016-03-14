@@ -60,4 +60,4 @@
    [:times_visited :int "NOT NULL" "DEFAULT 0"]
    [:org_id :bigint "NOT NULL" "DEFAULT 0"] ;; forigen key to orgs for admins
    [:tag_subscriptions :bigint "ARRAY" "DEFAULT ARRAY[]::bigint[]"]
-   [:user_is_active :boolean "NOT NULL" "DEFAULT true"]))
+   [:user_is_active :boolean "NOT NULL" "DEFAULT TRUE"]))

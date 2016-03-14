@@ -46,7 +46,7 @@
    [:icon_20 :text]
    [:times_viewed :int "NOT NULL" "DEFAULT 0"]
    [:org_id :bigint "NOT NULL"]
-   [:tag_is_active :boolean "NOT NULL" "DEFAULT true"]))
+   [:tag_is_active :boolean "NOT NULL" "DEFAULT TRUE"]))
 
 
 

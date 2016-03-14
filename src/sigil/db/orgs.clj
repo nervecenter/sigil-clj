@@ -63,6 +63,7 @@
    [:org_url :text "NOT NULL" "UNIQUE"]
    [:org_name :text "NOT NULL" "UNIQUE"]
    [:website :text "NOT NULL" "DEFAULT '#'"]
+   [:org_topic_ids :bigint "ARRAY" "NOT NULL" "DEFAULT ARRAY[]::bigint[]"]
    [:created_at :timestamp "NOT NULL" "DEFAULT CURRENT_TIMESTAMP"]
    [:icon_20 :text]
    [:icon_100 :text]
@@ -73,9 +74,9 @@
    [:address :text]
    [:city :text]
    [:state :text]
-   [:zip-code :text]
-   [:org_is_active :boolean "NOT NULL" "DEFAULT true"]
-   ))
+   [:zip_code :text]
+   [:org_is_active :boolean "NOT NULL" "DEFAULT TRUE"]
+   [:org_approved :boolean "NOT NULL" "DEFAULT FALSE"]))
 
 
 

@@ -39,5 +39,6 @@
    [:topic_url :text "NOT NULL"]
    [:topic_name :text "NOT NULL"]
    [:banner :text "NOT NULL"]
+   [:created_at :timestamp "NOT NULL" "DEFAULT CURRENT_TIMESTAMP"]
    [:topic_is_active :boolean "NOT NULL" "DEFAULT true"]))
 
