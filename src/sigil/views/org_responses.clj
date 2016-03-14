@@ -25,5 +25,4 @@
       (for [i issues]
         (issue-partial uri i user true))
       [:h4 (:org_name org) " hasn't responded to any issues yet. They'll get to it soon!"])]]
-  ;; sidebar goes here
-  )
+  (sidebar-partial org user))

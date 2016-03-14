@@ -3,17 +3,40 @@
             [sigil.db.users :refer [get-user-subscriptions]]
             [hiccup.core :refer [html]]))
 
-(defn sidebar-partial
-  ([user]
-   )
-  ([user org]
-   (let [org-tags (get-tags-by-org-id (:org_id org))
-         user-subs (get-user-subscriptions (:user_id user))]
-     
-     ))
-  ;; Get the org's tags
-  ;; Get the user's subscriptions
-  )
+(declare sidebar-partial sidebar org-box link-box ad ad-box sidebar-footer)
+
+(defn sidebar-partial [org user]
+  (cond
+    (and (some? org) (some? user))
+    (let [org-tags (get-tags-by-org-id (:org_id org))
+;;        user-favorites (get-favorites-by-user-id (:user_id user))
+          ]
+      (sidebar org
+               org-tags
+               ;;user-favorites
+               nil))
+    (and (some? org) (nil? user))
+    (let [org-tags (get-tags-by-org-id (:org_id org))]
+      (sidebar org org-tags nil))
+    (and (nil? org) (some? user))
+;;    (let [user-favorites (get-favorites-by-user-id (:user_id user))]
+    (sidebar nil
+             nil
+             ;;user-favorites
+             nil)
+;;      )
+    :else
+    (sidebar nil nil nil)))
+
+(defn sidebar [org org-tags user-favorites]
+  [:div.col-md-3.col-lg-3.col-sm-12.col-xs-12
+   (if (some? org)
+     (org-box org org-tags))
+   link-box
+;;   (if (not-empty user-favorites)
+;;     (favorites-box user-favorites))
+   (ad-box)
+   sidebar-footer])
 
 (defn org-box [org org-tags]
   [:div.panel.panel-default
@@ -43,7 +66,14 @@
     [:hr.sidebar-divider]
     [:a {:href "/features"} [:b "Sigil for your business"]]]])
 
-;;(defn subscription-box [])
+;;(defn favorites-box [user-favorites]
+;;  [:div.panel.panel-default
+;;   [:div.panel-heading "Your Favorites"]
+;;   [:div.panel-body
+;;    (for [f user-favorites]
+;;     [:a.sub {:href (:org_url (:org f))}
+;;       [:img.sub-org-icon {:src (:icon_30 (:org f))}]
+;;      (:org_name (:org f))])]])
 
 (defn ad [url img new-tab?]
   [:a (if new-tab? {:href url :target "_blank"} {:href url})

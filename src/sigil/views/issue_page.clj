@@ -2,7 +2,8 @@
   (:require [sigil.auth :refer [user-or-nil]]
             [sigil.db.issues :refer [get-issue-with-user-and-org-by-id]]
             [sigil.db.responses :refer [get-responses-by-issue]]
-            [sigil.db.comments :refer [get-comments-by-issue]]))
+            [sigil.db.comments :refer [get-comments-by-issue]]
+            [sigil.views.partials.sidebar :refer [sidebar-partial]]))
 
 (declare issue-page-handler issue-page-body)
 
@@ -125,4 +126,5 @@
                      :placeholder "What would you like to say?"}
                     "add-comment-box")]
         (submit-button {:class "btn btn-primary"} "submit-comment" "Submit comment"))
-       nil)]]])
+       nil)]]]
+  (sidebar-partial org user))
