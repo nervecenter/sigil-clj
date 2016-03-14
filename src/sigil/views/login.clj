@@ -31,18 +31,17 @@
         password (login-data "password")
         return (login-data "return")
         user (get-user-by-email email)]
-    (if (some? user)
-      (if (check password (:pass_hash user))
-        {:status 302
-         :headers {"Location" return}
-         :body ""
-         :cookies {:user {:value (make-user-token user)
-                          :max-age 2628000
-                          ;;:secure true
-                          ;;:http-only true
-                          ;;:domain ".sigil.tech"
-                          }}}
-        (redirect-invalid return))
+    (if (and (some? user)
+             (check password (:pass_hash user)))
+      {:status 302
+       :headers {"Location" return}
+       :body ""
+       :cookies {:user {:value (make-user-token user)
+                        :max-age 2628000
+                        ;;:secure true
+                        ;;:http-only true
+                        ;;:domain ".sigil.tech"
+                        }}}
       (redirect-invalid return))))
 
 (defn login-page

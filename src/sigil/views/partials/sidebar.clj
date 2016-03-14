@@ -60,11 +60,12 @@
        [:br]))]])
 
 (def link-box
-  [:div.panel.panel-default
-   [:div.panel-body
-    [:a {:href "/companies"} "Browse companies on Sigil"]
-    [:hr.sidebar-divider]
-    [:a {:href "/features"} [:b "Sigil for your business"]]]])
+  (html
+   [:div.panel.panel-default
+    [:div.panel-body
+     [:a {:href "/companies"} "Browse companies on Sigil"]
+     [:hr.sidebar-divider]
+     [:a {:href "/features"} [:b "Sigil for your business"]]]]))
 
 ;;(defn favorites-box [user-favorites]
 ;;  [:div.panel.panel-default
@@ -86,19 +87,20 @@
     1 (ad "/sigil" "images/feedback-ad.png" true)))
 
 (def sidebar-footer
-  [:div.panel.panel-default
-   [:div.panel-body {:style "font-size:12px;"}
-    "© 2016 Sigil Technologies Inc."
-    [:br]
-    [:a {:href "/404"} "About"]
-    "|"
-    [:a {:href "/legal"} "Legal"]
-    "|"
-    [:a {:href "mailto:contact@sigil.tech"} "Advertise"]
-    "|"
-    [:a {:href "#"} "Twitter"]
-    "|"
-    [:a {:href "https://www.facebook.com/Sigil-Technologies-Inc-1617420208509874/"
-         :target "_blank"} "Facebook"]
-    "|"
-    [:a {:href "mailto:contact@sigil.tech"} "Contact"]]])
+  (html
+   [:div.panel.panel-default
+    [:div.panel-body {:style "font-size:12px;"}
+     "© 2016 Sigil Technologies Inc."
+     [:br]
+     [:a {:href "/404"} "About"]
+     "|"
+     [:a {:href "/legal"} "Legal"]
+     "|"
+     [:a {:href "mailto:contact@sigil.tech"} "Advertise"]
+     "|"
+     [:a {:href "#"} "Twitter"]
+     "|"
+     [:a {:href "https://www.facebook.com/Sigil-Technologies-Inc-1617420208509874/"
+          :target "_blank"} "Facebook"]
+     "|"
+     [:a {:href "mailto:contact@sigil.tech"} "Contact"]]]))
