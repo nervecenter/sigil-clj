@@ -34,7 +34,7 @@
         [:img.img-rounded.img-responsive.img-relief {:src (:banner org)}]
         [:h4 "Banner files: 1000 x 200 px .jpg or .png"]
         (form-to
-         [:post "/orgsettings/changebanner"]
+         [:post "/orgbanner"]
          [:div.form-group
           [:div.input-group
            [:div.input-group-btn
@@ -71,7 +71,7 @@
             [:a {:href (str "/" (:org_url org) "/" (:tag_url tag) "/delete")}
              [:span.glyphicon.glyphicon-remove-sign]]]])
         (form-to
-         [:post "/orgsettings/addtag"]
+         [:post "/orgaddtag"]
          [:div.row {:style "margin-top:30px;"}
           [:div.col-lg-6
            [:div.form-group
@@ -90,7 +90,7 @@
          {:src (:icon_100 org)}]
         [:h4 "Large icon files: 100 x 100 px .jpg or .png"]
         (form-to
-         [:post "orgsettings/changeicon100"]
+         [:post "/orgicon100"]
          [:div.form-group
           [:div.input-group
            [:div.input-group-btn
@@ -105,7 +105,7 @@
          {:src (:icon_30 org)}]
         [:h4 "Small icon files: 30 x 30 px .jpg or .png"]
         (form-to
-         [:post "orgsettings/changeicon30"]
+         [:post "/orgicon30"]
          [:div.form-group
           [:div.input-group
            [:div.input-group-btn

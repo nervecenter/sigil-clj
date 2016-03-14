@@ -13,11 +13,15 @@
 
 (defn org-page-handler [req]
   (let [user (user-or-nil req)
+        user-org (get-org-by-user user)
         org (get-org-by-url (:org_url (:route-params req)))
         tags (get-tags-by-org-id (:org_id org))]
     (if (some? org)
       (let [issues (get-hottest-issues-by-org-id (:org_id org))]
-        (layout/render req user org (str "Sigil - " (:org_name org))
+        (layout/render req
+                       user
+                       user-org
+                       (str "Sigil - " (:org_name org))
                        (org-page-body req user org tags issues)))
       ("404"))))
 
