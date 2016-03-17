@@ -25,6 +25,7 @@
 
             [sigil.actions.logout :refer [logout-handler]]
             [sigil.actions.db :as db-actions]
+            [sigil.actions.search :as search-actions]
             [sigil.db.migrations :as mig]
 
             [ring.middleware.resource :refer [wrap-resource]]
@@ -65,7 +66,8 @@
   (GET "/printrequest" req (html [:p {} req]))
   (GET "/printrequest/:x" req (html [:p {} req]))
   (GET "/404" req (not-found-handler req))
-  (GET "/search/:term" req ())
+  (GET "/search/:term" req (search-actions/auto-complete-search req))
+  (GET "/search/:org-id/:term" req (search-actions/search-org-issues req))
   (GET "/:org_url" req (org-page-handler req))
   ;(GET "/:org_url/:issue_id" req (issue-page-handler req))
   (ANY "*" req (not-found-handler req))

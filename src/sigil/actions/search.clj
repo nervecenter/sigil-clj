@@ -1,11 +1,13 @@
 (ns sigil.actions.search
-  (:require [sigil.helpers :refer [search-all]]))
+  (:require [sigil.helpers :refer [search-orgs-tags-topics]]
+            [clojure.string :as str]
+            [sigil.db.issues :refer [get-issues-by-org]]))
 
 
 
 (defn auto-complete-search
   [req]
-  (let [matched (search-all (:term (:route-params req)))]
+  (let [matched (search-orgs-tags-topics (:term (:route-params req)))]
     (for [[k v] matched]
       (cond
         (= k :orgs) (for [org v]
@@ -17,3 +19,17 @@
         (= k :topics) (for [topic v]
                         {:label (:topic_name topic)
                          :value (:topic_url topic)})))))
+
+
+;;-------------------------------------------------
+; Org_page search issues
+
+;;TODO:: Need to jsonify the return issues
+(defn search-org-issues
+  [req]
+  (let [search-params (:route-params req)
+        org (sigil.db.orgs/get-org-by-id (search-params :org-id))
+        term (search-params :term)]
+    (if (not= term "")
+      (filter #(str/starts-with? (:title %) term) (get-issues-by-org org))
+      ())))

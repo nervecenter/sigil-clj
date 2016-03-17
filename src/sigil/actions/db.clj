@@ -50,6 +50,8 @@
       (count (notes/get-user-notifications user))
       0)))
 
+
+;;TODO:: Need to jsonify the return of notifications
 (defn get-user-notifications
   [req]
   (let [user (user-or-nil req)]
@@ -70,7 +72,9 @@
         new-issue (zipmap [:org_id :user_id :title :text]
                           (map #(new-issue-data %) ["org-id" "user-id" "title" "text"]))]
     (if (= :success (db/db-trans [issues/create-issue new-issue]))
-      {:status 301
+      {:status 302
        :headers {"Location" (str "return=" return "/" (issues/get-issue-insert-id new-issue))}}
       ;;else redirect and let them know whats wrong....
       )))
+
+
