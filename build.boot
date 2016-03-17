@@ -59,7 +59,6 @@
 (def default-sigil-map
   {:sigil-root "src/sigil"})
 
-
 ;; Task to build the server jar using "boot build"
 (deftask build
   "Build the Sigil web server."

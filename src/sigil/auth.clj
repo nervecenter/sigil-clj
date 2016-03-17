@@ -1,5 +1,7 @@
 (ns sigil.auth
   (:require [clojure.java.jdbc :refer [query]]
+            [sigil.db.orgs :as orgs]
+            [sigil.db.votes :as votes]
             [buddy.sign.jwe :as jwe]
             [buddy.core.keys :refer [public-key private-key]]
             [sigil.db.users :refer [get-user-by-id]]))
@@ -31,10 +33,17 @@
 (defn user-or-nil [req]
   (if (authenticated? req) (identity req) nil))
 
-;; TODO: Implement user-org-or-nil
 (defn user-org-or-nil [user]
-  nil)
+  (let [user-org (:org_id user)]
+      (if (not= user-org 0)
+        (orgs/get-org-by-id user-org)
+        nil)))
 
 (defn is-user-site-admin?
   [user]
+  true)
+
+;;TODO::
+(defn user-is-admin-of-org?
+  [user org]
   true)

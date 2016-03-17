@@ -1,9 +1,13 @@
 (ns sigil.views.issue-page
-  (:require [sigil.auth :refer [user-or-nil]]
-            [sigil.db.issues :refer [get-issue-with-user-and-org-by-id]]
-            [sigil.db.responses :refer [get-responses-by-issue]]
+  (:require [sigil.views.layout :as layout]
+            [sigil.auth :refer [user-or-nil user-org-or-nil user-is-admin-of-org?]]
+            [sigil.helpers :refer [get-issue-with-user-and-org-by-issue-id]]
+            [sigil.db.officialresponses :refer [get-official-responses-by-issue]]
             [sigil.db.comments :refer [get-comments-by-issue]]
-            [sigil.views.partials.sidebar :refer [sidebar-partial]]))
+            [sigil.db.votes :refer [user-voted-on-issue?]]
+            [sigil.views.partials.sidebar :refer [sidebar-partial]]
+            )
+  (:use [hiccup.form]))
 
 (declare issue-page-handler issue-page-body)
 
@@ -31,7 +35,7 @@
                         org
                         (some? user)
                         (if (some? user)
-                          (user-voted-on-issue? (:user_id user) (:issue_id issue))
+                          (user-voted-on-issue? user issue)
                           false)
                         nil ;(get-responses-with-responders-by-issue-id (:issue_id issue))
                         nil ;(get-comments-with-commenters-by-issue-id (:issue_id issue))

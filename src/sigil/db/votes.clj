@@ -6,8 +6,8 @@
 ; Querys
 
 (defn user-voted-on-issue?
-  [user_id issue_id]
-  (empty? (into [] (sql/query db/spec ["SELECT * FROM votes WHERE user_id = ? AND issue_id = ?" user_id issue_id] ))))
+  [user issue]
+  (empty? (into [] (sql/query db/spec ["SELECT * FROM votes WHERE user_id = ? AND issue_id = ?" (:user_id user) (:issue_id issue)] ))))
 
 (defn user-voted-on-comment?
   [user_id comment_id]

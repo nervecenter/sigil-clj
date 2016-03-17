@@ -10,7 +10,7 @@
 
 (defn get-issue-by-id
   [id]
-  (first (sql/query db/spec ["SELECT * FROM issues WHERE issue_id = ?;" id])))
+  (first (sql/query db/spec ["SELECT * FROM issues WHERE issue_id = ?;"  id])))
 
 (defn get-hottest-issues-by-org-id
   [org_id]
@@ -22,7 +22,7 @@
 
 (defn get-landing-issues
   []
-  (set (sql/query db/spec ["SELECT DISTINCT ON (issue_id) issues.title, users.username FROM issues LEFT JOIN users ON (issues.user_id = users.user_id);"])))
+  (into [] (sql/query db/spec ["SELECT DISTINCT ON (issue_id) issues.title, users.username FROM issues LEFT JOIN users ON (issues.user_id = users.user_id);"])))
 
 ;;------------------------------------------------------------------
 ; Updates/Inserts

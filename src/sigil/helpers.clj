@@ -48,7 +48,9 @@
 
 (defn get-issue-with-user-and-org-by-issue-id
   [issue_id]
-  (let [issue (issues/get-issue-by-id issue_id)
+  (let [issue (issues/get-issue-by-id (read-string issue_id))
         user (users/get-user-by-id (:user_id issue))
-        org (orgs/get-org-by-id (:org_id issue))]
-      (vector  issue user org))) 
+        org (orgs/get-org-by-id (:org_id issue))
+        ]
+      [issue user org]                                ;(vector  issue user org)
+    )) 

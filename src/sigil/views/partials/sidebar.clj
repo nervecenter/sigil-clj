@@ -1,6 +1,6 @@
 (ns sigil.views.partials.sidebar
   (:require [sigil.db.tags :refer [get-tags-by-org-id]]
-            [sigil.db.users :refer [get-user-subscriptions]]
+            [sigil.db.users :refer [get-user-favorites]]
             [hiccup.core :refer [html]]))
 
 (declare sidebar-partial sidebar org-box link-box ad ad-box sidebar-footer)

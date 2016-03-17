@@ -63,7 +63,7 @@
   (GET "/404" req (not-found-handler req))
   (GET "/search/:term" req ())
   (GET "/:org_url" req (org-page-handler req))
-  (GET "/:org_url/:issue_id" req (issue-page-handler req))
+  ;(GET "/:org_url/:issue_id" req (issue-page-handler req))
   (ANY "*" req (not-found-handler req))
   (route/resources "/")
   (route/not-found "404"))
