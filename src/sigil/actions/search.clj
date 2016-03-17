@@ -1,7 +1,8 @@
 (ns sigil.actions.search
   (:require [sigil.helpers :refer [search-orgs-tags-topics]]
             [clojure.string :as str]
-            [sigil.db.issues :refer [get-issues-by-org]]))
+            [sigil.db.issues :as issues]
+            [sigil.db.orgs :as orgs]))
 
 
 
@@ -28,8 +29,8 @@
 (defn search-org-issues
   [req]
   (let [search-params (:route-params req)
-        org (sigil.db.orgs/get-org-by-id (search-params :org-id))
+        org (orgs/get-org-by-id (search-params :org-id))
         term (search-params :term)]
     (if (not= term "")
-      (filter #(str/starts-with? (:title %) term) (get-issues-by-org org))
+      (filter #(str/starts-with? (:title %) term) (issues/get-issues-by-org org))
       ())))

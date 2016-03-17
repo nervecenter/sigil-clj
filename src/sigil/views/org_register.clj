@@ -2,7 +2,7 @@
   (:require [hiccup.core :refer [html]]
             [sigil.auth :refer [user-or-nil]]
             [sigil.views.layout :as layout]
-            [sigil.actions.db :as db]
+            [sigil.actions.register :as register]
             [sigil.helpers :refer [get-return]]
             [hiccup.page :refer [html5]])
   (:use hiccup.form))
@@ -59,7 +59,7 @@
       :else
       (do
         ;; Add the user
-        (db/register-org-and-admin
+        (register/register-org-and-admin
          {:org_name org-name
           :org_url org-url
           :website website}
