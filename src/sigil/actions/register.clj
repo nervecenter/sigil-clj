@@ -1,22 +1,7 @@
-(ns sigil.actions.db
+(ns sigil.actions.register
   (:require [sigil.db.core :as db]
-            [sigil.db.users :as users]
             [sigil.db.orgs :as orgs]
-            [sigil.db.issues :as issues]
-            [sigil.db.comments :as comments]
-            [sigil.db.officialresponses :as official]
-            [sigil.db.tags :as tags]
-            [sigil.db.topics :as topics]
-            [sigil.db.votes :as votes]))
-
-
-;;----------------------------------
-;; user_register_post
-
-(defn register-user [user]
-  (db/db-trans
-   [users/create-user
-    (assoc user :icon_100 (rand-nth orgs/default_org_icon_100))]))
+            [sigil.db.users :as users]))
 
 
 ;;---------------------------------
@@ -32,3 +17,12 @@
     (let [userid (:user_id (users/get-user-by-email (:email admin)))
           orgid (:org_id (orgs/get-org-by-url (:org_url org)))]
       (db/db-trans [users/update-user  [userid {:org_id orgid}]]))))
+
+;;-------------------------------------
+; user-register-post
+
+(defn register-user [user]
+  (db/db-trans
+   [users/create-user
+    (assoc user :icon_100 (rand-nth orgs/default_org_icon_100))]))
+

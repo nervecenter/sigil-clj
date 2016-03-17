@@ -12,16 +12,16 @@
   (first (sql/query db/spec ["SELECT * FROM official_responses WHERE comment_id = ?" id])))
 
 (defn get-official-responses-by-issue
-  [id]
-  (into [] (sql/query db/spec ["SELECT * FROM official_responses WHERE issue_id = ?" id])))
+  [issue]
+  (into [] (sql/query db/spec ["SELECT * FROM official_responses WHERE issue_id = ?" (:issue_id issue)])))
 
 (defn get-latest-official-response-by-issue
-  [id]
-  (first (into [] (sql/query db/spec ["SELECT * FROM official_responses WHERE issue_id = ? ORDER BY edited_at DESC LIMIT 1" id]))))
+  [issue]
+  (first (into [] (sql/query db/spec ["SELECT * FROM official_responses WHERE issue_id = ? ORDER BY edited_at DESC LIMIT 1" (:issue_id issue)]))))
 
 (defn get-official-responses-by-org
-  [id]
-  (into [] (sql/query db/spec ["SELECT * FROM official_responses WHERE user_id = ?" id])))
+  [org]
+  (into [] (sql/query db/spec ["SELECT * FROM official_responses WHERE org_id = ?" (:org_id org)])))
 
 ;;--------------------------------------------------------------
 ; Inserts/Updates/Deletes

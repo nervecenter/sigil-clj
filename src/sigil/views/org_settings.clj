@@ -2,7 +2,7 @@
   (:require [sigil.auth :refer [user-or-nil]]
             [sigil.helpers :refer [user-has-role? user-is-org-admin?]]
             [sigil.db.orgs :refer [get-org-by-id]]
-            [sigil.db.tags :refer [get-tags-by-org-id]]
+            [sigil.db.tags :refer [get-tags-by-org]]
             [sigil.views.layout :as layout]
             [hiccup.core :refer [html]]
             [hiccup.form :refer [form-to file-upload text-field submit-button]]))
@@ -13,7 +13,7 @@
   (let [user (user-or-nil req)]
     (if (user-is-org-admin? user)
       (let [org (get-org-by-id (:org_id user))
-            tags (get-tags-by-org-id (:org_id org))]
+            tags (get-tags-by-org (:org_id org))]
         (layout/render (str "Sigil - " (:org_name org) " Settings")
                        (org-settings-body org tags)))
       "404")))

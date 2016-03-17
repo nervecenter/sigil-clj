@@ -15,9 +15,9 @@
   [issue]
   (into [] (sql/query db/spec ["SELECT * FROM comments WHERE issue_id = ?" (:issue_id issue)])))
 
-(defn get-comments-by-user-id
-  [id]
-  (into [] (sql/query db/spec ["SELECT * FROM comments WHERE user_id = ?" id])))
+(defn get-comments-by-user
+  [user]
+  (into [] (sql/query db/spec ["SELECT * FROM comments WHERE user_id = ?" (:user_id user)])))
 
 
 ;;----------------------------------------------------------------

@@ -10,8 +10,8 @@
   (empty? (into [] (sql/query db/spec ["SELECT * FROM votes WHERE user_id = ? AND issue_id = ?" (:user_id user) (:issue_id issue)] ))))
 
 (defn user-voted-on-comment?
-  [user_id comment_id]
-  (empty? (into [] (sql/query db/spec ["SELECT * FROM votes WHERE user_id = ? AND comment_id = ?" user_id comment_id] ))))
+  [user comment]
+  (empty? (into [] (sql/query db/spec ["SELECT * FROM votes WHERE user_id = ? AND comment_id = ?" (:user_id user) (:comment_id comment)] ))))
 
 (defn get-user-votes
   [user_id]

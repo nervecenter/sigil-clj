@@ -2,7 +2,7 @@
   (:require [hiccup.core :refer [html]]
             [sigil.auth :refer [user-or-nil]]
             [sigil.views.layout :as layout]
-            [sigil.actions.db :as db]
+            [sigil.actions.register :as register]
             [sigil.helpers :refer [get-return]]
             [hiccup.page :refer [html5]])
   (:use hiccup.form))
@@ -41,7 +41,7 @@
       :else
       (do
         ;; Add the user
-        (db/register-user
+        (register/register-user
          {:username username
           :email email
           :pass_hash (buddy.hashers/encrypt password)})

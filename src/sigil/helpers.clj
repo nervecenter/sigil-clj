@@ -20,7 +20,7 @@
                           true
                           false)))
 
-(defn match-orgs-tags-topics
+(defn search-orgs-tags-topics
   [term]
   (let [matched-orgs (filter #(str/starts-with? (:org_name %) term) (orgs/get-all-orgs))
         matched-topics (filter #(str/starts-with? (:topic_name %) term) (topics/get-all-topics))

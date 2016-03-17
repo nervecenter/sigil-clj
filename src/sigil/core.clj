@@ -24,6 +24,9 @@
             [sigil.auth :refer [authenticated?]]
 
             [sigil.actions.logout :refer [logout-handler]]
+            [sigil.actions.issue :as issue-actions]
+            [sigil.actions.search :as search-actions]
+            [sigil.actions.notifications :as note-actions]
             [sigil.db.migrations :as mig]
 
             [ring.middleware.resource :refer [wrap-resource]]
@@ -55,13 +58,18 @@
                             (org-settings-handler req)
                             "404"))
   (GET "/register" req (user-register-get req))
+  (POST "/newissue" req (issue-actions/add-issue-post req))
+  (GET "/usernotes" req (note-actions/get-user-notifications req))
+  (GET "/countusernotes" req (note-actions/get-number-user-notifications req))
   (POST "/register" req (user-register-post req))
   (GET "/orgregister" req (org-register-get req))
   (POST "/orgregister" req (org-register-post req))
   (GET "/printrequest" req (html [:p {} req]))
   (GET "/printrequest/:x" req (html [:p {} req]))
   (GET "/404" req (not-found-handler req))
-  (GET "/search/:term" req ())
+  (context "/search" req
+    (GET "/:term" req (search-actions/auto-complete-search req))
+    (GET "/:org-id/:term" req (search-actions/search-org-issues req)))
   (context "/:org_url{[a-z0-9]{4,}}" req
     (GET "/" req (org-page-handler req))
     (GET "/:issue_id{[0-9]+}" req (issue-page-handler req)))

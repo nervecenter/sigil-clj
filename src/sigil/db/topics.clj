@@ -9,6 +9,9 @@
   []
   (into [] (sql/query db/spec ["SELECT * FROM topics"])))
 
+(defn get-topic-by-id
+  [id]
+  (first (sql/query db/spec ["SELECT * FROM topics WHERE topic_id = ?" id])))
 
 ;;-------------------------------------------------------------------
 ; Updates/Inserts/Deletes

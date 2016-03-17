@@ -1,5 +1,5 @@
 (ns sigil.views.partials.sidebar
-  (:require [sigil.db.tags :refer [get-tags-by-org-id]]
+  (:require [sigil.db.tags :refer [get-tags-by-org]]
             [sigil.db.users :refer [get-user-favorites]]
             [hiccup.core :refer [html]]))
 
@@ -8,7 +8,7 @@
 (defn sidebar-partial [org user]
   (cond
     (and (some? org) (some? user))
-    (let [org-tags (get-tags-by-org-id (:org_id org))
+    (let [org-tags (get-tags-by-org org)
 ;;        user-favorites (get-favorites-by-user-id (:user_id user))
           ]
       (sidebar org
@@ -16,7 +16,7 @@
                ;;user-favorites
                nil))
     (and (some? org) (nil? user))
-    (let [org-tags (get-tags-by-org-id (:org_id org))]
+    (let [org-tags (get-tags-by-org org)]
       (sidebar org org-tags nil))
     (and (nil? org) (some? user))
 ;;    (let [user-favorites (get-favorites-by-user-id (:user_id user))]

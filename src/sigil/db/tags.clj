@@ -13,9 +13,9 @@
   [id]
   (first (sql/query db/spec ["SELECT * FROM tags WHERE tag_id = ?;" id])))
 
-(defn get-tags-by-org-id
-  [org_id]
-  (into [] (sql/query db/spec ["SELECT * FROM tags WHERE org_id = ?;" org_id])))
+(defn get-tags-by-org
+  [org]
+  (into [] (sql/query db/spec ["SELECT * FROM tags WHERE org_id = ?;" (:org_id org)])))
 
 ;;---------------------------------------------------------------------
 ; Updates/Inserts/Deletes
