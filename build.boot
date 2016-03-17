@@ -13,7 +13,9 @@
                           ;;[korma "0.4.2"]
                           [org.clojure/java.jdbc "0.4.2"]
                           [org.postgresql/postgresql "9.4.1208"]
-                          [clj-time "0.11.0"]])
+                          [clj-time "0.11.0"]
+                          [speclj "3.3.1"]
+                          [fresh "1.0.1"]])
 
 (task-options! pom {:project 'sigil-clj
                     :version "0.5.0"}
@@ -53,6 +55,10 @@
   (do
     (sigil.db.migrations/create-db-tables)
     (sigil.db.seed/seed-db)))
+
+(def default-sigil-map
+  {:sigil-root "src/sigil"})
+
 
 ;; Task to build the server jar using "boot build"
 (deftask build

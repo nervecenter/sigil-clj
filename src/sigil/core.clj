@@ -14,6 +14,7 @@
             [sigil.views.login :refer [login-get login-post]]
             [sigil.views.usertest :refer [usertest-handler]]
             [sigil.views.org-page :refer [org-page-handler]]
+            [sigil.views.issue-page :refer [issue-page-handler]]
             [sigil.views.org-settings :refer [org-settings-handler]]
             [sigil.views.user-register :refer [user-register-get user-register-post]]
             [sigil.views.org-register :refer [org-register-get org-register-post]]
@@ -58,6 +59,7 @@
   (GET "/printrequest/:x" req (html [:p {} req]))
   (GET "/search/:term" req ())
   (GET "/:org_url" req (org-page-handler req))
+  (GET "/:org_url/:issue_id" req (issue-page-handler req))
   (route/resources "/")
   (route/not-found "404"))
 
@@ -69,9 +71,10 @@
       (wrap-cookies)
       (wrap-params)))
 
-(defonce server (jetty/run-jetty #'app {:port 3000 :join? false :configurator server-conf}))
+(def server () ;(jetty/run-jetty #'app {:port 3000 :join? false :configurator server-conf})
+  )
 
 
 (defn -main
   []
-  ())
+  (jetty/run-jetty #'app {:port 3000 :join? false :configurator server-conf}))

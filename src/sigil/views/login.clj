@@ -33,15 +33,16 @@
         user (get-user-by-email email)]
     (if (some? user)
       (if (check password (:pass_hash user))
-        {:status 302
-         :headers {"Location" return}
-         :body ""
-         :cookies {:user {:value (make-user-token user)
-                          :max-age 2628000
-                          ;;:secure true
-                          ;;:http-only true
-                          ;;:domain ".sigil.tech"
-                          }}}
+        (do (sigil.db.core/db-trans [sigil.db.users/user-login-inc (:user_id user)])
+          {:status 302
+           :headers {"Location" return}
+           :body ""
+           :cookies {:user {:value (make-user-token user)
+                            :max-age 2628000
+                            ;;:secure true
+                            ;;:http-only true
+                            ;;:domain ".sigil.tech"
+                            }}})
         (redirect-invalid return))
       (redirect-invalid return))))
 

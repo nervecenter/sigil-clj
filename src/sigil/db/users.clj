@@ -11,16 +11,16 @@
 (defn get-user-by-email [email]
   (first (sql/query db/spec ["SELECT * FROM users WHERE email = ?;" email])))
 
-(defn get-user-subscriptions [id]
-  (first (sql/query db/spec ["SELECT tag_subscriptions FROM users WHERE user_id = ?" id])))
+(defn get-user-favorites [id]
+  (first (sql/query db/spec ["SELECT favorites FROM users WHERE user_id = ?" id])))
 
 
 ;;--------------------------------------------------------------
-; Updates/Inserts
+; Updates/Inserts/Deletes
 
-(defn add-user-tags
-  [db-conn [user_id & tag_ids]]
-  ())
+(defn add-user-favorite
+  [db-conn [user_id org_id]]
+  (sql/execute! db-conn ["UPDATE users SET favorites = array_append(favorites, ?) WHERE user_id = ?" org_id user_id]))
 
 (defn user-login-inc
   [db-conn [user_id]]
@@ -59,5 +59,5 @@
    [:last_login :timestamp]
    [:times_visited :int "NOT NULL" "DEFAULT 0"]
    [:org_id :bigint "NOT NULL" "DEFAULT 0"] ;; forigen key to orgs for admins
-   [:tag_subscriptions :bigint "ARRAY" "DEFAULT ARRAY[]::bigint[]"]
+   [:favorites :bigint "ARRAY" "DEFAULT ARRAY[]::bigint[]"]
    [:user_is_active :boolean "NOT NULL" "DEFAULT TRUE"]))

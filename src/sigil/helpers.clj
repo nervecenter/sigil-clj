@@ -2,6 +2,8 @@
   (:require [sigil.db.orgs :as orgs]
             [sigil.db.topics :as topics]
             [sigil.db.tags :as tags]
+            [sigil.db.issues :as issues]
+            [sigil.db.users :as users]
             [clojure.string :as str]))
 
 (defn get-return [req]
@@ -35,3 +37,18 @@
 
 (defn is-user-site-admin? [user]
   (user-has-role? user :site-admin))
+
+
+(defn user-favorites-or-nil
+  [user]
+  (if (nil? (:user_id user))
+    nil
+    (map #(orgs/get-org-by-id %) (:favorites (users/get-user-favorites (:user_id user))))))
+
+
+(defn get-issue-with-user-and-org-by-issue-id
+  [issue_id]
+  (let [issue (issues/get-issue-by-id issue_id)
+        user (users/get-user-by-id (:user_id issue))
+        org (orgs/get-org-by-id (:org_id issue))]
+      (vector  issue user org))) 

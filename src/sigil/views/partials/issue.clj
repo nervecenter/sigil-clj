@@ -9,7 +9,7 @@
   ;; We need: The issue, whether the user is authed, and whether they voted
   (let [authenticated? (some? user)
         user-voted? (if authenticated?
-                      (user-voted-on-issue? (:user_id user))
+                      (user-voted-on-issue? (:user_id user) (:issue_id issue))
                       false)]
     (if in-panel?
       ;; We need: a response

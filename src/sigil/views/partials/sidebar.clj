@@ -1,6 +1,6 @@
 (ns sigil.views.partials.sidebar
   (:require [sigil.db.tags :refer [get-tags-by-org-id]]
-            [sigil.db.users :refer [get-user-subscriptions]]
+            [sigil.db.users :refer [get-user-favorites]]
             [hiccup.core :refer [html]]))
 
 (defn sidebar-partial
@@ -8,7 +8,7 @@
    )
   ([user org]
    (let [org-tags (get-tags-by-org-id (:org_id org))
-         user-subs (get-user-subscriptions (:user_id user))]
+         user-subs (get-user-favorites (:user_id user))]
      
      ))
   ;; Get the org's tags

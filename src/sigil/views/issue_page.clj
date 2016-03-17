@@ -1,8 +1,11 @@
 (ns sigil.views.issue-page
-  (:require [sigil.auth :refer [user-or-nil]]
-            [sigil.db.issues :refer [get-issue-with-user-and-org-by-id]]
-            [sigil.db.responses :refer [get-responses-by-issue]]
-            [sigil.db.comments :refer [get-comments-by-issue]]))
+  (:require [sigil.auth :refer [user-or-nil user-org-or-nil]]
+            [sigil.helpers :refer [get-issue-with-user-and-org-by-issue-id user-is-admin-of-org?]]
+            [sigil.db.officialresponses :refer [get-official-responses-by-issue]]
+            [sigil.db.comments :refer [get-comments-by-issue]]
+            [sigil.db.votes :refer [user-voted-on-issue?]]
+            [sigil.views.layout :as layout])
+  (:use [hiccup.form]))
 
 (declare issue-page-handler issue-page-body)
 
@@ -16,19 +19,25 @@
     ;; Each response should contain responding user for icon, name, etc.
   ;; List of comments on the issue
   ;; Each comment should have commenting user for icon, name
-  (let [issue (get-issue-with-poster-by-id (:issue_id (:route-params req)))
-        org (get-org-by-url (:org_url (:route-params req)))]
-    (layout/render
-     (str "Sigil - " (:title issue))
-     (issue-page-body (user-or-nil req)
-                      issue
-                      org
-                      (some? user)
-                      (if (some? user)
-                        (user-voted-on-issue? (:user_id user))
-                        false)
-                      (get-responses-with-responders-by-issue-id (:issue_id issue))
-                      (get-comments-with-commenters-by-issue-id (:issue_id issue))))))
+  (let [[issue issue-user org] (get-issue-with-user-and-org-by-issue-id (read-string (:issue_id (:route-params req))))
+        ;org (get-org-by-url (:org_url (:route-params req)))
+        user (user-or-nil req)]
+    (do (sigil.db.core/db-trans [sigil.db.issues/issue-view-inc (:issue_id issue)])
+      (layout/render
+       req
+       user
+       (user-org-or-nil user)
+       (str "Sigil - " (:title issue))
+       (issue-page-body user
+                        issue
+                        org
+                        (some? user)
+                        (if (some? user)
+                          (user-voted-on-issue? (:user_id user) (:issue_id issue))
+                          false)
+                        nil ;(get-responses-with-responders-by-issue-id (:issue_id issue))
+                        nil ;(get-comments-with-commenters-by-issue-id (:issue_id issue))
+                        )))))
 
 (defn issue-page-body
   [user
@@ -116,7 +125,7 @@
            [:p (:text c)]]]))
      (if (some? user)
        (form-to
-        [:post]
+        [:post "/submitcomment"]
         {:class "issue-add-comment"}
         [:div.form-group
          (label "add-comment-label" "Add a comment")
@@ -124,5 +133,5 @@
                      :id "add-comment-box"
                      :placeholder "What would you like to say?"}
                     "add-comment-box")]
-        (submit-button {:class "btn btn-primary"} "submit-comment" "Submit comment"))
+        (submit-button {:class "btn btn-primary"} "Submit comment"))
        nil)]]])

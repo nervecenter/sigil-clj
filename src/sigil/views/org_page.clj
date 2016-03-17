@@ -1,9 +1,8 @@
 (ns sigil.views.org-page
-  (:require [sigil.db.orgs :refer [get-org-by-url]]
-            [sigil.auth :refer [user-or-nil]]
+  (:require [sigil.auth :refer [user-or-nil]]
             [sigil.views.layout :as layout]
             [sigil.views.partials.issue :refer [issue-partial]]
-            [sigil.db.orgs :refer [get-org-by-url get-org-by-user]]
+            [sigil.db.orgs :refer [get-org-by-url get-org-by-user org-visit-inc]]
             [sigil.db.tags :refer [get-tags-by-org-id]]
             [sigil.db.issues :refer [get-hottest-issues-by-org-id]]
             [sigil.views.partials.sidebar :refer [sidebar-partial]])
@@ -18,11 +17,12 @@
         tags (get-tags-by-org-id (:org_id org))]
     (if (some? org)
       (let [issues (get-hottest-issues-by-org-id (:org_id org))]
-        (layout/render req
-                       user
-                       user-org
-                       (str "Sigil - " (:org_name org))
-                       (org-page-body req user org tags issues)))
+        (do (sigil.db.core/db-trans [org-visit-inc (:org_id org)])
+          (layout/render req
+                         user
+                         user-org
+                         (str "Sigil - " (:org_name org))
+                         (org-page-body req user org tags issues))))
       ("404"))))
 
 (defn org-page-body [req user org tags issues]
