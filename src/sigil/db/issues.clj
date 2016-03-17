@@ -12,6 +12,10 @@
   [id]
   (first (sql/query db/spec ["SELECT * FROM issues WHERE issue_id = ?;"  id])))
 
+(defn get-issue-insert-id
+  [issue]
+  (first (sql/query db/spec ["SELECT issue_id FROM issues WHERE title = ? AND text = ?" (:title issue) (:text issue)])))
+
 (defn get-hottest-issues-by-org
   [org]
   (into [] (sql/query db/spec ["SELECT * FROM issues WHERE org_id = ?;" (:org_id org)])))

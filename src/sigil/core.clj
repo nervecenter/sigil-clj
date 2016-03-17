@@ -56,6 +56,7 @@
                             (org-settings-handler req)
                             "404"))
   (GET "/register" req (user-register-get req))
+  (POST "/newissue" req (db-actions/add-issue-post req))
   (GET "/usernotes" req (db-actions/get-user-notifications req))
   (GET "/countusernotes" req (db-actions/get-number-user-notifications req))
   (POST "/register" req (user-register-post req))

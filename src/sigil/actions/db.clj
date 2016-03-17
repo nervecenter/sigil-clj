@@ -9,7 +9,8 @@
             [sigil.db.topics :as topics]
             [sigil.db.votes :as votes]
             [sigil.db.notifications :as notes])
-  (:use [sigil.auth]))
+  (:use [sigil.auth]
+        [hiccup.form]))
 
 
 (def not-nil? (complement nil?))
@@ -55,3 +56,20 @@
     (if (not-nil? user)
       (notes/get-user-notifications user)
       [])))
+
+
+
+;;----------------------------------------
+; Add-issue-post
+
+;;TODO::Validate new issue and add redirect on fail
+(defn add-issue-post
+  [req]
+  (let [new-issue-data (:form-params req)
+        new-issue (zipmap [:org_id :user_id :title :text]
+                          (map #(new-issue-data %) ["org-id" "user-id" "title" "text"]))]
+    (if (= :success (db/db-trans [issues/create-issue new-issue]))
+      {:status 301
+       :headers {"Location" (str "return=" return "/" (issues/get-issue-insert-id new-issue))}}
+      ;;else redirect and let them know whats wrong....
+      )))
