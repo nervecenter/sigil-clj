@@ -12,13 +12,13 @@
   [id]
   (first (sql/query db/spec ["SELECT * FROM issues WHERE issue_id = ?;"  id])))
 
-(defn get-hottest-issues-by-org-id
-  [org_id]
-  (into [] (sql/query db/spec ["SELECT * FROM issues WHERE org_id = ?;" org_id])))
+(defn get-hottest-issues-by-org
+  [org]
+  (into [] (sql/query db/spec ["SELECT * FROM issues WHERE org_id = ?;" (:org_id org)])))
 
-(defn get-issues-by-org-id
-  [org_id]
-  (into [] (sql/query db/spec ["SELECT * FROM issues WHERE org_id = ?;" org_id])))
+(defn get-issues-by-org
+  [org]
+  (into [] (sql/query db/spec ["SELECT * FROM issues WHERE org_id = ?;" (:org_id org)])))
 
 (defn get-landing-issues
   []
