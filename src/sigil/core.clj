@@ -5,7 +5,7 @@
 
             [hiccup.core :refer [html]]
 
-            [compojure.core :refer [defroutes GET POST ANY]]
+            [compojure.core :refer [defroutes context GET POST ANY]]
             [compojure.route :as route]
             [compojure.handler :as handler]
 
@@ -72,10 +72,12 @@
   (GET "/printrequest" req (html [:p {} req]))
   (GET "/printrequest/:x" req (html [:p {} req]))
   (GET "/404" req (not-found-handler req))
-  (GET "/search/:term" req (search-actions/auto-complete-search req))
-  (GET "/search/:org-id/:term" req (search-actions/search-org-issues req))
-  (GET "/:org_url" req (org-page-handler req))
-  ;(GET "/:org_url/:issue_id" req (issue-page-handler req))
+  (context "/search" req
+    (GET "/:term" req (search-actions/auto-complete-search req))
+    (GET "/:org-id/:term" req (search-actions/search-org-issues req)))
+  (context "/:org_url{[a-z0-9]{4,}}" req
+    (GET "/" req (org-page-handler req))
+    (GET "/:issue_id{[0-9]+}" req (issue-page-handler req)))
   (ANY "*" req (not-found-handler req))
   (route/resources "/")
   (route/not-found "404"))
