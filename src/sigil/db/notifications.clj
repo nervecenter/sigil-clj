@@ -1,30 +1,36 @@
 (ns sigil.db.notifications
   (:require [clojure.java.jdbc :as sql]
-            [sigil.db.core :as db]))
+            [sigil.db.core :as db]
+            [clj-time.local :as time]
+            [clj-time.jdbc]))
 
 
 ;;-----------------------------------------------------------------
 ; Querys
 
 
-(defn get-users-notifications
+(defn get-user-notifications
   [user]
-  ())
+  (into [] (sql/query db/spec ["SELECT * FROM notifications WHERE to_user_id = ?" (:user_id user)])))
 
 ;;-----------------------------------------------------------------
 ; Updates/Inserts/Deletes
 
 (defn create-notification
   [db-conn [new-note]]
-  ())
+  (sql/insert! db-conn :notifications new-note))
 
 (defn archive-notification
-  []
-  ())
+  [note]
+  (sql/update! db/spec :notifications {:archived true
+                                       :viewed_at (time/local-now)} ["note_id = ?" (:note_id note)]))
 
 (defn delete-notification
-  []
-  ())
+  ([note] (delete-notification note false))
+  ([note perm]
+   (if perm
+     (sql/delete! db/spec :notiications ["note_id = ?" (:note_id note)])
+     (archive-notification note))))
 
 (defn notification_model
   "Defines the org model in the db"

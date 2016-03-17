@@ -24,6 +24,7 @@
             [sigil.auth :refer [authenticated?]]
 
             [sigil.actions.logout :refer [logout-handler]]
+            [sigil.actions.db :as db-actions]
             [sigil.db.migrations :as mig]
 
             [ring.middleware.resource :refer [wrap-resource]]
@@ -55,6 +56,8 @@
                             (org-settings-handler req)
                             "404"))
   (GET "/register" req (user-register-get req))
+  (GET "/usernotes" req (db-actions/get-user-notifications req))
+  (GET "/countusernotes" req (db-actions/get-number-user-notifications req))
   (POST "/register" req (user-register-post req))
   (GET "/orgregister" req (org-register-get req))
   (POST "/orgregister" req (org-register-post req))

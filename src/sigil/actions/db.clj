@@ -7,8 +7,12 @@
             [sigil.db.officialresponses :as official]
             [sigil.db.tags :as tags]
             [sigil.db.topics :as topics]
-            [sigil.db.votes :as votes]))
+            [sigil.db.votes :as votes]
+            [sigil.db.notifications :as notes])
+  (:use [sigil.auth]))
 
+
+(def not-nil? (complement nil?))
 
 ;;----------------------------------
 ;; user_register_post
@@ -32,3 +36,22 @@
     (let [userid (:user_id (users/get-user-by-email (:email admin)))
           orgid (:org_id (orgs/get-org-by-url (:org_url org)))]
       (db/db-trans [users/update-user  [userid {:org_id orgid}]]))))
+
+
+
+;;----------------------------------------
+;; notification GETs
+
+(defn get-number-user-notifications
+  [req]
+  (let [user (user-or-nil req)]
+    (if (not-nil? user)
+      (count (notes/get-user-notifications user))
+      0)))
+
+(defn get-user-notifications
+  [req]
+  (let [user (user-or-nil req)]
+    (if (not-nil? user)
+      (notes/get-user-notifications user)
+      [])))
