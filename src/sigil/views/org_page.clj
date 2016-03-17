@@ -1,11 +1,13 @@
 (ns sigil.views.org-page
-  (:require [sigil.auth :refer [user-or-nil]]
+  (:require [sigil.db.orgs :refer [get-org-by-url]]
+            [sigil.auth :refer [user-or-nil]]
             [sigil.views.layout :as layout]
             [sigil.views.partials.issue :refer [issue-partial]]
-            [sigil.db.orgs :refer [get-org-by-url get-org-by-user org-visit-inc]]
+            [sigil.db.orgs :refer [get-org-by-url get-org-by-user]]
             [sigil.db.tags :refer [get-tags-by-org-id]]
             [sigil.db.issues :refer [get-hottest-issues-by-org-id]]
-            [sigil.views.partials.sidebar :refer [sidebar-partial]])
+            [sigil.views.partials.sidebar :refer [sidebar-partial]]
+            [sigil.views.not-found :refer [not-found-handler]])
   (:use hiccup.form))
 
 (declare org-page-handler org-page-body)
@@ -14,7 +16,7 @@
   (let [user (user-or-nil req)
         user-org (get-org-by-user user)
         org (get-org-by-url (:org_url (:route-params req)))
-        tags (get-tags-by-org-id (:org_id org))]
+        tags (get-tags-by-org-id org)]
     (if (some? org)
       (let [issues (get-hottest-issues-by-org-id (:org_id org))]
         (do (sigil.db.core/db-trans [org-visit-inc (:org_id org)])
@@ -23,7 +25,10 @@
                          user-org
                          (str "Sigil - " (:org_name org))
                          (org-page-body req user org tags issues))))
-      ("404"))))
+      (not-found-handler req)
+      ;;{:status 302
+      ;; :headers {"Location" "/404"}}
+      )))
 
 (defn org-page-body [req user org tags issues]
   [:div#main-col.col-md-9.col-lg-9
@@ -56,5 +61,4 @@
      [:div.issues
       (for [i issues]
         (issue-partial (:uri req) i user true))]]
-  ;(sidebar-partial user org)
-  )
+  (sidebar-partial org user))

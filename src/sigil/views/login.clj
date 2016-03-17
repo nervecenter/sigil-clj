@@ -31,9 +31,9 @@
         password (login-data "password")
         return (login-data "return")
         user (get-user-by-email email)]
-    (if (some? user)
-      (if (check password (:pass_hash user))
-        (do (sigil.db.core/db-trans [sigil.db.users/user-login-inc (:user_id user)])
+    (if (and (some? user)
+             (check password (:pass_hash user)))
+      (do (sigil.db.core/db-trans [sigil.db.users/user-login-inc (:user_id user)])
           {:status 302
            :headers {"Location" return}
            :body ""
@@ -43,7 +43,6 @@
                             ;;:http-only true
                             ;;:domain ".sigil.tech"
                             }}})
-        (redirect-invalid return))
       (redirect-invalid return))))
 
 (defn login-page

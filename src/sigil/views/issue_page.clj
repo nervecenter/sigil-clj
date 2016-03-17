@@ -1,11 +1,9 @@
 (ns sigil.views.issue-page
-  (:require [sigil.auth :refer [user-or-nil user-org-or-nil]]
-            [sigil.helpers :refer [get-issue-with-user-and-org-by-issue-id user-is-admin-of-org?]]
-            [sigil.db.officialresponses :refer [get-official-responses-by-issue]]
+  (:require [sigil.auth :refer [user-or-nil]]
+            [sigil.db.issues :refer [get-issue-with-user-and-org-by-id]]
+            [sigil.db.responses :refer [get-responses-by-issue]]
             [sigil.db.comments :refer [get-comments-by-issue]]
-            [sigil.db.votes :refer [user-voted-on-issue?]]
-            [sigil.views.layout :as layout])
-  (:use [hiccup.form]))
+            [sigil.views.partials.sidebar :refer [sidebar-partial]]))
 
 (declare issue-page-handler issue-page-body)
 
@@ -133,5 +131,6 @@
                      :id "add-comment-box"
                      :placeholder "What would you like to say?"}
                     "add-comment-box")]
-        (submit-button {:class "btn btn-primary"} "Submit comment"))
-       nil)]]])
+        (submit-button {:class "btn btn-primary"} "submit-comment" "Submit comment"))
+       nil)]]]
+  (sidebar-partial org user))

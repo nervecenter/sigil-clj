@@ -5,11 +5,12 @@
 
             [hiccup.core :refer [html]]
 
-            [compojure.core :refer [defroutes GET POST]]
+            [compojure.core :refer [defroutes GET POST ANY]]
             [compojure.route :as route]
             [compojure.handler :as handler]
 
             [sigil.views.home :refer [home-handler]]
+            [sigil.views.legal :refer [legal-handler]]
             [sigil.views.landing :refer [landing-handler]]
             [sigil.views.login :refer [login-get login-post]]
             [sigil.views.usertest :refer [usertest-handler]]
@@ -18,6 +19,7 @@
             [sigil.views.org-settings :refer [org-settings-handler]]
             [sigil.views.user-register :refer [user-register-get user-register-post]]
             [sigil.views.org-register :refer [org-register-get org-register-post]]
+            [sigil.views.not-found :refer [not-found-handler]]
 
             [sigil.auth :refer [authenticated?]]
 
@@ -45,6 +47,7 @@
                  (home-handler req)
                  (landing-handler)))
   (GET "/usertest" req (usertest-handler req))
+  (GET "/legal" req (legal-handler req))
   (GET "/login" req (login-get req))
   (POST "/login" req (login-post req))
   (GET "/logout" req (logout-handler req))
@@ -54,12 +57,14 @@
   (GET "/register" req (user-register-get req))
   (POST "/register" req (user-register-post req))
   (GET "/orgregister" req (org-register-get req))
-  (POST "/orgregister" req (org-register-post req)) 
+  (POST "/orgregister" req (org-register-post req))
   (GET "/printrequest" req (html [:p {} req]))
   (GET "/printrequest/:x" req (html [:p {} req]))
+  (GET "/404" req (not-found-handler req))
   (GET "/search/:term" req ())
   (GET "/:org_url" req (org-page-handler req))
   (GET "/:org_url/:issue_id" req (issue-page-handler req))
+  (ANY "*" req (not-found-handler req))
   (route/resources "/")
   (route/not-found "404"))
 
@@ -71,10 +76,9 @@
       (wrap-cookies)
       (wrap-params)))
 
-(def server () ;(jetty/run-jetty #'app {:port 3000 :join? false :configurator server-conf})
-  )
+(defonce server (jetty/run-jetty #'app {:port 3000 :join? false :configurator server-conf}))
 
 
 (defn -main
   []
-  (jetty/run-jetty #'app {:port 3000 :join? false :configurator server-conf}))
+  ())
