@@ -8,7 +8,8 @@
             [sigil.db.tags]
             [sigil.db.votes]
             [sigil.db.topics]
-            [sigil.db.officialresponses]))
+            [sigil.db.officialresponses]
+            [sigil.db.notifications]))
 
 
 (defn create-db-tables
@@ -22,6 +23,7 @@
                       (votes_model)
                       (official_response_model)
                       (topic_model)
+                      (notification_model)
                       (db/error_model)))
 
 
@@ -36,4 +38,5 @@
                       (sql/drop-table-ddl :official_responses)
                       (sql/drop-table-ddl :errors)
                       (sql/drop-table-ddl :topics)
+                      (sql/drop-table-ddl :notifications)
                       (sql/drop-table-ddl :votes)))
