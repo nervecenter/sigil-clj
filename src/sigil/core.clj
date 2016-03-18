@@ -26,6 +26,7 @@
             [sigil.actions.logout :refer [logout-handler]]
             [sigil.actions.issue :as issue-actions]
             [sigil.actions.search :as search-actions]
+            [sigil.actions.comment :as comment-actions]
             [sigil.actions.notifications :as note-actions]
             [sigil.db.migrations :as mig]
 
@@ -61,6 +62,10 @@
   (POST "/newissue" req (issue-actions/add-issue-post req))
   (GET "/usernotes" req (note-actions/get-user-notifications req))
   (GET "/countusernotes" req (note-actions/get-number-user-notifications req))
+  (GET "/vote/:issue_id" req (issue-actions/vote-issue req))
+  (GET "/unvote/:issue_id" req (issue-actions/unvote-issue req))
+  (GET "/vote/:issue_id/:comment_id" req (comment-actions/vote-comment req))
+  (GET "/unvote/:issue_id/:comment_id" req (comment-actions/unvote-comment req))
   (POST "/register" req (user-register-post req))
   (GET "/orgregister" req (org-register-get req))
   (POST "/orgregister" req (org-register-post req))

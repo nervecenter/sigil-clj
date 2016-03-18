@@ -14,9 +14,16 @@
   (empty? (into [] (sql/query db/spec ["SELECT * FROM votes WHERE user_id = ? AND comment_id = ?" (:user_id user) (:comment_id comment)] ))))
 
 (defn get-user-votes
-  [user_id]
-  (into [] (sql/query db/spec ["SELECT * FROM votes WHERE user_id = ?" user_id])))
+  [user]
+  (into [] (sql/query db/spec ["SELECT * FROM votes WHERE user_id = ?" (:user_id user)])))
 
+(defn get-user-issue-vote
+  [user issue]
+  (first (sql/query db/spec ["SELECT * FROM votes WHERE user_id = ? AND issue_id = ? AND comment_id = NULL" (:user_id user) (:issue_id issue)])))
+
+(defn get-user-comment-vote
+  [user comment]
+  (first (sql/query db/spec ["SELECT * FROM votes WHERE user_id = ? AND comment_id = ?" (:user_id user) (:comment_id comment)])))
 
 ;;----------------------------------------------------------------
 ; Updates/Inserts/Deletes
