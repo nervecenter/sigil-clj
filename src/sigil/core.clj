@@ -1,5 +1,4 @@
 (ns sigil.core
-  (:gen-class)
   (:import [org.eclipse.jetty.server.handler StatisticsHandler])
   (:require [ring.adapter.jetty :as jetty]
 
@@ -34,7 +33,8 @@
             [ring.middleware.content-type :refer [wrap-content-type]]
             [ring.middleware.not-modified :refer [wrap-not-modified]]
             [ring.middleware.cookies :refer [wrap-cookies]]
-            [ring.middleware.params :refer [wrap-params]]))
+            [ring.middleware.params :refer [wrap-params]])
+  (:gen-class))
 
 
 (defn server-conf
@@ -90,9 +90,17 @@
       (wrap-cookies)
       (wrap-params)))
 
-(defonce server (jetty/run-jetty #'app {:port 3000 :join? false :configurator server-conf}))
+(def jetty-options {:port 8080
+                    :join? false
+                    :configurator server-conf})
+
+;;(defonce server (jetty/run-jetty #'app {:port 8080
+;;                                        :join? false
+;;                                        :configurator server-conf
+;;                                        }))
 
 
 (defn -main
-  []
-  ())
+  [& args]
+  (.start (jetty/run-jetty #'app jetty-options))
+  )

@@ -1,8 +1,11 @@
 #!/usr/bin/env boot
 
-(set-env! :source-paths #{"src"}
+(set-env! :project 'sigil-clj
+          :version "0.5.0"
+          :source-paths #{"src"}
           :resource-paths #{"resources"}
-          :dependencies '[[org.clojure/tools.namespace "0.2.11"]
+          :dependencies '[[org.clojure/clojure "1.8.0"]
+                          [org.clojure/tools.namespace "0.2.11"]
                           [ring/ring-core "1.4.0"]
                           [ring/ring-jetty-adapter "1.4.0"]
                           [buddy/buddy-auth "0.9.0"]
@@ -17,8 +20,12 @@
                           [speclj "3.3.1"]
                           [fresh "1.0.1"]])
 
-(task-options! pom {:project 'sigil-clj
-                    :version "0.5.0"}
+(task-options! pom {:project (get-env :project)
+                    :version (get-env :version)}
+               jar {:main 'sigil.core
+                    ;;:manifest {"URL" "http://localhost:3000"}
+                    }
+               aot {:namespace '#{sigil.core}}
                ;;repl {:init-ns 'sigil.core}
                )
 
@@ -36,13 +43,13 @@
 
 ;; Define helpers for REPL
 ;; Start the Ring Jetty server
-(defn start [] (.start sigil.core/server))
+;(defn start [] (.start sigil.core/server))
 ;; Stop the server
-(defn stop [] (.stop sigil.core/server))
+;(defn stop [] (.stop sigil.core/server))
 ;; Reload dirs with code changes
-(defn reload [] (repl/refresh))
+;(defn reload [] (repl/refresh))
 ;; Do it all!
-(defn restart [] (stop) (reload) (start))
+;(defn restart [] (stop) (reload) (start))
 
 (defn rebuild-and-seed
   "Drops the current db tables and then rebuilds and seeds."
@@ -63,7 +70,13 @@
 (deftask build
   "Build the Sigil web server."
   []
-  (comp (pom) (jar) (install)))
+  (comp (aot)
+        (pom)
+        (uber)
+        (jar :file (format "%s-%s-standalone.jar"
+                           (get-env :project)
+                           (get-env :version)))
+        (target)))
 
 ;; Totally irrelevant, but if you want to test boot, run "boot repl" in the
 ;; boot.user namespace, and you can run fib; you can also run "./build.boot n"

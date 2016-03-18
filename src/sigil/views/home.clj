@@ -3,7 +3,7 @@
             [sigil.views.partials.sidebar :refer [sidebar-partial]]
             [sigil.views.layout :as layout]
             [sigil.auth :refer [user-or-nil user-org-or-nil]]
-            [sigil.db.issues :refer [get-home-page-issues]]
+            ;;[sigil.db.issues :refer [get-home-page-issues]]
             [hiccup.core :refer [html]]))
 
 (declare home-body home-handler)
@@ -12,7 +12,8 @@
   ;; Home page expects user
   (let [user (user-or-nil req)
         user-org (user-org-or-nil user)
-        issues (get-home-page-issues)]
+        ;;issues (get-home-page-issues)
+        issues nil]
     (layout/render req
                    user
                    user-org
