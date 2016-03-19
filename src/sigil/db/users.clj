@@ -11,9 +11,12 @@
 (defn get-user-by-email [email]
   (first (sql/query db/spec ["SELECT * FROM users WHERE email = ?;" email])))
 
-(defn get-user-favorites [id]
-  (first (sql/query db/spec ["SELECT favorites FROM users WHERE user_id = ?" id])))
+(defn get-user-favorites [user]
+  (first (sql/query db/spec ["SELECT favorites FROM users WHERE user_id = ?" (:user_id user)])))
 
+(defn get-user-roles
+  [user]
+  (first (sql/query db/spec ["SELECT roles FROM users WHERE user_id = ?" (:user_id user)])))
 
 ;;--------------------------------------------------------------
 ; Updates/Inserts/Deletes

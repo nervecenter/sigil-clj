@@ -15,10 +15,12 @@
   (cond
     (= role :org-admin) (if (contains? (:roles user) "org-admin")
                           true
-                          false)
+                          false
+                          )
     (= role :site-admin) (if (contains? (:roles user) "site-admin")
                           true
-                          false)))
+                          false
+                          )))
 
 (defn search-orgs-tags-topics
   [term]
@@ -52,5 +54,4 @@
         user (users/get-user-by-id (:user_id issue))
         org (orgs/get-org-by-id (:org_id issue))
         ]
-      [issue user org]                                ;(vector  issue user org)
-    )) 
+      [issue user org])) 

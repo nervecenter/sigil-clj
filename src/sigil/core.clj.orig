@@ -1,5 +1,8 @@
 (ns sigil.core
+<<<<<<< HEAD
+=======
   (:import [org.eclipse.jetty.server.handler StatisticsHandler])
+>>>>>>> origin/core_pages
   (:require [ring.adapter.jetty :as jetty]
 
             [hiccup.core :refer [html]]
@@ -16,9 +19,9 @@
             [sigil.views.org-page :refer [org-page-handler]]
             [sigil.views.issue-page :refer [issue-page-handler]]
             [sigil.views.org-settings :refer [org-settings-handler]]
-            [sigil.views.user-settings :refer [user-settings-handler]]
             [sigil.views.user-register :refer [user-register-get user-register-post]]
             [sigil.views.org-register :refer [org-register-get org-register-post]]
+            [sigil.views.user-settings :refer [user-settings-handler]]
             [sigil.views.not-found :refer [not-found-handler]]
 
             [sigil.auth :refer [authenticated?]]
@@ -36,6 +39,11 @@
             [ring.middleware.not-modified :refer [wrap-not-modified]]
             [ring.middleware.cookies :refer [wrap-cookies]]
             [ring.middleware.params :refer [wrap-params]])
+<<<<<<< HEAD
+  (:use [ring.middleware.reload])
+  (:import [org.eclipse.jetty.server.handler StatisticsHandler])
+=======
+>>>>>>> origin/core_pages
   (:gen-class))
 
 
@@ -53,6 +61,8 @@
                  (home-handler req)
                  (landing-handler)))
   (GET "/usertest" req (usertest-handler req))
+  (GET "/usersettings" req (user-settings-handler req))
+  (POST "/usericon100" req (image-actions/update-user-icon req))
   (GET "/legal" req (legal-handler req))
   (GET "/login" req (login-get req))
   (POST "/login" req (login-post req))
@@ -60,19 +70,6 @@
   (GET "/orgsettings" req (if (authenticated? req)
                             (org-settings-handler req)
                             "404"))
-  (POST "/orgbanner" req (if (authenticated? req)
-                            (image-actions/update-org-banner req)
-                            "404"))
-  (POST "/orgicon100" req (if (authenticated? req)
-                            (image-actions/update-org-icon-100 req)
-                            "404")) 
-  (POST "/orgicon30" req (if (authenticated? req)
-                            (image-actions/update-org-icon-30 req)
-                            "404"))
-  (GET "/settings" req (user-settings-handler req))
-  (POST "/usericon100" req (if (authenticated? req)
-                            (image-actions/update-user-icon req)))
-
   (GET "/register" req (user-register-get req))
   (POST "/newissue" req (issue-actions/add-issue-post req))
   (GET "/usernotes" req (note-actions/get-user-notifications req))
@@ -100,11 +97,21 @@
 (def app
   (-> (handler/site sigil-routes)
       (wrap-resource "public")
+      (wrap-reload)
       (wrap-content-type)
       (wrap-not-modified)
       (wrap-cookies)
       (wrap-params)))
 
+<<<<<<< HEAD
+(def server () ;(jetty/run-jetty #'app {:port 3000 :join? false :configurator server-conf})
+  )
+
+
+(defn -main
+  []
+  (jetty/run-jetty #'app {:port 3000 :join? false :configurator server-conf}))
+=======
 (def jetty-options {:port 8080
                     :join? false
                     :configurator server-conf})
@@ -115,8 +122,8 @@
 ;;                                        }))
 
 
-
 (defn -main
   [& args]
   (.start (jetty/run-jetty #'app jetty-options))
   )
+>>>>>>> origin/core_pages

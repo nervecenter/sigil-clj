@@ -47,7 +47,7 @@
 ;; Stop the server
 ;(defn stop [] (.stop sigil.core/server))
 ;; Reload dirs with code changes
-;(defn reload [] (repl/refresh))
+(defn reload [] (repl/refresh))
 ;; Do it all!
 ;(defn restart [] (stop) (reload) (start))
 

@@ -14,20 +14,20 @@
 (def org_seed [{:org_url "sigil"
                 :org_name "Sigil"
                 :website "beta.sigil.tech"
-                :icon_20 (str (rand-nth default_org_icon_20))
+                :icon_30 (str (rand-nth default_org_icon_20))
                 :icon_100 (str (rand-nth default_org_icon_100))
                 :banner (str (rand-nth default_org_banner))}
                {:org_url "test"
                 :org_name "testname"
                 :website "www.test.com"
-                :icon_20 (str (rand-nth default_org_icon_20))
+                :icon_30 (str (rand-nth default_org_icon_20))
                 :icon_100 (str (rand-nth default_org_icon_100))
                 :banner (str (rand-nth default_org_banner))}])
 
 (def tag_seed [{:tag_url "beta"
                 :tag_name "Sigil Beta"
                 :org_id 1
-                :icon_20 (rand-nth default_org_icon_20)}]) ;;hard setting org id as one in hopes of db being fresh
+                :icon_30 (rand-nth default_org_icon_20)}]) ;;hard setting org id as one in hopes of db being fresh
 
 (def issue_seed [{:org_id 1
                   :user_id 1
@@ -41,7 +41,12 @@
 (def user_seed [{:email "fuckjoe@gmail.com"
                  :username "Joetest"
                  :pass_hash "fuck"
-                 :icon_100 (str (rand-nth default_org_icon_100))}])
+                 :icon_100 (str (rand-nth default_org_icon_100))}
+                {:email "dominiccox@sigil.tech"
+                 :username "Dominic"
+                 :pass_hash (buddy.hashers/encrypt "323232")
+                 :icon_100 (str (rand-nth default_org_icon_100))
+                 :roles ["org-admin" "site-admin"]}])
 
 (def topic_seed [{:topic_url "testtopic"
                   :topic_name "TestTopic"

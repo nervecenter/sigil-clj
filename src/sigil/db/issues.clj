@@ -20,6 +20,10 @@
   [org]
   (into [] (sql/query db/spec ["SELECT * FROM issues WHERE org_id = ?;" (:org_id org)])))
 
+(defn get-top-issues-by-org
+  [org]
+  [])
+
 (defn get-issues-by-org
   [org]
   (into [] (sql/query db/spec ["SELECT * FROM issues WHERE org_id = ?;" (:org_id org)])))

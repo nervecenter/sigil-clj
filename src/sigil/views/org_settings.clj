@@ -14,8 +14,12 @@
     (if (user-is-org-admin? user)
       (let [org (get-org-by-id (:org_id user))
             tags (get-tags-by-org (:org_id org))]
-        (layout/render (str "Sigil - " (:org_name org) " Settings")
-                       (org-settings-body org tags)))
+        (layout/render
+         req
+         user
+         org
+         (str "Sigil - " (:org_name org) " Settings")
+         (org-settings-body org tags)))
       "404")))
 
 (defn org-settings-body [org tags]
@@ -33,16 +37,16 @@
        [:div.panel-body
         [:img.img-rounded.img-responsive.img-relief {:src (:banner org)}]
         [:h4 "Banner files: 1000 x 200 px .jpg or .png"]
-        (form-to
-         [:post "/orgbanner"]
+       
+        [:form {:action "/orgbanner" :method "post" :enctype "multipart/form-data"}
          [:div.form-group
           [:div.input-group
            [:div.input-group-btn
             [:span.btn.btn-default.btn-file "Browse"
              (file-upload {:id "banner-upload"} "banner-upload")]]
-           (text-field {:class "form-control image-input" :readonly ""})]]
+           (text-field {:class "form-control image-input" :readonly ""} "txt-field-banner")]]
          [:div.form-group
-          (submit-button {:class "btn btn-default disabled form-control"} "Upload new banner")])]]]]]
+          (submit-button {:class "btn btn-default disabled form-control"} "Upload new banner")]]]]]]]
    [:div.container.settings-container
     [:div.row
      [:div.col-lg-6
@@ -89,28 +93,26 @@
         [:img.img-rounded.img-responsive.img-relief
          {:src (:icon_100 org)}]
         [:h4 "Large icon files: 100 x 100 px .jpg or .png"]
-        (form-to
-         [:post "/orgicon100"]
+        [:form {:action "/orgicon100" :method "post" :enctype "multipart/form-data"}
          [:div.form-group
           [:div.input-group
            [:div.input-group-btn
             [:span.btn.btn-default.btn-file "Browse"
              (file-upload {:id "icon-100-upload"} "icon-100-upload")]]
-           (text-field {:class "form-control image-input" :readonly ""})]]
+           (text-field {:class "form-control image-input" :readonly ""} "txt-field-icon100")]]
          [:div.form-group
-          (submit-button {:class "btn btn-default disabled form-control"} "Upload new 100px icon")])]]
+          (submit-button {:class "btn btn-default disabled form-control"} "Upload new 100px icon")]]]]
       [:div.panel
        [:div.panel-body
         [:img.img-rounded.img-responsive.img-relief
          {:src (:icon_30 org)}]
         [:h4 "Small icon files: 30 x 30 px .jpg or .png"]
-        (form-to
-         [:post "/orgicon30"]
+        [:form {:action "/orgicon30" :method "post" :enctype "multipart/form-data"}
          [:div.form-group
           [:div.input-group
            [:div.input-group-btn
             [:span.btn.btn-default.btn-file "Browse"
              (file-upload {:id "icon-30-upload"} "icon-30-upload")]]
-           (text-field {:class "form-control image-input" :readonly ""})]]
+           (text-field {:class "form-control image-input" :readonly ""} "txt-field-icon30")]]
          [:div.form-group
-          (submit-button {:class "btn btn-default disabled form-control"} "Upload new 30px icon")])]]]]]))
+          (submit-button {:class "btn btn-default disabled form-control"} "Upload new 30px icon")]]]]]]]))

@@ -1,6 +1,6 @@
 (ns sigil.views.partials.navbar
   (:require [sigil.auth :refer [authenticated?
-                                identity
+                                user-identity
                                 is-user-site-admin?]]
             [sigil.helpers :refer [user-has-role?]]
             [hiccup.core :refer [html]])

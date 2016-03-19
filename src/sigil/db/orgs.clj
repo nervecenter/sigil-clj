@@ -65,7 +65,7 @@
    [:website :text "NOT NULL" "DEFAULT '#'"]
    [:org_topic_ids :bigint "ARRAY" "NOT NULL" "DEFAULT ARRAY[]::bigint[]"]
    [:created_at :timestamp "NOT NULL" "DEFAULT CURRENT_TIMESTAMP"]
-   [:icon_20 :text]
+   [:icon_30 :text]
    [:icon_100 :text]
    [:banner :text]
    [:last_viewed :timestamp "NOT NULL" "DEFAULT CURRENT_TIMESTAMP"]

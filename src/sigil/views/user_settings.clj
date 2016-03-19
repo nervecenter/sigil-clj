@@ -28,7 +28,7 @@
      [:div.panel.panel-default
       [:div.panel-body
        [:div.form-group
-        [:h4 "Change your password fool"]]]]]
+        [:h4 "Change your password"]]]]]
     [:div.col-lg-6
      [:div.panel.panel-default
       [:div.panel-body
@@ -43,10 +43,8 @@
           [:div.input-group-btn
            [:span.btn.btn-default.btn-file
             "Browse"
-            (file-upload {:id "usericon100"} "usericon100")
-            ]]
-          
-                                        ;(text-field {:class "form-control"  :readonly ""})
+            (file-upload {:id "usericon100"} "usericon100")]]
+          (text-field {:class "form-control"  :readonly ""} "txt-field-icon")
           ]]
         [:div.form-group
          (submit-button {:class "btn btn-default disabled form-control"}

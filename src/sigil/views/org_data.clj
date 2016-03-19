@@ -1,17 +1,18 @@
 (ns sigil.views.org-data
   (:require [sigil.auth :refer [user-or-nil]]
-            [sigi.helpers :refer [user-is-org-admin?]]
-            [sigil.db.orgs :refer [get-org-by-user get-chart-data-by-org]]
+            [sigil.helpers :refer [user-is-org-admin?]]
+            [sigil.db.orgs :refer [get-org-by-user]]
             [sigil.db.issues :refer [get-top-issues-by-org]]
             [sigil.views.not-found :refer [not-found-handler]]
             [sigil.views.layout :as layout]
+            [sigil.actions.data :as data]
             [clj-time.core :as time]))
 
 (defn org-data-handler [req]
   (let [user (user-or-nil req)]
     (if (user-is-org-admin? user)
       (let [user-org (get-org-by-user user)
-            chart-data (get-chart-data-by-org
+            chart-data (data/get-chart-data-by-org
                         user-org
                         (time/minus (time/now) (time/days 7))
                         (time/now))

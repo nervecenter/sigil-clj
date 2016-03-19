@@ -43,7 +43,7 @@
    [:tag_url :text "NOT NULL" "UNIQUE"]
    [:tag_name :text "NOT NULL" "UNIQUE"]
    [:created_at :timestamp "NOT NULL" "DEFAULT CURRENT_TIMESTAMP"]
-   [:icon_20 :text]
+   [:icon_30 :text]
    [:times_viewed :int "NOT NULL" "DEFAULT 0"]
    [:org_id :bigint "NOT NULL"]
    [:tag_is_active :boolean "NOT NULL" "DEFAULT TRUE"]))
