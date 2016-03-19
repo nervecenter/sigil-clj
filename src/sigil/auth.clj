@@ -27,11 +27,11 @@
       false)
     false))
 
-(defn identity [req]
+(defn user-identity [req]
   (get-user-by-id (extract-user-id req)))
 
 (defn user-or-nil [req]
-  (if (authenticated? req) (identity req) nil))
+  (if (authenticated? req) (user-identity req) nil))
 
 (defn user-org-or-nil [user]
   (let [user-org (:org_id user)]
