@@ -28,6 +28,10 @@
   []
   (into [] (sql/query db/spec ["SELECT DISTINCT ON (issue_id) issues.title, users.username FROM issues LEFT JOIN users ON (issues.user_id = users.user_id);"])))
 
+(defn get-responded-issues-by-org
+  [org]
+  (into [] (sql/query db/spec ["SELECT * FROM issues WHERE org_id = ? AND responded = TRUE" (:org_id org)])))
+
 ;;------------------------------------------------------------------
 ; Updates/Inserts
 

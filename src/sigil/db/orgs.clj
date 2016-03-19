@@ -37,8 +37,8 @@
   (sql/execute! db-conn ["UPDATE orgs SET times_viewed = 1 + times_viewed, last_viewed = CURRENT_TIMESTAMP WHERE org_id = ?" org_id]))
 
 (defn update-org
-  [db-conn [org_id updated-rows]]
-  (sql/update! db-conn :orgs updated-rows ["org_id = ?" org_id]))
+  [db-conn [org updated-rows]]
+  (sql/update! db-conn :orgs updated-rows ["org_id = ?" (:org_id org)]))
 
 (defn create-org
   "Creates a new org from passed in map."

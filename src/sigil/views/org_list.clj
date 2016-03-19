@@ -1,12 +1,14 @@
 (ns sigil.views.org-list
   (:require [sigil.auth :refer [user-or-nil]]
-            [sigil.views.partials.sidebar :refer [sidebar-partial]]))
+            [sigil.views.partials.sidebar :refer [sidebar-partial]]
+            [sigil.db.orgs :as orgs])
+  (:use [hiccup.core]))
 
 (declare org-list-handler org-list-body)
 
 (defn org-list-handler [req]
   (let [user (user-or-nil req)
-        orgs (get-orgs)]
+        orgs (orgs/get-all-orgs)]
     (org-list-body user orgs)))
 
 (defn org-list-body [user orgs]

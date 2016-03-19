@@ -1,10 +1,16 @@
-(ns sigil.views.org-responses)
+(ns sigil.views.org-responses
+  (:require [sigil.auth :as auth]
+            [sigil.db.orgs :as orgs]
+            [sigil.db.issues :as issues]
+            [sigil.views.layout :as layout]))
+
+(declare org-responses-body org-responses-handler)
 
 (defn org-responses-handler [req]
-  (let [user (user-or-nil req)
-        user-org (get-or-by-user-id (:user_id user))
-        org (get-org-by-url (:org_url (:route-params req)))
-        issues (get-responded-issues-by-org-id (:org_id org))]
+  (let [user (auth/user-or-nil req)
+        user-org (auth/user-org-or-nil user)
+        org (orgs/get-org-by-url (:org_url (:route-params req)))
+        issues (issues/get-responded-issues-by-org org)]
     (layout/render req
                    user
                    user-org
@@ -23,6 +29,6 @@
    [:div#issues
     (if (not-empty issues)
       (for [i issues]
-        (issue-partial uri i user true))
+        (sigil.views.partials.issue/issue-partial uri i user true))
       [:h4 (:org_name org) " hasn't responded to any issues yet. They'll get to it soon!"])]]
-  (sidebar-partial org user))
+  (sigil.views.partials.sidebar/sidebar-partial org user))

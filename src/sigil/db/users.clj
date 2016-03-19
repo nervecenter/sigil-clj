@@ -27,8 +27,8 @@
   (sql/execute! db-conn ["UPDATE users SET last_login = LOCALTIMESTAMP, times_visited = times_visited + 1 WHERE user_id = ?" user_id]))
 
 (defn update-user
-  [db-conn [user_id updated-rows]]
-  (sql/update! db-conn :users updated-rows ["user_id = ?" user_id]))
+  [db-conn [user updated-rows]]
+  (sql/update! db-conn :users updated-rows ["user_id = ?" (:user_id user)]))
 
 (defn create-user
   [db-conn [new-user]]

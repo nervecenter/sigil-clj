@@ -1,6 +1,4 @@
 (ns sigil.core
-  (:gen-class)
-  (:import [org.eclipse.jetty.server.handler StatisticsHandler])
   (:require [ring.adapter.jetty :as jetty]
 
             [hiccup.core :refer [html]]
@@ -19,6 +17,7 @@
             [sigil.views.org-settings :refer [org-settings-handler]]
             [sigil.views.user-register :refer [user-register-get user-register-post]]
             [sigil.views.org-register :refer [org-register-get org-register-post]]
+            [sigil.views.user-settings :refer [user-settings-handler]]
             [sigil.views.not-found :refer [not-found-handler]]
 
             [sigil.auth :refer [authenticated?]]
@@ -28,13 +27,17 @@
             [sigil.actions.search :as search-actions]
             [sigil.actions.comment :as comment-actions]
             [sigil.actions.notifications :as note-actions]
+            [sigil.actions.image :as image-actions]
             [sigil.db.migrations :as mig]
 
             [ring.middleware.resource :refer [wrap-resource]]
             [ring.middleware.content-type :refer [wrap-content-type]]
             [ring.middleware.not-modified :refer [wrap-not-modified]]
             [ring.middleware.cookies :refer [wrap-cookies]]
-            [ring.middleware.params :refer [wrap-params]]))
+            [ring.middleware.params :refer [wrap-params]])
+  (:use [ring.middleware.reload])
+  (:import [org.eclipse.jetty.server.handler StatisticsHandler])
+  (:gen-class))
 
 
 (defn server-conf
@@ -51,6 +54,8 @@
                  (home-handler req)
                  (landing-handler)))
   (GET "/usertest" req (usertest-handler req))
+  (GET "/usersettings" req (user-settings-handler req))
+  (POST "/usericon100" req (image-actions/update-user-icon req))
   (GET "/legal" req (legal-handler req))
   (GET "/login" req (login-get req))
   (POST "/login" req (login-post req))
@@ -85,14 +90,16 @@
 (def app
   (-> (handler/site sigil-routes)
       (wrap-resource "public")
+      (wrap-reload)
       (wrap-content-type)
       (wrap-not-modified)
       (wrap-cookies)
       (wrap-params)))
 
-(defonce server (jetty/run-jetty #'app {:port 3000 :join? false :configurator server-conf}))
+(def server () ;(jetty/run-jetty #'app {:port 3000 :join? false :configurator server-conf})
+  )
 
 
 (defn -main
   []
-  ())
+  (jetty/run-jetty #'app {:port 3000 :join? false :configurator server-conf}))
