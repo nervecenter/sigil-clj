@@ -56,7 +56,7 @@
 
 (defn orgs_model
   "Defines the org model in the db"
-  []
+  [& specs]
   (sql/create-table-ddl
    :orgs
    [:org_id :bigserial "PRIMARY KEY"]

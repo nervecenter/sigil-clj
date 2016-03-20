@@ -29,6 +29,7 @@
             [sigil.actions.comment :as comment-actions]
             [sigil.actions.notifications :as note-actions]
             [sigil.actions.image :as image-actions]
+            [sigil.actions.tag :as tag-actions]
             [sigil.db.migrations :as mig]
 
             [ring.middleware.resource :refer [wrap-resource]]
@@ -68,6 +69,9 @@
                             "404")) 
   (POST "/orgicon30" req (if (authenticated? req)
                             (image-actions/update-org-icon-30 req)
+                            "404"))
+  (POST "/orgaddtag" req (if (authenticated? req)
+                            (tag-actions/add-org-tag req)
                             "404"))
   (GET "/settings" req (user-settings-handler req))
   (POST "/usericon100" req (if (authenticated? req)

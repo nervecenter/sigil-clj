@@ -13,14 +13,12 @@
 
 (defn user-has-role? [user role]
   (cond
-    (= role :org-admin) (if (contains? (:roles user) "org-admin")
+    (= role :org-admin) (if (some #{"org-admin"} (:roles user))
                           true
-                          false
-                          )
-    (= role :site-admin) (if (contains? (:roles user) "site-admin")
+                          false)
+    (= role :site-admin) (if (some #{"site-admin"} (:roles user))
                           true
-                          false
-                          )))
+                          false)))
 
 (defn search-orgs-tags-topics
   [term]

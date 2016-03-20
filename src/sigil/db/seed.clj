@@ -46,7 +46,9 @@
                  :username "Dominic"
                  :pass_hash (buddy.hashers/encrypt "323232")
                  :icon_100 (str (rand-nth default_org_icon_100))
-                 :roles ["org-admin" "site-admin"]}])
+                 :roles ["org-admin" "site-admin"]
+                 :org_id 1}
+                ])
 
 (def topic_seed [{:topic_url "testtopic"
                   :topic_name "TestTopic"
