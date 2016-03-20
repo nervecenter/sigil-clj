@@ -7,6 +7,11 @@
 
 (def not-nil? (complement nil?))
 
+
+(defn post-comment
+  [req]
+  ())
+
 (defn vote-comment
   [req]
   (let [issue (issues/get-issue-by-id (:issue_id (:route-params req)))

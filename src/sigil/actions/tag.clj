@@ -18,3 +18,14 @@
       {:status 302
        :headers {"Location" "/orgsettings"}})))
 
+
+
+
+(defn delete-org-tag
+  [req]
+  (let [org (auth/user-org-or-nil (auth/user-or-nil req))
+        deleted-tag-params (:route-params req)]
+    (do
+      ;(tags/delete-tag __ true)
+      {:status 302
+       :headers {"Location" "/orgsettings"}})))

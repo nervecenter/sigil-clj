@@ -1,5 +1,9 @@
 (ns sigil.actions.officialresponse)
 
+(defn post-official-response
+  [req]
+  ())
+
 (defn vote-helpful
   [req]
   ())
