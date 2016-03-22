@@ -1,6 +1,7 @@
 (ns sigil.core
   (:import [org.eclipse.jetty.server.handler StatisticsHandler])
-  (:require [ring.adapter.jetty :as jetty]
+  (:require [org.http-kit.server "2.1.18" :as hk]
+            ;;[ring.adapter.jetty :as jetty]
 
             [hiccup.core :refer [html]]
 
@@ -36,7 +37,8 @@
             [ring.middleware.content-type :refer [wrap-content-type]]
             [ring.middleware.not-modified :refer [wrap-not-modified]]
             [ring.middleware.cookies :refer [wrap-cookies]]
-            [ring.middleware.params :refer [wrap-params]])
+            [ring.middleware.params :refer [wrap-params]]
+            [ring.middleware.logger :refer [wrap-with-logger]])
   (:gen-class))
 
 
@@ -66,7 +68,7 @@
                             "404"))
   (POST "/orgicon100" req (if (authenticated? req)
                             (image-actions/update-org-icon-100 req)
-                            "404")) 
+                            "404"))
   (POST "/orgicon30" req (if (authenticated? req)
                             (image-actions/update-org-icon-30 req)
                             "404"))
@@ -107,20 +109,34 @@
       (wrap-content-type)
       (wrap-not-modified)
       (wrap-cookies)
-      (wrap-params)))
+      (wrap-params)
+      (wrap-with-logger)))
 
-(def jetty-options {:port 8080
-                    :join? false
-                    :configurator server-conf})
+(def server-options {:port 8080
+                    ;;:join? false
+                    ;;:configurator server-conf
+                    })
 
 ;;(defonce server (jetty/run-jetty #'app {:port 8080
 ;;                                        :join? false
 ;;                                        :configurator server-conf
 ;;                                        }))
 
+(defonce server (atom nil))
 
+(defn stop-server []
+  (when-not (nil? @server)
+    (@server :timeout 100)
+    (reset! server nil)))
+
+(defn start-server []
+  (when (nil? @server)
+    (reset! server (eval '(hk/run-server #'app server-options)))))
+
+(defn restart-server []
+  (when-not (nil? @server)
+    (do (stop-server) (start-server))))
 
 (defn -main
   [& args]
-  (.start (jetty/run-jetty #'app jetty-options))
-  )
+  (start-server))
