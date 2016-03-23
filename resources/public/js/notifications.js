@@ -86,7 +86,7 @@ function deletenotification(event) {
 }
 
 function hidenotifications() {
-    $("#header-user-icon").off("click").click(function () { shownotifications() });
+    $("#header-user-icon").off("click").click(shownotifications);
     $("#notifications-shade").remove();
 }
 
@@ -101,3 +101,7 @@ function refreshnumnotes() {
         }
     });
 }
+
+$(document).ready(function () {
+    $("#header-user-icon").click(shownotifications);
+});

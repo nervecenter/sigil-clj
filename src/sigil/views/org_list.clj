@@ -1,15 +1,21 @@
 (ns sigil.views.org-list
   (:require [sigil.auth :refer [user-or-nil]]
             [sigil.views.partials.sidebar :refer [sidebar-partial]]
-            [sigil.db.orgs :as orgs])
+            [sigil.db.orgs :refer [get-all-orgs get-org-by-user]]
+            [sigil.views.layout :as layout])
   (:use [hiccup.core]))
 
 (declare org-list-handler org-list-body)
 
 (defn org-list-handler [req]
   (let [user (user-or-nil req)
-        orgs (orgs/get-all-orgs)]
-    (org-list-body user orgs)))
+        user-org (get-org-by-user user)
+        orgs (get-all-orgs)]
+    (layout/render req
+                   user
+                   user-org
+                   "Sigil - All Companies"
+                   (org-list-body user orgs))))
 
 (defn org-list-body [user orgs]
   (html

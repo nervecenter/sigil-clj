@@ -7,7 +7,7 @@
           :dependencies '[[org.clojure/clojure "1.8.0"]
                           [org.clojure/tools.namespace "0.2.11"]
                           [ring/ring-core "1.4.0"]
-                          [ring/ring-jetty-adapter "1.4.0"]
+                          [javax.servlet/servlet-api "2.5"]
                           ;;[ring.middleware.logger "0.5.0"]
                           [http-kit "2.1.19"]
                           [buddy/buddy-auth "0.9.0"]

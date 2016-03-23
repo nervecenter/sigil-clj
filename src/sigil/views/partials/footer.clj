@@ -1,7 +1,7 @@
 (ns sigil.views.partials.footer)
 
 (def footer
-  [:div.footer
+  [:div#footer
    [:div.container
     [:div.row.footer-row
      [:div.col-sm-6.col-md-4

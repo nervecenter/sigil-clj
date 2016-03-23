@@ -14,6 +14,7 @@
             [sigil.views.login :refer [login-get login-post]]
             [sigil.views.usertest :refer [usertest-handler]]
             [sigil.views.org-page :refer [org-page-handler]]
+            [sigil.views.org-list :refer [org-list-handler]]
             [sigil.views.issue-page :refer [issue-page-handler]]
             [sigil.views.org-settings :refer [org-settings-handler]]
             [sigil.views.user-settings :refer [user-settings-handler]]
@@ -61,24 +62,26 @@
   (GET "/login" req (login-get req))
   (POST "/login" req (login-post req))
   (GET "/logout" req (logout-handler req))
+  (GET "/companies" req (org-list-handler req))
   (GET "/orgsettings" req (if (authenticated? req)
                             (org-settings-handler req)
-                            "404"))
+                            (not-found-handler req)))
   (POST "/orgbanner" req (if (authenticated? req)
                             (image-actions/update-org-banner req)
-                            "404"))
+                            {:status 403}))
   (POST "/orgicon100" req (if (authenticated? req)
                             (image-actions/update-org-icon-100 req)
-                            "404"))
+                            {:status 403}))
   (POST "/orgicon30" req (if (authenticated? req)
                             (image-actions/update-org-icon-30 req)
-                            "404"))
+                            {:status 403}))
   (POST "/orgaddtag" req (if (authenticated? req)
                             (tag-actions/add-org-tag req)
-                            "404"))
+                            {:status 403}))
   (GET "/settings" req (user-settings-handler req))
   (POST "/usericon100" req (if (authenticated? req)
-                            (image-actions/update-user-icon req)))
+                             (image-actions/update-user-icon req)
+                             {:status 403}))
 
   (GET "/register" req (user-register-get req))
   (POST "/newissue" req (issue-actions/add-issue-post req))
