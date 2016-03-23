@@ -1,7 +1,8 @@
 (ns sigil.db.seed
   (:require [clojure.java.jdbc :as sql]
             [sigil.db.core :as db]
-            [sigil.db.migrations :as migrate])
+            [sigil.db.migrations :as migrate]
+            buddy.hashers)
   (:use [sigil.db.issues]
         [sigil.db.orgs]
         [sigil.db.comments]

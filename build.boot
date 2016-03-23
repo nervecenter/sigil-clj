@@ -7,9 +7,9 @@
           :dependencies '[[org.clojure/clojure "1.8.0"]
                           [org.clojure/tools.namespace "0.2.11"]
                           [ring/ring-core "1.4.0"]
-                          [http-kit "2.1.18"]
-                          ;;[ring/ring-jetty-adapter "1.4.0"]
-                          [ring.middleware.logger "0.5.0"]
+                          [ring/ring-jetty-adapter "1.4.0"]
+                          ;;[ring.middleware.logger "0.5.0"]
+                          [http-kit "2.1.19"]
                           [buddy/buddy-auth "0.9.0"]
                           [buddy/buddy-hashers "0.11.0"]
                           [compojure "1.5.0"]
@@ -34,10 +34,10 @@
 ;; Let's define some utilities we can run in REPL
 ;; First, we include core for access to server and repl
 ;; for access to namespace reloading stuff
-(require [sigil.core :refer [server start-server stop-server restart-server]]
-         'sigil.db.migrations
+(require 'sigil.db.migrations
          'sigil.db.seed
-         '[clojure.tools.namespace.repl :as repl])
+         '[clojure.tools.namespace.repl :as repl]
+         '[sigil.core :refer [server start-server stop-server restart-server]])
 
 ;; Define dirs for reloading
 (def dirs (get-env :directories))

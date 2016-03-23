@@ -1,6 +1,6 @@
 (ns sigil.core
-  (:import [org.eclipse.jetty.server.handler StatisticsHandler])
-  (:require [org.http-kit.server "2.1.18" :as hk]
+  ;;(:import [org.eclipse.jetty.server.handler StatisticsHandler])
+  (:require [org.httpkit.server :as http]
             ;;[ring.adapter.jetty :as jetty]
 
             [hiccup.core :refer [html]]
@@ -38,18 +38,20 @@
             [ring.middleware.not-modified :refer [wrap-not-modified]]
             [ring.middleware.cookies :refer [wrap-cookies]]
             [ring.middleware.params :refer [wrap-params]]
-            [ring.middleware.logger :refer [wrap-with-logger]])
-  (:gen-class))
+            ;;[ring.middleware.logger :refer [wrap-with-logger]]
+            ;;[ring.middleware.multipart-params :refer [wrap-multipart-params]]
+            )
+  (:gen-class :main true))
 
 
-(defn server-conf
-  [s]
-  (let [stats-handler (StatisticsHandler.)
-        default-handler (.getHandler s)]
-    (.setHandler stats-handler default-handler)
-    (.setHandler s stats-handler)
-    (.setStopTimeout s 60000)
-    (.setStopAtShutdown s true)))
+;;(defn server-conf
+;;  [s]
+;;  (let [stats-handler (StatisticsHandler.)
+;;        default-handler (.getHandler s)]
+;;    (.setHandler stats-handler default-handler)
+;;    (.setHandler s stats-handler)
+;;    (.setStopTimeout s 60000)
+;;    (.setStopAtShutdown s true)))
 
 (defroutes sigil-routes
   (GET "/" req (if (authenticated? req)
@@ -110,7 +112,9 @@
       (wrap-not-modified)
       (wrap-cookies)
       (wrap-params)
-      (wrap-with-logger)))
+      ;;(wrap-multipart-params)
+      ;;(wrap-with-logger)
+      ))
 
 (def server-options {:port 8080
                     ;;:join? false
@@ -131,7 +135,7 @@
 
 (defn start-server []
   (when (nil? @server)
-    (reset! server (eval '(hk/run-server #'app server-options)))))
+    (reset! server (http/run-server #'app server-options))))
 
 (defn restart-server []
   (when-not (nil? @server)
