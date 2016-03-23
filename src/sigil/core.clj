@@ -1,7 +1,6 @@
 (ns sigil.core
   ;;(:import [org.eclipse.jetty.server.handler StatisticsHandler])
   (:require [org.httpkit.server :as http]
-            ;;[ring.adapter.jetty :as jetty]
 
             [hiccup.core :refer [html]]
 
@@ -120,11 +119,6 @@
                     ;;:join? false
                     ;;:configurator server-conf
                     })
-
-;;(defonce server (jetty/run-jetty #'app {:port 8080
-;;                                        :join? false
-;;                                        :configurator server-conf
-;;                                        }))
 
 (defonce server (atom nil))
 

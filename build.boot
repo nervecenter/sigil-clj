@@ -43,19 +43,10 @@
 (def dirs (get-env :directories))
 (apply repl/set-refresh-dirs dirs)
 
+;; Composes stopping server, reloading namespaces, and starting server
 (defn reload-server []
   (when-not (nil? @server)
     (do (stop-server) (repl/refresh) (start-server))))
-
-;; Define helpers for REPL
-;; Start the Ring Jetty server
-;(defn start [] (.start sigil.core/server))
-;; Stop the server
-;(defn stop [] (.stop sigil.core/server))
-;; Reload dirs with code changes
-;;(defn reload [] (repl/refresh))
-;; Do it all!
-;(defn restart [] (stop) (reload) (start))
 
 (defn rebuild-and-seed
   "Drops the current db tables and then rebuilds and seeds."
