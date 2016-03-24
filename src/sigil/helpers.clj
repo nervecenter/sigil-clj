@@ -11,15 +11,6 @@
     ((:query-params req) "return")
     "/"))
 
-(defn user-has-role? [user role]
-  (cond
-    (= role :org-admin) (if (some #{"org-admin"} (:roles user))
-                          true
-                          false)
-    (= role :site-admin) (if (some #{"site-admin"} (:roles user))
-                          true
-                          false)))
-
 (defn search-orgs-tags-topics
   [term]
   (let [matched-orgs (filter #(str/starts-with? (:org_name %) term) (orgs/get-all-orgs))
@@ -28,16 +19,6 @@
     {:orgs matched-orgs
      :topics matched-topics
      :tags matched-tags}))
-
-(defn user-is-org-admin? [user]
-  (and (user-has-role? user :org-admin) (not= 0 (:org_id user))))
-
-(defn user-is-admin-of-org? [user org]
-  (and (user-has-role? user :org-admin) (= (:org_id org) (:org_id user))))
-
-(defn is-user-site-admin? [user]
-  (user-has-role? user :site-admin))
-
 
 (defn user-favorites-or-nil
   [user]
@@ -52,4 +33,4 @@
         user (users/get-user-by-id (:user_id issue))
         org (orgs/get-org-by-id (:org_id issue))
         ]
-      [issue user org])) 
+      [issue user org]))

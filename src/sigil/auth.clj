@@ -39,11 +39,20 @@
         (orgs/get-org-by-id user-org)
         nil)))
 
-(defn is-user-site-admin?
-  [user]
-  true)
+(defn user-has-role? [user role]
+  (cond
+    (= role :org-admin) (if (some #{"org-admin"} (:roles user))
+                          true
+                          false)
+    (= role :site-admin) (if (some #{"site-admin"} (:roles user))
+                           true
+                           false)))
 
-;;TODO::
-(defn user-is-admin-of-org?
-  [user org]
-  true)
+(defn user-is-org-admin? [user]
+  (and (user-has-role? user :org-admin) (not= 0 (:org_id user))))
+
+(defn user-is-admin-of-org? [user org]
+  (and (user-has-role? user :org-admin) (= (:org_id org) (:org_id user))))
+
+(defn is-user-site-admin? [user]
+  (user-has-role? user :site-admin))
