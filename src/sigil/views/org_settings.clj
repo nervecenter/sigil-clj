@@ -1,6 +1,5 @@
 (ns sigil.views.org-settings
-  (:require [sigil.auth :refer [user-or-nil]]
-            [sigil.helpers :refer [user-has-role? user-is-org-admin?]]
+  (:require [sigil.auth :refer [user-or-nil user-has-role? user-is-org-admin?]]
             [sigil.db.orgs :refer [get-org-by-id]]
             [sigil.db.tags :refer [get-tags-by-org]]
             [sigil.views.layout :as layout]

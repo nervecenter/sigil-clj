@@ -1,6 +1,6 @@
 (ns sigil.views.layout
   (require [sigil.views.partials.footer :as footer]
-           [sigil.helpers :refer [user-has-role?]])
+           [sigil.auth :refer [user-has-role?]])
   (use hiccup.core
        hiccup.page
        hiccup.form))
