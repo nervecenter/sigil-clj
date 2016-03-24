@@ -28,6 +28,10 @@
     nil 
     (first (sql/query db/spec ["SELECT * FROM orgs WHERE org_id = ?" (:org_id user)]))))
 
+(defn get-org-by-issue
+  [issue]
+  (first (sql/query db/spec ["SELECT * FROM orgs WHERE org_id = ?;" (:org_id issue)])))
+
 ;;-----------------------------------------------------
 ; Updates/Inserts
 

@@ -11,6 +11,9 @@
 (defn get-user-by-email [email]
   (first (sql/query db/spec ["SELECT * FROM users WHERE email = ?;" email])))
 
+(defn get-user-by-issue [issue]
+  (first (sql/query db/spec ["SELECT * FROM users WHERE user_id = ?;" (:user_id issue)])))
+
 (defn get-user-favorites [user]
   (first (sql/query db/spec ["SELECT favorites FROM users WHERE user_id = ?" (:user_id user)])))
 
