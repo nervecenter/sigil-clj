@@ -8,13 +8,15 @@
 
 (declare issue-partial issue-panel issue-without-panel)
 
-(defn issue-partial [uri issue user in-panel?]
+(defn issue-partial
+  ([uri issue user in-panel?]
+   (issue-partial uri issue (get-org-by-issue issue) user in-panel?))
+  ([uri issue issue-org user in-panel?]
   ;; We need: The issue, whether the user is authed, and whether they voted
   (let [authenticated? (some? user)
         user-voted? (if authenticated?
                       (user-voted-on-issue? (:user_id user) (:issue_id issue))
                       false)
-        issue-org (get-org-by-issue issue)
         issue-user (get-user-by-issue issue)]
     (if in-panel?
       ;; We need: a response
@@ -30,7 +32,7 @@
                            issue-org
                            issue-user
                            authenticated?
-                           user-voted?))))
+                           user-voted?)))))
 
 (defn issue-panel [uri issue issue-org issue-user authenticated? user-voted? response]
   [:div.panel.panel-info.issue-panel-partial
