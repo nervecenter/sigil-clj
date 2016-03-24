@@ -25,7 +25,7 @@
   ([uri user user-org]
    [:div.navbar.navbar-fixed-top.navbar-default
     [:div.container-fluid
-     [:div.#navbar-header.navbar-header
+     [:div#navbar-header.navbar-header
       [:button.navbar-toggle.collapsed {:type "button"
                                         :data-toggle "collapse"
                                         :data-target "#collapser"
@@ -47,7 +47,8 @@
                      :class "form-control typeahead"
                      :placeholder "Search for a company, person, or product"}
                     "search-term")])
-      (if (some? user);; Logged in part
+      ;; Logged in part
+      (if (some? user)
         (html
          [:ul.nav.navbar-nav.navbar-right
           [:li

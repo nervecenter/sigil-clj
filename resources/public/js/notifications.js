@@ -2,12 +2,12 @@ function shownotifications() {
     $("#header-user-icon").off("click").click(hidenotifications);
 
     var $noteparent = $("<div>")
-        .attr("id", "NoteParent")
+        .attr("id", "note-parent")
         .addClass("panel-body");
 
     var $callout = $("<img>")
         .addClass("callout")
-        .attr("src", "/Content/Images/callout.png");
+        .attr("src", "images/callout.png");
 
     var $panel = $("<div>")
         .addClass("panel")
@@ -25,8 +25,10 @@ function shownotifications() {
     $.get("/check_notes",
         function (data) {
             if (data.response == "none") {
-                var $nonotes = $("<h5>").attr("style", "text-align:center;").html("No notifications. You're all caught up. :)")
-                $("#NoteParent").append($nonotes);
+                var $nonotes = $("<h5>")
+                    .attr("style", "text-align:center;")
+                    .html("No notifications. You're all caught up. :)")
+                $("#note-parent").append($nonotes);
             } else {
                 $.each(data, function (index, Note) {
                     //img container for the user icon
@@ -35,7 +37,7 @@ function shownotifications() {
                         .addClass("notification-icon")
                         .attr("src", Note.icon);
                     //icon for from user -- need to change return value of from userid to a link to their icon instead
-                    var $imganchor = $("<a>")   
+                    var $imganchor = $("<a>")
                         .addClass("media-left")
                         .append($img);
 
@@ -65,7 +67,7 @@ function shownotifications() {
                         .append($imganchor)
                         .append($mediabody)
                         .append($controls);
-                    $("#NoteParent").append($media);
+                    $("#note-parent").append($media);
                 });
             }
         }
@@ -77,9 +79,11 @@ function deletenotification(event) {
     var $note = $(this);
     $.post("/delete_notification/" + event.data.id, function () {
         $note.parent().parent().remove();
-        if ($("#NoteParent").html() == "") {
-            var $nonotes = $("<h5>").attr("style", "text-align:center;").html("No notifications. You're all caught up. :)")
-            $("#NoteParent").append($nonotes);
+        if ($("#note-parent").html() == "") {
+            var $nonotes = $("<h5>")
+                .attr("style", "text-align:center;")
+                .html("No notifications. You're all caught up. :)")
+            $("#note-parent").append($nonotes);
         }
         refreshnumnotes();
     });
