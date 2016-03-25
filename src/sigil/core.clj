@@ -37,10 +37,7 @@
             [ring.middleware.content-type :refer [wrap-content-type]]
             [ring.middleware.not-modified :refer [wrap-not-modified]]
             [ring.middleware.cookies :refer [wrap-cookies]]
-            [ring.middleware.params :refer [wrap-params]]
-            ;;[ring.middleware.logger :refer [wrap-with-logger]]
-            ;;[ring.middleware.multipart-params :refer [wrap-multipart-params]]
-            )
+            [ring.middleware.params :refer [wrap-params]])
   (:gen-class :main true))
 
 
@@ -84,7 +81,7 @@
                              {:status 403}))
 
   (GET "/register" req (user-register-get req))
-  (POST "/newissue" req (issue-actions/add-issue-post req))
+  (POST "/postissue" req (issue-actions/add-issue-post req))
   (GET "/usernotes" req (note-actions/get-user-notifications req))
   (GET "/countusernotes" req (note-actions/get-number-user-notifications req))
   (GET "/vote/:issue_id" req (issue-actions/vote-issue req))

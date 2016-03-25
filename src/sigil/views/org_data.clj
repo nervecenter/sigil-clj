@@ -1,6 +1,6 @@
 (ns sigil.views.org-data
-  (:require [sigil.auth :refer [user-or-nil]]
-            [sigil.helpers :refer [user-is-org-admin?]]
+  (:require [sigil.auth :refer [user-or-nil user-is-org-admin?]]
+            ;[sigil.helpers :refer [user-is-org-admin?]]
             [sigil.db.orgs :refer [get-org-by-user]]
             [sigil.db.issues :refer [get-top-issues-by-org]]
             [sigil.views.not-found :refer [not-found-handler]]

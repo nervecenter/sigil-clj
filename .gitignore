@@ -2,3 +2,8 @@
 
 pg
 target
+
+resources/public/db_imgs/org/*
+resources/public/db_imgs/user/*
+resources/public/db_imgs/temp/*
+resources/public/db_imgs/tag/*

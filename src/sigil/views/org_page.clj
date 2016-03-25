@@ -51,10 +51,16 @@
          (text-area {:id "issues-by-org-search"
                      :class "form-control org-feedback-input-box"
                      :data-orgid (:org_id org)}
-                    "title")]
+                    "title")
+         (label {:class ""} "issue-text" "More details about your suggestion...")
+         (text-area {:id "text-suggest-area"
+                     :class ""} "text")
+         (hidden-field "org-id" (:org_id org))]
         [:div#new-feedback-group.form-group
-         [:div#new-feedback-button.btn.btn-primary.pull-right
-          {:style "padding:4px 9px;"} "Submit this as new feedback"]
+         (submit-button {:id "new-feedback-button"
+                         :class "btn btn-primary pull-right"
+                         :style {:padding "4px 9px"}
+                         } "Submit this as new feedback")
          (label {:class "pull-right" :style "margin:5px 10px;"} "new-feedback" "Has nobody posted what you're suggesting?")]
         [:div#tag-select-group.form-group
          (label "tag-select" "Tag your feedback by product, department, or category:")
