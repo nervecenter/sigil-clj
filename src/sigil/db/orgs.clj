@@ -3,9 +3,9 @@
             [sigil.db.core :as db]))
 
 
-(def default_org_icon_20 ["images/default/default20.png"])
-(def default_org_icon_100 ["images/default/default100_1.png" "images/default/default100_2.png" "images/default/default100_3.png" "images/default/default100_4.png" "images/default/default100_5.png"])
-(def default_org_banner ["images/default/defaultbanner.png"])
+(def default_org_icon_20 ["db_imgs/default/default20.png"])
+(def default_org_icon_100 ["db_imgs/default/default100_1.png" "db_imgs/default/default100_2.png" "db_imgs/default/default100_3.png" "db_imgs/default/default100_4.png" "db_imgs/default/default100_5.png"])
+(def default_org_banner ["db_imgs/default/defaultbanner.png"])
 
 
 ;;-----------------------------------------------------

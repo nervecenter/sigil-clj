@@ -17,7 +17,10 @@
                          :user_id (:user_id user)
                          :org_id (:org_id issue_org)
                          :tags [(long (read-string (new-issue-data "tag-select")))])]
-    (if (= :success (db/db-trans [issues/create-issue new-issue]))
+    (if (= :success (do
+                      (db/db-trans [issues/create-issue new-issue])
+                      (db/db-trans [votes/create-vote {:user_id (:user_id user)
+                                                       :issue_id (:issue_id (issues/get-issue-insert-id new-issue))}])))
       {:status 302
        :headers {"Location" (str (:org_url issue_org) "/" (:issue_id (issues/get-issue-insert-id new-issue)))}}
       ;;else redirect and let them know whats wrong....
@@ -28,14 +31,16 @@
   [req]
   (let [issue (issues/get-issue-by-id (:issue_id (:route-params req)))
         user (auth/user-or-nil req)]
-    (if (and (not-nil? user) (not (votes/user-voted-on-issue? user issue)))
-      (db/db-trans [votes/create-vote {:user_id (:user_id user)
-                                 :issue_id (:issue_id issue)}]))))
+    (do (println issue)
+      (if (and (not-nil? user) (not (votes/user-voted-on-issue? user issue)))
+        (db/db-trans [votes/create-vote {:user_id (:user_id user)
+                                         :issue_id (:issue_id issue)}])))))
 
 (defn unvote-issue
   [req]
-  (let [issue (issues/get-issue-by-id (:route-params req))
+  (let [issue (issues/get-issue-by-id (:issue_id (:route-params req)))
         user (auth/user-or-nil req)
         vote (votes/get-user-issue-vote user issue)]
-    (if (not-nil? vote)
-      (votes/delete-vote vote))))
+    (do (println vote)
+      (if (not-nil? vote)
+        (votes/delete-vote vote)))))

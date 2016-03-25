@@ -7,7 +7,7 @@
 
 (defn user-voted-on-issue?
   [user issue]
-  (empty? (into [] (sql/query db/spec ["SELECT * FROM votes WHERE user_id = ? AND issue_id = ?" (:user_id user) (:issue_id issue)] ))))
+  (not (empty? (into [] (sql/query db/spec ["SELECT * FROM votes WHERE user_id = ? AND issue_id = ?" (:user_id user) (:issue_id issue)] )))))
 
 (defn user-voted-on-comment?
   [user comment]
@@ -33,8 +33,9 @@
   (sql/delete! db/spec :votes ["vote_id = ?" (:vote_id vote)]))
 
 (defn create-vote
-  ([db-conn [{:as new-vote}]]
-   (sql/insert! db-conn :votes
+  ([db-conn [new-vote]]
+   (sql/insert! db-conn
+                :votes
                 new-vote)))
 
 (defn votes_model

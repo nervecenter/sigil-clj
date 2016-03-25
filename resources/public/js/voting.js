@@ -11,13 +11,13 @@ $(".votelogin, .voteup, .unvoteup")
     .mouseover(function () {
         var $this = $(this);
         if ($this.hasClass('voteup') || $this.hasClass("votelogin")) {
-            $this.attr("src", "/Content/Images/notvoted-hover.png");
+            $this.attr("src", "/images/notvoted-hover.png");
         }
     })
     .mouseout(function () {
         var $this = $(this);
         if ($this.hasClass('voteup') || $this.hasClass("votelogin")) {
-            $this.attr("src", "/Content/Images/notvoted.png");
+            $this.attr("src", "/images/notvoted.png");
         }
     });
 
@@ -33,7 +33,7 @@ function voteup(event) {
     $.post("/voteup/" + event.data.issueid + "/", function () {
         event.data.$button.removeClass("voteup")
             .addClass("unvoteup")
-            .attr("src", "/Content/Images/voted.png")
+            .attr("src", "/images/voted.png")
             .off("click")
             .click({ $button: event.data.$button, issueid: event.data.issueid }, unvoteup);
         var $count = $("#count-" + event.data.issueid);
@@ -45,7 +45,7 @@ function unvoteup(event) {
     $.post("/unvoteup/" + event.data.issueid + "/", function () {
         event.data.$button.removeClass("unvoteup")
             .addClass("voteup")
-            .attr("src", "/Content/Images/notvoted-hover.png")
+            .attr("src", "/images/notvoted-hover.png")
             .off("click")
             .click({ $button: event.data.$button, issueid: event.data.issueid }, voteup);
         var $count = $("#count-" + event.data.issueid);
