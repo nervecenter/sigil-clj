@@ -1,6 +1,7 @@
 (ns sigil.views.layout
   (require [sigil.views.partials.footer :as footer]
-           [sigil.auth :refer [user-has-role?]])
+           [sigil.auth :refer [user-has-role?]]
+           [sigil.db.notifications :refer [get-number-notifications-by-user]])
   (use hiccup.core
        hiccup.page
        hiccup.form))
@@ -62,7 +63,8 @@
             {:src (:icon_100 user)
              :style "height:40px;margin-top:10px;"}]
            [:img#num-notes-back {:src "images/num-notes-back.png"}]
-           [:h5#num-notes]]]
+           [:h5#num-notes
+            (get-number-notifications-by-user user)]]]
          (if (some? user-org)
            [:ul.nav.navbar-nav.navbar-right
             [:li

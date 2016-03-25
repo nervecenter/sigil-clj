@@ -13,6 +13,12 @@
   [user]
   (into [] (sql/query db/spec ["SELECT * FROM notifications WHERE to_user_id = ?" (:user_id user)])))
 
+(defn get-number-notifications-by-user
+  [user]
+  (if (some? user)
+    (:count (first (sql/query db/spec ["SELECT COUNT(*) FROM notifications WHERE to_user_id = ?" (:user_id user)])))
+    0))
+
 ;;-----------------------------------------------------------------
 ; Updates/Inserts/Deletes
 
