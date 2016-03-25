@@ -70,9 +70,9 @@
       [:a {:href (str "/" (:org_url issue-org)
                       "/" (:issue_id issue))} (:title issue)]]
      [:p.pull-left
-      [:img.issue-panel-icon {:src (:icon_30 issue-org)}]
+      [:img.issue-panel-icon {:src (str "/" (:icon_30 issue-org))}]
       [:a {:href (str "/" (:org_url issue-org))} (:org_name issue-org)]]
      [:p.pull-right
       "Posted at [TIME] by "
-      [:img {:src (:icon_30 issue-user)}]
+      [:img {:src (str "/" (:icon_30 issue-user))}]
       (:username issue-user)]]]])

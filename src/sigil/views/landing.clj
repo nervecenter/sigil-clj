@@ -33,7 +33,7 @@
      [:div.panel.panel-default
       [:div.panel-body
        (for [i issues]
-         [:p (:title i) [:br] (:text i)])]]]
+         (issue-partial "/" i ))]]]
     [:div#middle-col.col-lg-4 "Middle column goes here."]
     [:div#right-col.col-lg-4 "Right column goes here."]]])
 

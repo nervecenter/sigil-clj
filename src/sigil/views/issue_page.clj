@@ -84,7 +84,7 @@
        [:div.panel-body
         [:div.media
          [:div.pull-left
-          [:img.media-object {:src (:icon_100 (:responder r))}]]
+          [:img.media-object {:src (str "/" (:icon_100 (:responder r)))}]]
          [:div.media-body
           [:h4.media-heading
            (:username (:responder r))
@@ -114,7 +114,7 @@
         (for [c comments]
           [:div.media
            [:div.pull-left
-            [:img.media-object {:src (:icon_100 (:commenter c))}]]
+            [:img.media-object {:src (str "/" (:icon_100 (:commenter c)))}]]
            [:div.media-body
             [:h4.media-heading
              (:username (:commenter c))

@@ -36,7 +36,7 @@
        [:span.icon-bar]
        [:span.icon-bar]]
       [:a.navbar-brand {:href "/" :style "padding: 10px 15px;height:40px;"}
-       [:img {:alt "Sigil" :src "images/symbol-small.png"}]]
+       [:img {:alt "Sigil" :src "/images/symbol-small.png"}]]
       [:div.navbar-brand "Beta"]]
      [:div#collapser.navbar-collapse.collapse
       (form-to
@@ -60,9 +60,9 @@
          [:ul.nav.navbar-nav.navbar-right.hidden-xs
           [:li {:style "position:relative;"}
            [:img#header-user-icon.img-rounded.img-responsive
-            {:src (:icon_100 user)
+            {:src (str "/" (:icon_100 user))
              :style "height:40px;margin-top:10px;"}]
-           [:img#num-notes-back {:src "images/num-notes-back.png"}]
+           [:img#num-notes-back {:src "/images/num-notes-back.png"}]
            [:h5#num-notes
             (get-number-notifications-by-user user)]]]
          (if (some? user-org)

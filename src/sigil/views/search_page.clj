@@ -42,7 +42,7 @@
          (for [o orgs]
            (html [:div.media
               [:div.media-left
-               [:img.media-object {:src (:icon_100 o)}]]
+               [:img.media-object {:src (str "/" (:icon_100 o))}]]
               [:div.media-body
                [:h3 [:a {:href (:org_url o)} (:org_name o)]]]]
             [:hr]))
@@ -64,12 +64,12 @@
          (for [t tags]
            (html [:div.media
               [:div.media-left
-               [:img.media-object {:src (:icon_100 (:org t))}]]
+               [:img.media-object {:src (str "/" (:icon_100 (:org t)))}]]
               [:div.media-body
                [:h3
                 [:a {:href (:org_url (:org t))} (:org_name (:org t))]
                 [:span.label.label-default.pull-right
-                 [:img {:src (:icon_30 t)}]
+                 [:img {:src (str "/" (:icon_30 t))}]
                  (:tag_name t)]]]]
             [:hr]))
          [:p "No tags matching your search."])]]]]])

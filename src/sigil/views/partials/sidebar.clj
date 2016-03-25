@@ -43,7 +43,8 @@
    [:div.panel-body
     [:h3 {:style "margin: 10px auto -10px;"}
      [:a {:href (:org_url org)}
-      [:img {:src (:icon_20 org) :style "width:25px;height:25px;"}]
+      [:img {:src (str "/" (:icon_20 org))
+             :style "width:25px;height:25px;"}]
       (:org_name org)]]
     [:br]
     [:a {:href (:website org)}
@@ -55,7 +56,7 @@
     [:h4 {:style "margin-bottom:10px"} "Tags:"]
     (for [t org-tags]
       (html
-       [:img.sub-org-icon {:src (:icon_20 t)}]
+       [:img.sub-org-icon {:src (str "/" (:icon_20 t))}]
        (:tag_name t)
        [:br]))]])
 

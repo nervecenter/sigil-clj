@@ -36,9 +36,9 @@
          [:div.col-lg-12
           [:div.panel
            [:div.panel-body
-            [:img.img-rounded.img-responsive.img-relief {:src (:banner org)}]
+            [:img.img-rounded.img-responsive.img-relief
+             {:src (str "/" (:banner org))}]
             [:h4 "Banner files: 1000 x 200 px .jpg or .png"]
-         
             [:form {:action "/orgbanner" :method "post" :enctype "multipart/form-data"}
              [:div.form-group
               [:div.input-group
@@ -97,7 +97,7 @@
           [:div.panel
            [:div.panel-body
             [:img.img-rounded.img-responsive.img-relief
-             {:src (:icon_100 org)}]
+             {:src (str "/" (:icon_100 org))}]
             [:h4 "Large icon files: 100 x 100 px .jpg or .png"]
             [:form {:action "/orgicon100" :method "post" :enctype "multipart/form-data"}
              [:div.form-group
@@ -111,7 +111,7 @@
           [:div.panel
            [:div.panel-body
             [:img.img-rounded.img-responsive.img-relief
-             {:src (:icon_30 org)}]
+             {:src (str "/" (:icon_30 org))}]
             [:h4 "Small icon files: 30 x 30 px .jpg or .png"]
             [:form {:action "/orgicon30" :method "post" :enctype "multipart/form-data"}
              [:div.form-group

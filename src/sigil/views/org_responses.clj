@@ -20,7 +20,7 @@
 (defn org-responses-body [uri user org issues]
   [:div#main-col.col-md-9.col-lg-9
    [:img.img-rounded.img-responsive.org-banner-small
-    {:src (:banner org)}]
+    {:src (str "/" (:banner org))}]
    [:div.btn-group.btn-group-sm.btn-group-justified
     {:style "margin-bottom:20px;"}
     [:a.btn.btn-warning {:href (:org_url org)} "Main feed"]
