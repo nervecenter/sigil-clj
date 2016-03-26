@@ -4,7 +4,10 @@
             [sigil.db.tags :as tags]
             [sigil.db.issues :as issues]
             [sigil.db.users :as users]
-            [clojure.string :as str]))
+            [clojure.string :as str]
+            [clj-time.jdbc]
+            [clj-time.local :as local-time]
+            [clj-time.core :as time]))
 
 (defn get-return [req]
   (if (some? ((:query-params req) "return"))
@@ -34,3 +37,34 @@
         org (orgs/get-org-by-id (:org_id issue))
         ]
       [issue user org]))
+
+
+
+(defn time-display
+  [t]
+  (let [time-diff (time/minus (local-time/local-now) t)]
+    (cond
+      (true) "")))
+
+
+;; public static string TimeSince(DateTime datePosted) {
+;;             DateTime now = DateTime.Now;
+;;             TimeSpan since = now - datePosted;
+
+;;             if ( since >= TimeSpan.FromDays( 365.0 ) ) {
+;;                 int years = since.Days / 365;
+;;                 return ( years > 1 ) ? years.ToString() + " years ago" : "1 year ago";
+;;             } else if ( since >= TimeSpan.FromDays( 30.0 ) ) {
+;;                 int months = since.Days / 30;
+;;                 return ( months > 1 ) ? months.ToString() + " months ago" : "1 month ago";
+;;             } else if ( since >= TimeSpan.FromDays( 1.0 ) ) {
+;;                 return ( since.Days > 1 ) ? since.Days.ToString() + " days ago" : "1 day ago";
+;;             } else if ( since >= TimeSpan.FromHours( 1.0 ) ) {
+;;                 return ( since.Hours > 1 ) ? since.Hours.ToString() + " hours ago" : "1 hour ago";
+;;             } else if ( since >= TimeSpan.FromMinutes( 1.0 ) ) {
+;;                 return ( since.Minutes > 1 ) ? since.Minutes.ToString() + " minutes ago" : "1 minute ago";
+;;             } else {
+;;                 return "Less than a minute ago";
+;;             }
+
+;;         }

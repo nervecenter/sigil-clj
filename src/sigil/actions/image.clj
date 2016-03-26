@@ -73,7 +73,7 @@
         db-path (str "/db_imgs/org/" new-file-name)
         save-path (str "resources/public/" db-path)]
     (do
-      (convert-image (org-icon-file :tempfile) 1000 1000 save-path)
+      (convert-image (org-icon-file :tempfile) 1000 200 save-path)
       (db/db-trans [orgs/update-org org {:banner db-path}])
       {:status 302
        :headers {"Location" "/orgsettings"}})))

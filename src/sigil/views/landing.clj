@@ -4,7 +4,7 @@
             [hiccup.form :refer [form-to]]
             [sigil.db.issues :refer [get-landing-issues]]))
 
-(declare  landing-handler issue-section landing-page head navbar splash)
+(declare  landing-handler issue-section landing-page head landing-navbar splash)
 
 (defn landing-handler []
   (landing-page (get-landing-issues)))
@@ -13,7 +13,7 @@
   (html5
    head
    [:body.page
-    navbar
+    landing-navbar
     splash
     (issue-section issues)
     footer/footer
@@ -33,7 +33,7 @@
      [:div.panel.panel-default
       [:div.panel-body
        (for [i issues]
-         (sigil.views.partials.issue/issue-partial "/" i ))]]]
+         (sigil.views.partials.issue/issue-partial "/" i nil true))]]]
     [:div#middle-col.col-lg-4 "Middle column goes here."]
     [:div#right-col.col-lg-4 "Right column goes here."]]])
 
@@ -47,7 +47,7 @@
    [:link {:rel "shortcut icon" :href "images/favicon.png"}]
    [:title "Sigil"]])
 
-(def navbar
+(def landing-navbar
   [:div.navbar.navbar-transparent.navbar-static-top.landing-navbar
    {:style "margin-bottom:-60px;"}
    [:div.container-fluid

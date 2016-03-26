@@ -35,7 +35,7 @@
        (if icon-invalid?
          [:p.text-success "User icon must be .jpg or .png at most 100 x 100 pixels."])
        [:img.img-rounded.img-responsive.img-relief
-        {:src (str "/" (:icon_100 user))}]
+        {:src (:icon_100 user)}]
        [:h4 "User icon: 100 x 100 pixels, .jpg or .png"]
        [:form {:action "/usericon100"
                :method "post"

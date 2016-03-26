@@ -47,7 +47,7 @@
   (html
    [:div.col-md-9.col-lg-9
     [:img.img-rounded.img-responsive.org-banner-small
-     {:src (str "/" (:banner org))}]
+     {:src (:banner org)}]
     [:div.btn-group.btn-group-sm.btn-group-justified
      {:style {:margin "20px"}}
      [:a.btn.btn-warning {:href (:org_url org)} "Main feed"]
