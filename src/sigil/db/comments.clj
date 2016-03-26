@@ -1,6 +1,7 @@
 (ns sigil.db.comments
   (:require [clojure.java.jdbc :as sql]
             [sigil.db.core :as db]
+            [sigil.db.users :as users]
             [clj-time.local :as time]
             [clj-time.jdbc]))
 
@@ -19,6 +20,16 @@
   [user]
   (into [] (sql/query db/spec ["SELECT * FROM comments WHERE user_id = ?" (:user_id user)])))
 
+(defn get-last-user-comment-id
+  [user]
+  (:comment_id (first (sql/query db/spec ["SELECT * FROM comments WHERE user_id = ? ORDER BY created_at DESC" (:user_id user)]))))
+
+
+(defn get-comments-with-commenters-by-issue
+  [issue]
+  (let [issue-comments (get-comments-by-issue issue)]
+    (map #(hash-map :comment %
+                    :commenter (users/get-user-by-id (:user_id %))) issue-comments)))
 
 ;;----------------------------------------------------------------
 ; Updates/Inserts/Deletes

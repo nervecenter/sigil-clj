@@ -3,7 +3,7 @@
             [sigil.auth :refer [user-or-nil user-org-or-nil user-is-admin-of-org?]]
             [sigil.helpers :refer [get-issue-with-user-and-org-by-issue-id]]
             [sigil.db.officialresponses :refer [get-official-responses-by-issue]]
-            [sigil.db.comments :refer [get-comments-by-issue]]
+            [sigil.db.comments :refer [get-comments-by-issue get-comments-with-commenters-by-issue]]
             [sigil.db.votes :refer [user-voted-on-issue?]]
             [sigil.views.partials.sidebar :refer [sidebar-partial]]
             )
@@ -39,7 +39,7 @@
                           (user-voted-on-issue? user issue)
                           false)
                         nil ;(get-responses-with-responders-by-issue-id (:issue_id issue))
-                        nil ;(get-comments-with-commenters-by-issue-id (:issue_id issue))
+                        (get-comments-with-commenters-by-issue issue)
                         )))))
 
 (defn issue-page-body
@@ -114,22 +114,23 @@
         (for [c comments]
           [:div.media
            [:div.pull-left
-            [:img.media-object {:src (str "/" (:icon_100 (:commenter c)))}]]
+            [:img.media-object {:src (:icon_100 (:commenter c))}]]
            [:div.media-body
             [:h4.media-heading
              (:username (:commenter c))
-             [:small [:i "Posted on some date"]]]
-            [:p (:text c)]]]))
+             [:small [:i "Posted on " (:created_at (:comment c))]]]
+            [:p (:text (:comment c))]]]))
       (if (some? user)
         (form-to
          [:post "/submitcomment"]
-         {:class "issue-add-comment"}
+         ;{:class "issue-add-comment"}
          [:div.form-group
           (label "add-comment-label" "Add a comment")
           (text-area {:class "form-control panel-input-box"
                       :id "add-comment-box"
                       :placeholder "What would you like to say?"}
-                     "add-comment-box")]
+                     "add-comment-box")
+          (hidden-field "issue-id" (:issue_id issue))]
          (submit-button {:class "btn btn-primary" :id "submit-comment"} "Submit comment"))
         nil)]]]
    (sidebar-partial org user)))
