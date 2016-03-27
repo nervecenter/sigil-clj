@@ -37,18 +37,9 @@
             [ring.middleware.content-type :refer [wrap-content-type]]
             [ring.middleware.not-modified :refer [wrap-not-modified]]
             [ring.middleware.cookies :refer [wrap-cookies]]
-            [ring.middleware.params :refer [wrap-params]])
+            [ring.middleware.params :refer [wrap-params]]
+            [ring.middleware.multipart-params :refer [wrap-multipart-params]])
   (:gen-class :main true))
-
-
-;;(defn server-conf
-;;  [s]
-;;  (let [stats-handler (StatisticsHandler.)
-;;        default-handler (.getHandler s)]
-;;    (.setHandler stats-handler default-handler)
-;;    (.setHandler s stats-handler)
-;;    (.setStopTimeout s 60000)
-;;    (.setStopAtShutdown s true)))
 
 (defroutes sigil-routes
   (GET "/" req (if (authenticated? req)
@@ -97,12 +88,13 @@
   (context "/:org_url{[a-z0-9]{4,}}" req
     (GET "/" req (org-page-handler req))
     (GET "/:issue_id{[0-9]+}" req (issue-page-handler req))
-    (POST "/unvoteup/:issue_id{[0-9]+}" req (issue-actions/unvote-issue req))
-    (POST "/voteup/:issue_id{[0-9]+}" req (issue-actions/vote-issue req)))
-  (POST "/voteup/:issue_id{[0-9]+}" req (issue-actions/vote-issue req))
-  (POST "/unvoteup/:issue_id{[0-9]+}" req (issue-actions/unvote-issue req))
-  (GET "/vote/:issue_id/:comment_id" req (comment-actions/vote-comment req))
-  (GET "/unvote/:issue_id/:comment_id" req (comment-actions/unvote-comment req))
+    ;(POST "/unvoteup/:issue_id{[0-9]+}" req (issue-actions/unvote-issue req))
+    ;(POST "/voteup/:issue_id{[0-9]+}" req (issue-actions/vote-issue req))
+    )
+  (POST "/voteup" req (issue-actions/vote-issue req))
+  (POST "/unvoteup" req (issue-actions/unvote-issue req))
+  ;(GET "/vote/:issue_id/:comment_id" req (comment-actions/vote-comment req))
+  ;(GET "/unvote/:issue_id/:comment_id" req (comment-actions/unvote-comment req))
   (ANY "*" req (not-found-handler req))
   (route/resources "/")
   (route/not-found "404"))
@@ -114,14 +106,10 @@
       (wrap-not-modified)
       (wrap-cookies)
       (wrap-params)
-      ;;(wrap-multipart-params)
-      ;;(wrap-with-logger)
+      (wrap-multipart-params)
       ))
 
-(def server-options {:port 8080
-                    ;;:join? false
-                    ;;:configurator server-conf
-                    })
+(def server-options {:port 8080})
 
 (defonce server (atom nil))
 

@@ -15,7 +15,7 @@
   ;; We need: The issue, whether the user is authed, and whether they voted
   (let [authenticated? (some? user)
         user-voted? (if authenticated?
-                      (user-voted-on-issue? (:user_id user) (:issue_id issue))
+                      (user-voted-on-issue? user issue)
                       false)
         issue-user (get-user-by-issue issue)]
     (if in-panel?

@@ -29,18 +29,25 @@
 
 (defn vote-issue
   [req]
-  (let [issue (issues/get-issue-by-id (:issue_id (:route-params req)))
+  (let [issue (issues/get-issue-by-id (read-string (:issue_id (:params req))))
         user (auth/user-or-nil req)]
-    (do (println issue)
-      (if (and (not-nil? user) (not (votes/user-voted-on-issue? user issue)))
+    (if (not (votes/user-voted-on-issue? user issue))
+      (do
         (db/db-trans [votes/create-vote {:user_id (:user_id user)
-                                         :issue_id (:issue_id issue)}])))))
+                                         :issue_id (:issue_id issue)}]
+                     [issues/issue-voted issue])
+        {:status 200})
+      {:status 403})))
 
 (defn unvote-issue
   [req]
-  (let [issue (issues/get-issue-by-id (:issue_id (:route-params req)))
+  (let [issue (issues/get-issue-by-id (read-string (:issue_id (:params req))))
         user (auth/user-or-nil req)
         vote (votes/get-user-issue-vote user issue)]
-    (do (println vote)
-      (if (not-nil? vote)
-        (votes/delete-vote vote)))))
+    (if (not-nil? vote)
+      (do
+        (db/db-trans
+         [votes/delete-vote vote]
+         [issues/issue-unvoted issue])
+        {:status 200})
+      {:status 403})))

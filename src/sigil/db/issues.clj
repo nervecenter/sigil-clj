@@ -45,13 +45,13 @@
 
 (defn issue-voted
   "Increments issues total_votes and sets last_voted to current time."
-  [db-conn [issue_id]]
-  (sql/execute! db-conn ["UPDATE issues SET last_voted = LOCALTIMESTAMP, total_votes = 1 + total_votes WHERE issue_id = ?" issue_id]))
+  [db-conn [issue]]
+  (sql/execute! db-conn ["UPDATE issues SET last_voted = LOCALTIMESTAMP, total_votes = 1 + total_votes WHERE issue_id = ?" (:issue_id issue)]))
 
 (defn issue-unvoted
   "Decrements issues total_votes"
-  [db-conn [issue_id]]
-  (sql/execute! db-conn ["UPDATE issues SET total_votes = total_votes - 1 WHERE issue_id = ?" issue_id]))
+  [db-conn [issue]]
+  (sql/execute! db-conn ["UPDATE issues SET total_votes = total_votes - 1 WHERE issue_id = ?" (:issue_id issue)]))
 
 (defn update-issue
   [db-conn [issue_id updated-rows]]
