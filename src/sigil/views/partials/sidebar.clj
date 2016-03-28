@@ -43,7 +43,7 @@
    [:div.panel-body
     [:h3 {:style "margin: 10px auto -10px;"}
      [:a {:href (:org_url org)}
-      [:img {:src (str "/" (:icon_20 org))
+      [:img {:src (:icon_30 org)
              :style "width:25px;height:25px;"}]
       (:org_name org)]]
     [:br]

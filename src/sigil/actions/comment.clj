@@ -10,6 +10,22 @@
 
 (defn post-comment
   [req]
+  (let [new-comment-data (:form-params req)
+        user (auth/user-or-nil req)
+        issue (issues/get-issue-by-id (read-string (new-comment-data "issue-id")))
+        new-comment {:user_id (:user_id user)
+                     :issue_id (:issue_id issue)
+                     :text (new-comment-data "add-comment-box")}]
+    (if (= :success (do
+                      (db/db-trans [comments/create-comment new-comment])
+                      (db/db-trans [votes/create-vote {:user_id (:user_id user)
+                                                       :issue_id (:issue_id issue)
+                                                       :comment_id (comments/get-last-user-comment-id user)}])))
+      {:status 302
+       :headers {"Location" (str ((:headers req) "referer"))}})))
+
+(defn delete-comment
+  [req]
   ())
 
 (defn vote-comment

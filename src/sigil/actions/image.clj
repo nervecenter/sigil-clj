@@ -27,13 +27,13 @@
         user-icon-file (upload-params :usericon100)
         user (auth/user-or-nil req)
         new-file-name (str (:username user) "_100.png")
-        db-path (str "db_imgs/user/" new-file-name)
+        db-path (str "/db_imgs/user/" new-file-name)
         save-path (str "resources/public/" db-path)]
     (do
       (convert-image (user-icon-file :tempfile) 100 100 save-path)
       (db/db-trans [users/update-user user {:icon_100 db-path}])
       {:status 302
-       :headers {"Location" "/settings"}})))
+       :headers {"Location" "/settings?success=i"}})))
 
 (defn update-org-icon-30
   [req]
@@ -41,7 +41,7 @@
         org-icon-file (upload-params :icon-30-upload)
         org (auth/user-org-or-nil (auth/user-or-nil req))
         new-file-name (str (:org_name org) "_30.png")
-        db-path (str "db_imgs/org/" new-file-name)
+        db-path (str "/db_imgs/org/" new-file-name)
         save-path (str "resources/public/" db-path)]
     (if (not (nil? org))
       (do
@@ -56,7 +56,7 @@
         org-icon-file (upload-params :icon-100-upload)
         org (auth/user-org-or-nil (auth/user-or-nil req))
         new-file-name (str (:org_name org) "_100.png")
-        db-path (str "db_imgs/org/" new-file-name)
+        db-path (str "/db_imgs/org/" new-file-name)
         save-path (str "resources/public/" db-path)]
     (do
       (convert-image (org-icon-file :tempfile) 100 100 save-path)
@@ -70,10 +70,10 @@
         org-icon-file (upload-params :banner-upload)
         org (auth/user-org-or-nil (auth/user-or-nil req))
         new-file-name (str (:org_name org) "_banner.png")
-        db-path (str "db_imgs/org/" new-file-name)
+        db-path (str "/db_imgs/org/" new-file-name)
         save-path (str "resources/public/" db-path)]
     (do
-      (convert-image (org-icon-file :tempfile) 1000 1000 save-path)
+      (convert-image (org-icon-file :tempfile) 1000 200 save-path)
       (db/db-trans [orgs/update-org org {:banner db-path}])
       {:status 302
        :headers {"Location" "/orgsettings"}})))

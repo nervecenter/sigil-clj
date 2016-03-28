@@ -15,7 +15,7 @@
   ;; We need: The issue, whether the user is authed, and whether they voted
   (let [authenticated? (some? user)
         user-voted? (if authenticated?
-                      (user-voted-on-issue? (:user_id user) (:issue_id issue))
+                      (user-voted-on-issue? user issue)
                       false)
         issue-user (get-user-by-issue issue)]
     (if in-panel?
@@ -56,11 +56,11 @@
      (if authenticated?
        (if user-voted?
          [:img.unvoteup {:data-issueid (:issue_id issue)
-                         :src "images/voted.png"}]
+                         :src "/images/voted.png"}]
          [:img.voteup {:data-issueid (:issue_id issue)
-                       :src "images/notvoted.png"}])
+                       :src "/images/notvoted.png"}])
        [:a {:href (str "login?return=" uri)}
-        [:img.votelogin {:src "images/notvoted.png"}]])
+        [:img.votelogin {:src "/images/notvoted.png"}]])
      [:br]
      [:span.voteamount
       {:id (str "count-" (:issue_id issue))}
@@ -70,9 +70,9 @@
       [:a {:href (str "/" (:org_url issue-org)
                       "/" (:issue_id issue))} (:title issue)]]
      [:p.pull-left
-      [:img.issue-panel-icon {:src (str "/" (:icon_30 issue-org))}]
+      [:img.issue-panel-icon {:src (:icon_30 issue-org)}]
       [:a {:href (str "/" (:org_url issue-org))} (:org_name issue-org)]]
      [:p.pull-right
-      "Posted at [TIME] by "
-      [:img {:src (str "/" (:icon_30 issue-user))}]
+      (str "Posted at " (clj-time.coerce/to-local-date (:created_at issue)) " by ") 
+      [:img {:src (:icon_30 issue-user)}]
       (:username issue-user)]]]])

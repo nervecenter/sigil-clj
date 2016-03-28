@@ -21,8 +21,8 @@
             [sigil.views.user-register :refer [user-register-get user-register-post]]
             [sigil.views.org-register :refer [org-register-get org-register-post]]
             [sigil.views.not-found :refer [not-found-handler]]
-            [sigil.views.search-page :refer [search-page-handler]]
-
+            [sigil.views.org-data :refer [org-data-handler]]
+            
             [sigil.auth :refer [authenticated?]]
 
             [sigil.actions.logout :refer [logout-handler]]
@@ -32,30 +32,22 @@
             [sigil.actions.notifications :as note-actions]
             [sigil.actions.image :as image-actions]
             [sigil.actions.tag :as tag-actions]
+            [sigil.actions.user :as user-actions]
             [sigil.db.migrations :as mig]
 
             [ring.middleware.resource :refer [wrap-resource]]
             [ring.middleware.content-type :refer [wrap-content-type]]
             [ring.middleware.not-modified :refer [wrap-not-modified]]
             [ring.middleware.cookies :refer [wrap-cookies]]
-            [ring.middleware.params :refer [wrap-params]])
+            [ring.middleware.params :refer [wrap-params]]
+            [ring.middleware.multipart-params :refer [wrap-multipart-params]])
   (:gen-class :main true))
-
-
-;;(defn server-conf
-;;  [s]
-;;  (let [stats-handler (StatisticsHandler.)
-;;        default-handler (.getHandler s)]
-;;    (.setHandler stats-handler default-handler)
-;;    (.setHandler s stats-handler)
-;;    (.setStopTimeout s 60000)
-;;    (.setStopAtShutdown s true)))
 
 (defroutes sigil-routes
   (GET "/" req (if (authenticated? req)
                  (home-handler req)
                  (landing-handler)))
-  (GET "/usertest" req (usertest-handler req))
+  ;(GET "/usertest" req (usertest-handler req))
   (GET "/legal" req (legal-handler req))
   (GET "/login" req (login-get req))
   (POST "/login" req (login-post req))
@@ -82,27 +74,29 @@
                              {:status 403}))
 
   (GET "/register" req (user-register-get req))
+  (POST "/userpasschange" req (user-actions/change-user-password req))
   (POST "/postissue" req (issue-actions/add-issue-post req))
   (GET "/usernotes" req (note-actions/get-user-notifications req))
   (GET "/countusernotes" req (note-actions/get-number-user-notifications req))
-  (POST "/voteup/:issue_id{[0-9]+}" req (issue-actions/vote-issue req))
-  (POST "/unvoteup/:issue_id{[0-9]+}" req (issue-actions/unvote-issue req))
-  (GET "/vote/:issue_id/:comment_id" req (comment-actions/vote-comment req))
-  (GET "/unvote/:issue_id/:comment_id" req (comment-actions/unvote-comment req))
   (POST "/register" req (user-register-post req))
   (GET "/orgregister" req (org-register-get req))
   (POST "/orgregister" req (org-register-post req))
+  (POST "/submitcomment" req (comment-actions/post-comment req))
   (GET "/printrequest" req (html [:p {} req]))
-  (GET "/printrequest/:x" req (html [:p {} req]))
+  ;(GET "/printrequest/:x" req (html [:p {} req]))
   (GET "/404" req (not-found-handler req))
-  (GET "/search" req (search-page-handler req))
-  (GET "/searchbar" req (search-actions/auto-complete-search req))
-  (GET "/searchorgissues/:org-id/:term" req (search-actions/search-org-issues req))
+  (context "/search" req
+    (GET "/:term" req (search-actions/auto-complete-search req))
+    (GET "/:org-id/:term" req (search-actions/search-org-issues req)))
   (context "/:org_url{[a-z0-9]{4,}}" req
     (GET "/" req (org-page-handler req))
+    (GET "/data" req (org-data-handler req))
     (GET "/:issue_id{[0-9]+}" req (issue-page-handler req))
-    (POST "/unvoteup/:issue_id{[0-9]+}" req (issue-actions/unvote-issue req))
-    (POST "/voteup/:issue_id{[0-9]+}" req (issue-actions/vote-issue req)))
+    )
+  (POST "/voteup" req (issue-actions/vote-issue req))
+  (POST "/unvoteup" req (issue-actions/unvote-issue req))
+  ;(GET "/vote/:issue_id/:comment_id" req (comment-actions/vote-comment req))
+  ;(GET "/unvote/:issue_id/:comment_id" req (comment-actions/unvote-comment req))
   (ANY "*" req (not-found-handler req))
   (route/resources "/")
   (route/not-found "404"))
@@ -114,14 +108,10 @@
       (wrap-not-modified)
       (wrap-cookies)
       (wrap-params)
-      ;;(wrap-multipart-params)
-      ;;(wrap-with-logger)
+      (wrap-multipart-params)
       ))
 
-(def server-options {:port 8080
-                    ;;:join? false
-                    ;;:configurator server-conf
-                    })
+(def server-options {:port 8080})
 
 (defonce server (atom nil))
 

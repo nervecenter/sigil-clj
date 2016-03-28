@@ -36,7 +36,7 @@
   (html
    [:div#main-col.col-md-9.col-lg-9
      [:img.img-rounded.img-responsive.org-banner-small
-      {:src (str "/" (:banner org))}]
+      {:src (:banner org)}]
      [:div.btn-group.btn-group-sm.btn-group-justified
       {:style "margin-bottom:20px;"}
       [:a.btn.btn-default.active "Main feed"]
@@ -71,3 +71,4 @@
       (for [i issues]
         (issue-partial (:uri req) i org user true))]]
   (sidebar-partial org user)))
+

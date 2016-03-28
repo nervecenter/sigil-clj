@@ -1,38 +1,45 @@
 (ns sigil.views.org-data
-  (:require [sigil.auth :refer [user-or-nil user-is-org-admin?]]
+  (:require [sigil.auth :refer [user-or-nil user-is-org-admin? user-org-or-nil]]
             ;[sigil.helpers :refer [user-is-org-admin?]]
-            [sigil.db.orgs :refer [get-org-by-user]]
-            [sigil.db.issues :refer [get-top-issues-by-org]]
+            ;[sigil.db.orgs :refer [get-org-by-user]]
+;            [sigil.db.issues]
             [sigil.views.not-found :refer [not-found-handler]]
             [sigil.views.layout :as layout]
             [sigil.actions.data :as data]
-            [clj-time.core :as time]))
+            [clj-time.core :as time]
+            [sigil.views.partials.issue :refer [issue-partial]])
+  (:use [hiccup.form]
+        [hiccup.core]
+        ))
+
+(declare org-data-page)
 
 (defn org-data-handler [req]
   (let [user (user-or-nil req)]
     (if (user-is-org-admin? user)
-      (let [user-org (get-org-by-user user)
+      (let [user-org (user-org-or-nil user)
             chart-data (data/get-chart-data-by-org
                         user-org
                         (time/minus (time/now) (time/days 7))
                         (time/now))
-            top-issues (get-top-issues-by-org
+            top-issues (data/get-top-issues-by-org
                         user-org
                         (time/minus (time/now) (time/days 7))
                         (time/now))
-            top-unresponded-issues (get-top-unresponded-issues-by-org
+            top-unresponded-issues (data/get-top-unresponded-issues-by-org
                                     user-org
                                     (time/minus (time/now) (time/days 7))
                                     (time/now))
-            top-rising-issues (get-top-rising-issues-by-org
+            top-rising-issues (data/get-top-rising-issues-by-org
                                user-org
                                (time/minus (time/now) (time/days 7))
                                (time/now))]
         (layout/render req
                        user
                        user-org
-                       (str "Sigil - " (:org_name org) " Data")
-                       (org-data-body (:uri req)
+                       (str "Sigil - " (:org_name user-org) " Data")
+                       (org-data-page (:uri req)
+                                      user
                                       user-org
                                       chart-data
                                       top-issues
@@ -41,6 +48,7 @@
       (not-found-handler req))))
 
 (defn org-data-page [uri
+                     user
                      org
                      chart-data
                      top-issues
@@ -52,7 +60,7 @@
      [:div.panel.panel-default
       [:div.panel-body
        [:img#data-controls-hider.pull-left
-        {:src "images/heirarchy-extended.png"
+        {:src "/images/heirarchy-extended.png"
          :style "margin-top:23px;margin-right:10px;"}]
        [:h3#data-header.pull-left
         (:org_name org)
@@ -78,17 +86,19 @@
                     "End date")
         [:button#data-button.btn.btn-primary.disabled "Get data"]]
        [:div#chart-panel {:style "clear:both;width:100%;"}
-        [:div#org-chart-div {:style "width:100%;height:350px;"}]]
+        [:div#org-chart-div {:style "width:100%;height:350px;"}]
+        chart-data]
        [:div
         [:h4#data-header "Top issues for selected period"
          [:div#top-issues-parent
           (for [i top-issues]
-            (issue-partial uri i user true))]]
+            (issue-partial uri i user true))
+         ]]
         [:h4#data-header "Top issues awaiting responses"
          [:div#top-unresponded-issues-parent
           (for [i top-unresponded-issues]
             (issue-partial uri i user true))]]
         [:h4#data-header "Top new and rising issues"
          [:div#top-rising-issues-parent
-          (for [i top-issues]
+          (for [i top-rising-issues]
             (issue-partial uri i user true))]]]]]]]])

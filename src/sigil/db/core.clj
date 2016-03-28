@@ -10,6 +10,11 @@
 
 (def spec "postgresql://localhost:5432/sigildb") ;; I wanted to alias this ns in the other model files but I didn't want it to be db/db everywhere
 
+
+(def default_icon_20 ["/db_imgs/default/default_20.png"])
+(def default_icon_100 ["/db_imgs/default/default100_1.png" "/db_imgs/default/default100_2.png" "/db_imgs/default/default100_3.png" "/db_imgs/default/default100_4.png" "/db_imgs/default/default100_5.png"])
+(def default_banner ["/db_imgs/default/defaultbanner.png"])
+
 (declare errors create-error)
 
 ;;Postgres arrays to clojure vecs

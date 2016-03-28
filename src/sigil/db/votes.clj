@@ -5,9 +5,11 @@
 ;;----------------------------------------------------------------
 ; Querys
 
+(def not-empty? (complement empty?))
+
 (defn user-voted-on-issue?
   [user issue]
-  (not (empty? (into [] (sql/query db/spec ["SELECT * FROM votes WHERE user_id = ? AND issue_id = ?" (:user_id user) (:issue_id issue)] )))))
+   (not-empty? (sql/query db/spec ["SELECT * FROM votes WHERE user_id = ? AND issue_id = ? AND comment_id IS NULL" (:user_id user) (:issue_id issue)] )))
 
 (defn user-voted-on-comment?
   [user comment]
@@ -19,7 +21,7 @@
 
 (defn get-user-issue-vote
   [user issue]
-  (first (sql/query db/spec ["SELECT * FROM votes WHERE user_id = ? AND issue_id = ? AND comment_id = NULL" (:user_id user) (:issue_id issue)])))
+  (first (sql/query db/spec ["SELECT * FROM votes WHERE user_id = ? AND issue_id = ? AND comment_id IS NULL" (:user_id user) (:issue_id issue)])))
 
 (defn get-user-comment-vote
   [user comment]
@@ -29,14 +31,14 @@
 ; Updates/Inserts/Deletes
 
 (defn delete-vote
-  [vote]
-  (sql/delete! db/spec :votes ["vote_id = ?" (:vote_id vote)]))
+  [db-conn [vote]]
+  (sql/delete! db-conn :votes ["vote_id = ?" (:vote_id vote)]))
 
 (defn create-vote
-  ([db-conn [new-vote]]
-   (sql/insert! db-conn
-                :votes
-                new-vote)))
+  [db-conn [new-vote]]
+  (sql/insert! db-conn
+               :votes
+               new-vote))
 
 (defn votes_model
   "Defines the vote model table in the db"
@@ -46,6 +48,6 @@
    [:vote_id :bigserial "PRIMARY KEY"]
    [:user_id :bigint "NOT NULL"]
    [:issue_id :bigint "NOT NULL"]
-   [:comment_id :bigint]
+   [:comment_id :bigint "DEFAULT NULL"]
    [:official_response_id :bigint]
    [:created_at :timestamp "NOT NULL" "DEFAULT CURRENT_TIMESTAMP"]))

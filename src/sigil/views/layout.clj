@@ -60,7 +60,7 @@
          [:ul.nav.navbar-nav.navbar-right.hidden-xs
           [:li {:style "position:relative;"}
            [:img#header-user-icon.img-rounded.img-responsive
-            {:src (str "/" (:icon_100 user))
+            {:src (:icon_100 user)
              :style "height:40px;margin-top:10px;"}]
            [:img#num-notes-back {:src "/images/num-notes-back.png"}]
            [:h5#num-notes

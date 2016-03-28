@@ -30,7 +30,7 @@ $(".votelogin").click(redirectToLogin);
  */
 
 function voteup(event) {
-    $.post("/voteup/" + event.data.issueid + "/", function () {
+    $.post("/voteup", {issue_id: event.data.issueid}, function () {
         event.data.$button.removeClass("voteup")
             .addClass("unvoteup")
             .attr("src", "/images/voted.png")
@@ -42,7 +42,7 @@ function voteup(event) {
 }
 
 function unvoteup(event) {
-    $.post("/unvoteup/" + event.data.issueid + "/", function () {
+    $.post("/unvoteup", {issue_id: event.data.issueid}, function () {
         event.data.$button.removeClass("unvoteup")
             .addClass("voteup")
             .attr("src", "/images/notvoted-hover.png")
