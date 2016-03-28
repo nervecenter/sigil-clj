@@ -31,6 +31,7 @@
             [sigil.actions.notifications :as note-actions]
             [sigil.actions.image :as image-actions]
             [sigil.actions.tag :as tag-actions]
+            [sigil.actions.user :as user-actions]
             [sigil.db.migrations :as mig]
 
             [ring.middleware.resource :refer [wrap-resource]]
@@ -45,7 +46,7 @@
   (GET "/" req (if (authenticated? req)
                  (home-handler req)
                  (landing-handler)))
-  (GET "/usertest" req (usertest-handler req))
+  ;(GET "/usertest" req (usertest-handler req))
   (GET "/legal" req (legal-handler req))
   (GET "/login" req (login-get req))
   (POST "/login" req (login-post req))
@@ -72,6 +73,7 @@
                              {:status 403}))
 
   (GET "/register" req (user-register-get req))
+  (POST "/userpasschange" req (user-actions/change-user-password req))
   (POST "/postissue" req (issue-actions/add-issue-post req))
   (GET "/usernotes" req (note-actions/get-user-notifications req))
   (GET "/countusernotes" req (note-actions/get-number-user-notifications req))

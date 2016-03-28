@@ -33,7 +33,7 @@
       (convert-image (user-icon-file :tempfile) 100 100 save-path)
       (db/db-trans [users/update-user user {:icon_100 db-path}])
       {:status 302
-       :headers {"Location" "/settings"}})))
+       :headers {"Location" "/settings?success=i"}})))
 
 (defn update-org-icon-30
   [req]

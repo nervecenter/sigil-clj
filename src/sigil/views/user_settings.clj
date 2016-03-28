@@ -10,25 +10,53 @@
         user-org (user-org-or-nil user)
         icon-invalid? (if (= "l" ((:query-params req) "invalid"))
                         true
-                        false)]
+                        false)
+        pass-invalid? ((:query-params req) "invalid")
+        successful? ((:query-params req) "success")]
     (if (some? user)
       (layout/render req
                      user
                      user-org
                      "Sigil - Settings"
-                     (user-settings-page user icon-invalid?))
+                     (user-settings-page user icon-invalid? pass-invalid? successful?))
       {:status 302
        :headers {"Location" "/"}})))
 
-(defn user-settings-page [user icon-invalid?]
+(defn user-settings-page [user icon-invalid? pass-invalid? successful?]
   [:div.container.settings-container
    [:h2.settings-page-header "Account settings for " (:username user)]
+   [:h3 {:style "color:green;"}
+    (cond
+      (= successful? "p") "Password Updated"
+      (= successful? "i") "Icon Updated")]
    [:div.row
     [:div.col-lg-6
      [:div.panel.panel-default
       [:div.panel-body
-       [:div.form-group
-        [:h4 "Change your password"]]]]]
+       [:h3 {:style "color:red;"} (cond
+                                    (= "m" pass-invalid?)  "New Password Fields did not match."
+                                    (= "b" pass-invalid?)  "Old Password Incorrect"
+                                    (= "c" pass-invalid?)  "Passwords need to be atleast 6 characters")]
+       [:form {:method "post" :action "/userpasschange"}
+        [:div.form-group
+         (label "password" "Old Password")
+         (password-field {:id "old-password"
+                          :placeholder "Old Password"
+                          :class "form-control"} "old-password")]
+        [:div.form-group
+         (label "password" "New Password")
+         (password-field {:id "new-password"
+                          :placeholder "Password"
+                          :class "form-control"} "new-password")]
+
+        [:div.form-group
+         (label "confirm-new-password" "Confirm New password")
+         (password-field {:id "confirm-new-password"
+                          :placeholder "Confirm New Password"
+                          :class "form-control"} "confirm-new-password")]
+        [:div.btn-group.btn-group-justified
+         [:div.btn-group
+          (submit-button {:class "btn btn-primary disabled"} "Change Password")]]]]]]
     [:div.col-lg-6
      [:div.panel.panel-default
       [:div.panel-body
