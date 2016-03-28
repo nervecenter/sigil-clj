@@ -21,7 +21,8 @@
             [sigil.views.user-register :refer [user-register-get user-register-post]]
             [sigil.views.org-register :refer [org-register-get org-register-post]]
             [sigil.views.not-found :refer [not-found-handler]]
-
+            [sigil.views.org-data :refer [org-data-handler]]
+            
             [sigil.auth :refer [authenticated?]]
 
             [sigil.actions.logout :refer [logout-handler]]
@@ -89,9 +90,8 @@
     (GET "/:org-id/:term" req (search-actions/search-org-issues req)))
   (context "/:org_url{[a-z0-9]{4,}}" req
     (GET "/" req (org-page-handler req))
+    (GET "/data" req (org-data-handler req))
     (GET "/:issue_id{[0-9]+}" req (issue-page-handler req))
-    ;(POST "/unvoteup/:issue_id{[0-9]+}" req (issue-actions/unvote-issue req))
-    ;(POST "/voteup/:issue_id{[0-9]+}" req (issue-actions/vote-issue req))
     )
   (POST "/voteup" req (issue-actions/vote-issue req))
   (POST "/unvoteup" req (issue-actions/unvote-issue req))
