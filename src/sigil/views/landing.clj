@@ -2,7 +2,8 @@
   (:require [sigil.views.partials.footer :as footer]
             [hiccup.page :refer [html5 include-css include-js]]
             [hiccup.form :refer [form-to]]
-            [sigil.db.issues :refer [get-landing-issues]]))
+            [sigil.db.issues :refer [get-landing-issues]]
+            [sigil.views.partials.issue :refer [issue-partial]]))
 
 (declare  landing-handler issue-section landing-page head navbar splash)
 
@@ -33,7 +34,7 @@
      [:div.panel.panel-default
       [:div.panel-body
        (for [i issues]
-         (issue-partial "/" i ))]]]
+         (issue-partial "/" i  false))]]]
     [:div#middle-col.col-lg-4 "Middle column goes here."]
     [:div#right-col.col-lg-4 "Right column goes here."]]])
 

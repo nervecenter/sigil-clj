@@ -9,7 +9,7 @@
 
 
 ;;-----------------------------------------------------
-; Querys
+; Queries
 
 (defn get-org-by-id
   [id]
@@ -19,13 +19,17 @@
   []
   (into [] (sql/query db/spec ["SELECT * FROM orgs"])))
 
+(defn get-five-orgs-by-term
+  [term]
+  (sql/query db/spec ["SELECT *, levenshtein(org_name, ?) FROM orgs ORDER BY levenshtein(org_name, ?) ASC LIMIT 5;" term term]))
+
 (defn get-org-by-url
   [url]
   (first (sql/query db/spec ["SELECT * FROM orgs WHERE org_url = ?;" url])))
 
 (defn get-org-by-user [user]
   (if (= (:org_id user) 0)
-    nil 
+    nil
     (first (sql/query db/spec ["SELECT * FROM orgs WHERE org_id = ?" (:org_id user)]))))
 
 (defn get-org-by-issue

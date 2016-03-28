@@ -21,6 +21,7 @@
             [sigil.views.user-register :refer [user-register-get user-register-post]]
             [sigil.views.org-register :refer [org-register-get org-register-post]]
             [sigil.views.not-found :refer [not-found-handler]]
+            [sigil.views.search-page :refer [search-page-handler]]
 
             [sigil.auth :refer [authenticated?]]
 
@@ -94,9 +95,9 @@
   (GET "/printrequest" req (html [:p {} req]))
   (GET "/printrequest/:x" req (html [:p {} req]))
   (GET "/404" req (not-found-handler req))
-  (context "/search" req
-    (GET "/:term" req (search-actions/auto-complete-search req))
-    (GET "/:org-id/:term" req (search-actions/search-org-issues req)))
+  (GET "/search" req (search-page-handler req))
+  (GET "/searchbar" req (search-actions/auto-complete-search req))
+  (GET "/searchorgissues/:org-id/:term" req (search-actions/search-org-issues req))
   (context "/:org_url{[a-z0-9]{4,}}" req
     (GET "/" req (org-page-handler req))
     (GET "/:issue_id{[0-9]+}" req (issue-page-handler req))
