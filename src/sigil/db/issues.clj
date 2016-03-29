@@ -32,6 +32,8 @@
   [org]
   (into [] (sql/query db/spec ["SELECT * FROM issues WHERE org_id = ? AND responded = TRUE" (:org_id org)])))
 
+
+
 ;;------------------------------------------------------------------
 ; Updates/Inserts
 

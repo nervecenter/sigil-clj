@@ -31,6 +31,10 @@
     (map #(hash-map :comment %
                     :commenter (users/get-user-by-id (:user_id %))) issue-comments)))
 
+
+(defn get-users-by-issue-comments
+  [issue]
+  (set (into [] (sql/query db/spec ["SELECT user_id FROM comments WHERE issue_id = ?" (:issue_id issue)]))))
 ;;----------------------------------------------------------------
 ; Updates/Inserts/Deletes
 

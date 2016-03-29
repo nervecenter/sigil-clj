@@ -4,6 +4,10 @@
             [sigil.db.tags :as tags]
             [sigil.db.issues :as issues]
             [sigil.db.users :as users]
+            [sigil.db.notifications :as notifications]
+            [sigil.db.core :as db]
+            [sigil.db.comments :as comments]
+            [sigil.db.votes :as votes]
             [clojure.string :as str]
             [clj-time.jdbc]
             [clj-time.local :as local-time]
@@ -37,6 +41,45 @@
         org (orgs/get-org-by-id (:org_id issue))
         ]
       [issue user org]))
+
+
+(defn get-all-users-of-issue
+  "Gets the users associated with an issue who voted or commented."
+  [issue]
+  (let [users-voted (votes/get-users-who-voted-issue issue)
+        users-commented (comments/get-users-by-issue-comments issue)]
+    ;(println (clojure.set/union users-voted users-commented))
+    (clojure.set/union users-voted users-commented)))
+
+(defn create-notes
+  ;; ([from & too]
+  ;;  (map #(hash-map :from_user_id (:user_id from)
+  ;;                          :to_user_id (:user_id %)) too))
+  ;; ([msg from & too]
+  ;;  (map #(hash-map :from_user_id (:user_id from)
+  ;;                    :to_user_id (:user_id %)
+  ;;                    :note_message msg
+  ;;                    ) too))
+  ([issue msg from too]
+   (map #(hash-map :from_user_id (:user_id from)
+                   :to_user_id (:user_id %1)
+                   :note_message msg
+                   :issue_id (:issue_id issue)) too))
+  ;; ([issue comment  msg from & too]
+  ;;  (map #(hash-map :from_user_id (:user_id from)
+  ;;                    :to_user_id (:user_id %)
+  ;;                    :note_message msg
+  ;;                    :issue_id (:issue_id issue)
+  ;;                    :comment_id (:comment_id comment)) too))
+  )
+
+
+
+(defn notify
+  [notes]
+  (into []  (map #(db/db-trans [notifications/create-notification %]) (flatten notes)))
+  ;(println (flatten notes))
+  )
 
 
 

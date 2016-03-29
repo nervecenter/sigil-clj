@@ -27,6 +27,10 @@
   [user comment]
   (first (sql/query db/spec ["SELECT * FROM votes WHERE user_id = ? AND comment_id = ?" (:user_id user) (:comment_id comment)])))
 
+(defn get-users-who-voted-issue
+  [issue]
+  (set (into [] (sql/query db/spec ["SELECT user_id FROM votes WHERE issue_id = ?" (:issue_id issue)]))))
+
 ;;----------------------------------------------------------------
 ; Updates/Inserts/Deletes
 
