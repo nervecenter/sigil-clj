@@ -31,6 +31,9 @@
   [issue]
   (first (sql/query db/spec ["SELECT * FROM orgs WHERE org_id = ?;" (:org_id issue)])))
 
+(defn get-twelve-random-orgs []
+  (into [] (sql/query db/spec ["SELECT * FROM orgs ORDER BY random() LIMIT 12;"])))
+
 ;;-----------------------------------------------------
 ; Updates/Inserts
 

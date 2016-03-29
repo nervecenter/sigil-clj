@@ -2,16 +2,17 @@
   (:require [sigil.views.partials.footer :as footer]
             [hiccup.page :refer [html5 include-css include-js]]
             [hiccup.form :refer [form-to]]
-            [sigil.db.issues :refer [get-landing-issues-with-posters]]
-            [sigil.views.partials.issue :as part-issue]))
+            [sigil.db.issues :refer [get-twelve-org-issue-boxes]]
+            [sigil.views.partials.issue :refer [issue-partial]]))
 
 (declare landing-handler issue-section landing-page head landing-navbar splash)
 
 (def not-nil? (complement nil?))
 
 (defn landing-handler []
-  (let [issue-cols (get-landing-issues-with-posters)]
-    (landing-page (first issue-cols) (second issue-cols) (nth issue-cols 2 []))))
+  (let [issue-boxes (get-twelve-org-issue-boxes)
+        cols (partition-by (fn [box] (rand-int 3)) issue-boxes)]
+    (landing-page (first cols) (second cols) (get cols 2))))
 
 (defn landing-page [col-1-issues col-2-issues col-3-issues]
   (html5
@@ -35,20 +36,38 @@
   [:div.container.landing-container
    [:div.row
     [:div#left-col.col-lg-4
-     [:div.panel.panel-default
-      [:div.panel-body
-       (for [i (flatten icol1)]
-         (part-issue/issue-partial "/" (:issue i) (:poster i) true))]]]
-    [:div#middle-col.col-lg-4
-     [:div.panel.panel-default
-      [:div.panel-body
-       (for [i (flatten icol2)]
-         (part-issue/issue-partial "/" (:issue i) (:poster i) true))]]]
-    [:div#right-col.col-lg-4
-     [:div.panel.panel-default
-      [:div.panel-body
-       (for [i (flatten icol3)]
-         (part-issue/issue-partial "/" (:issue i) (:poster i) true))]]]]])
+     (for [box icol1]
+       [:div.panel.panel-default
+        [:div.panel-heading
+         [:a {:href (str "/" (:org_url (:org box)))}
+          [:img {:src (:icon30 (:org box))
+                 :style "margin-right:5px;"}]
+          (:org_name (:org box))]]
+        [:div.panel-body
+         (for [issue (:issues box)]
+           (issue-partial "/" issue nil false))]])]
+    [:div#left-col.col-lg-4
+     (for [box icol2]
+       [:div.panel.panel-default
+        [:div.panel-heading
+         [:a {:href (str "/" (:org_url (:org box)))}
+          [:img {:src (:icon30 (:org box))
+                 :style "margin-right:5px;"}]
+          (:org_name (:org box))]]
+        [:div.panel-body
+         (for [issue (:issues box)]
+           (issue-partial "/" issue nil false))]])]
+    [:div#left-col.col-lg-4
+     (for [box icol3]
+       [:div.panel.panel-default
+        [:div.panel-heading
+         [:a {:href (str "/" (:org_url (:org box)))}
+          [:img {:src (:icon30 (:org box))
+                 :style "margin-right:5px;"}]
+          (:org_name (:org box))]]
+        [:div.panel-body
+         (for [issue (:issues box)]
+           (issue-partial "/" issue nil false))]])]]])
 
 (def head
   [:head
@@ -58,6 +77,13 @@
                 "css/bootstrap-flatly.css"
                 "css/site.css")
    [:link {:rel "shortcut icon" :href "images/favicon.png"}]
+
+   [:style ".media-heading {font-size:14px;font-weight: 600;}
+            .media-body {font-size: 12px;}
+            .twitter-typeahead {width: 100%;}
+            .navbar {box-shadow: none;}
+            .header-link {color:white;}
+            .panel-body {padding:10px;}"]
    [:title "Sigil"]])
 
 (def landing-navbar

@@ -3,6 +3,7 @@
             [sigil.db.core :as db]
             [clj-time.local :as time]
             [sigil.db.users :as users]
+            [sigil.db.orgs :as orgs]
             [sigil.db.orgs]
             [clj-time.jdbc]))
 
@@ -34,11 +35,15 @@
   [user]
   (into [] (sql/query db/spec ["SELECT * FROM issues WHERE user_id = ?" (:user_id user)])))
 
+(defn get-handful-issues-by-org
+  [org]
+  (into [] (sql/query db/spec ["SELECT * FROM issues WHERE org_id = ? ORDER BY random() LIMIT ?;" (:org_id org) (+ 3 (rand-int 3))])))
+
 (defn get-user-home-page-issues-and-posters
   [user]
   (let [user-issues (get-issues-by-user user)
-        hot-issues  (map #(get-hottest-issues-by-org-id %) (set (map :org_id user-issues)))]
-    
+        hot-issues  (map #(get-hottest-issues-by-org-id %)
+                         (set (map :org_id user-issues)))]
     (map #(hash-map :issue %
                     :poster (users/get-user-by-id (:user_id %)))
          (set (flatten (conj user-issues hot-issues))))))
@@ -47,13 +52,10 @@
   [org]
   (into [] (sql/query db/spec ["SELECT * FROM issues WHERE org_id = ? AND responded = TRUE" (:org_id org)])))
 
-(defn get-landing-issues-with-posters
-  []
-  (let [landing-issues (sql/query db/spec ["SELECT * FROM issues ORDER BY last_voted ASC LIMIT 30"])
-        num-orgs (count landing-issues)]
-    (partition-all (Math/ceil (/ num-orgs 3)) (map #(hash-map :issue %
-                                                              :poster (users/get-user-by-id (:user_id %)))
-                                                   landing-issues))))
+(defn get-twelve-org-issue-boxes []
+  (let [orgs (orgs/get-twelve-random-orgs)]
+    (map #(hash-map :org %
+                    :issues (get-handful-issues-by-org %)) orgs)))
 
 ;;------------------------------------------------------------------
 ; Updates/Inserts
