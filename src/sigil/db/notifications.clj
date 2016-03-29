@@ -49,11 +49,10 @@
   (sql/create-table-ddl
    :notifications
    [:note_id :bigserial "PRIMARY KEY"]
-   [:from_user_id :bigint "NOT NULL"]
    [:to_user_id :bigint "NOT NULL"]
    [:note_message :text "DEFAULT ''"]
-   [:issue_id :bigint]
-   [:comment_id :bigint]
+   [:url :text "NOT NULL"]
+   [:icon :text "NOT NULL"]
    [:created_at :timestamp "NOT NULL" "DEFAULT CURRENT_TIMESTAMP"]
    [:viewed_at :timestamp]
    [:archived :boolean "NOT NULL" "DEFAULT FALSE"]))

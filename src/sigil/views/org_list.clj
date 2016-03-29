@@ -26,7 +26,7 @@
       (for [o orgs]
         [:div.media
          [:div.media-left
-          [:img.media-object {:src (str "/" (:icon_100 o))}]]
+          [:img.media-object {:src (:icon_100 o)}]]
          [:div.media-body
           [:h3 [:a {:href (:org_url o)} (:org_name o)]]]
          [:hr]])]]]

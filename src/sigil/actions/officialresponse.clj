@@ -11,15 +11,16 @@
         user (auth/user-or-nil req)
         user-org (auth/user-org-or-nil user)
         issue (issues/get-issue-by-id (read-string (new-official-data "issue-id")))
+        return (str ((:headers req) "referer"))
         new-official {:user_id (:user_id user)
                       :issue_id (:issue_id issue)
                       :org_id (:org_id user-org)
                       :text (new-official-data "response")}]
     (if (= :success
            (db/db-trans [offrep/create-official-response new-official]))
-      (do (help/notify (help/create-notes issue "An admin from ...." user (vec (help/get-all-users-of-issue issue))))
+      (do (help/notify (help/create-notes "An issue you have shown interest in has been responsed too." return (:icon_100 user) (vec (help/get-all-users-of-issue issue))))
         {:status 302
-         :headers {"Location" (str ((:headers req) "referer"))}}))))
+         :headers {"Location" return}}))))
 
 (defn vote-helpful
   [req]
