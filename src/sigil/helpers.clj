@@ -48,10 +48,10 @@
   [issue]
   (let [users-voted (votes/get-users-who-voted-issue issue)
         users-commented (comments/get-users-by-issue-comments issue)]
-    ;(println (clojure.set/union users-voted users-commented))
     (clojure.set/union users-voted users-commented)))
 
 (defn create-notes
+  "Creates a vector of notification maps to be inserted."
   ;; ([from & too]
   ;;  (map #(hash-map :from_user_id (:user_id from)
   ;;                          :to_user_id (:user_id %)) too))
@@ -77,9 +77,7 @@
 
 (defn notify
   [notes]
-  (into []  (map #(db/db-trans [notifications/create-notification %]) (flatten notes)))
-  ;(println (flatten notes))
-  )
+  (db/db-trans [notifications/create-notification (flatten notes)]))
 
 
 

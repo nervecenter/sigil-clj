@@ -25,14 +25,10 @@
 
 
 ;;Clojure veccs to postgres arrays
-(defn vec->arr [array-vector]
-  (.createArrayOf (sql/get-connection spec) "long" (into-array Long array-vector)))
+;; (defn vec->arr [array-vector]
+;;   (.createArrayOf (sql/get-connection spec) "long" (into-array Long array-vector)))
 
-;; (extend-protocol sql/ISQLValue
-;;     clojure.lang.IPersistentVector
-;;     (sql-value [v]
-;;     (vec->arr v)))
-
+;;Allows us to convert 
 (extend-protocol clojure.java.jdbc/ISQLParameter
   clojure.lang.IPersistentVector
   (set-parameter [v ^java.sql.PreparedStatement stmt ^long i]

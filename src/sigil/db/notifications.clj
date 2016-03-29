@@ -1,5 +1,6 @@
 (ns sigil.db.notifications
   (:require [clojure.java.jdbc :as sql]
+            [clojure.java.jdbc.deprecated :as oldsql]
             [sigil.db.core :as db]
             [clj-time.local :as time]
             [clj-time.jdbc]))
@@ -23,8 +24,12 @@
 ; Updates/Inserts/Deletes
 
 (defn create-notification
-  [db-conn [new-note]]
-  (sql/insert! db-conn :notifications new-note))
+  [db-conn new-notes]
+  (let [notes (flatten new-notes)]
+    (loop [note notes results []]
+        (if (empty? note)
+          results
+          (recur (rest note) (conj results (sql/insert! db-conn :notifications (first note))))))))
 
 (defn archive-notification
   [note]
