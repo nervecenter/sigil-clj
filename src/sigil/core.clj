@@ -35,6 +35,7 @@
             [sigil.actions.tag :as tag-actions]
             [sigil.actions.user :as user-actions]
             [sigil.actions.officialresponse :as official-actions]
+            [sigil.actions.data :as data-actions]
             [sigil.db.migrations :as mig]
 
             [ring.middleware.resource :refer [wrap-resource]]
@@ -55,6 +56,8 @@
   (POST "/login" req (login-post req))
   (GET "/logout" req (logout-handler req))
   (GET "/companies" req (org-list-handler req))
+  (GET "/default_graph" req (data-actions/default-org-chart req))
+  (GET "/custom_graph" req (data-actions/custom-org-chart req)) 
   (GET "/orgsettings" req (if (authenticated? req)
                             (org-settings-handler req)
                             (not-found-handler req)))

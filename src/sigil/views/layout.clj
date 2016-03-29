@@ -108,4 +108,6 @@
                 "/js/subscriptions.js"
                 "/js/search.js"
                 "/js/notifications.js"
-                "/js/issue-form.js")]))
+                "/js/issue-form.js"
+                "/js/bootstrap-datepicker.js"
+                "https://www.google.com/jsapi" "/js/graph.js")]))

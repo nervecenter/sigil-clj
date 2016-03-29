@@ -1,6 +1,6 @@
 ﻿// To use google charts you must load 
-// <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-// as well as this file on the page you want a chart to appear
+//<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+// //as well as this file on the page you want a chart to appear
 
 
 google.load('visualization', '1', { 'packages': ['corechart'] });
@@ -9,29 +9,32 @@ google.load('visualization', '1', { 'packages': ['corechart'] });
 
 $(document).ready(function () {
     if (document.getElementById('org_chart_div') != null) {
-        var orgURL = get_org_url();
-        $.ajax({
-            url: "/default_graph/" + orgURL,
-            success: function (org_data) {
-                //alert("Graphs are cool");
-                var chart_data = new google.visualization.DataTable();
-                chart_data.addColumn({ type: 'date', id: "Date" });
-                chart_data.addColumn({ type: 'number', id: "Count" });
-
-                $.each(org_data, function (index, data) {
-                    chart_data.addRow([new Date(data.viewDate), data.viewCount]);
-                });
-
-                var default_options = {
-                    title: 'Org Data',
-                    hAxis: { title: 'Past Week', },
-                    vAxis: { title: 'Number of Users' }
-                };
-
-                var default_chart = new google.visualization.LineChart(document.getElementById('org_chart_div'));
-                default_chart.draw(chart_data, default_options);
-            }
-        });
+      var orgURL = get_org_url();
+      
+        $.get(
+           "/default_graph",
+          {org: orgURL},
+           function (org_data) {
+            //alert("Graphs are cool");
+             var clean_org_data = JSON.parse(org_data);
+            var chart_data = new google.visualization.DataTable();
+            chart_data.addColumn({ type: 'date', id: "Date" });
+            chart_data.addColumn({ type: 'number', id: "Count" });
+            
+            $.each(clean_org_data, function (index, data) {
+              chart_data.addRow([new Date(data.viewDate), data.viewCount]);
+            });
+            
+            var default_options = {
+              title: 'Org Data',
+              hAxis: { title: 'Past Week', },
+              vAxis: { title: 'Number of Users' }
+            };
+            
+            var default_chart = new google.visualization.LineChart(document.getElementById('org_chart_div'));
+            default_chart.draw(chart_data, default_options);
+          }
+        );
     }
     else if(document.getElementById('issue_chart_div') != null)
     {
@@ -133,15 +136,16 @@ function Custom_Org_Data() {
     var start_date_ms = jsDateToCSharp(start_date_str);
     var stop_date_ms = jsDateToCSharp(stop_date_str);
 
-    $.get("/custom_graph/" + orgURL + "/" + dataOption + "/" + start_date_ms + "/" + stop_date_ms,
+    $.get("/custom_graph",{org: orgURL, tag: dataOption, start: start_date_ms, stop: stop_date_ms},
         function (org_data) {
+          var clean_org_data = JSON.parse(org_data);
             var chart_data = new google.visualization.DataTable();
             chart_data.addColumn({ type: 'date', id: "Date" });
             chart_data.addColumn({ type: 'number', id: "Count" });
 
             $("#data-period").html("from " + start_date_str + " to " + stop_date_str);
 
-            $.each(org_data, function (index, data) {
+            $.each(clean_org_data, function (index, data) {
                 chart_data.addRow([new Date(data.viewDate), data.viewCount]);
             });
 

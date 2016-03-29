@@ -37,7 +37,7 @@
 (defn org-visit-inc
   "Called every time an org page is visited. "
   [db-conn [org_id]]
-  (sql/execute! db-conn ["UPDATE orgs SET times_viewed = 1 + times_viewed, last_viewed = CURRENT_TIMESTAMP WHERE org_id = ?" org_id]))
+  (sql/execute! db-conn ["UPDATE orgs SET times_viewed = 1 + times_viewed, views = ARRAY_APPEND(views, LOCALTIMESTAMP) WHERE org_id = ?" org_id]))
 
 (defn update-org
   [db-conn [org updated-rows]]
@@ -71,8 +71,9 @@
    [:icon_30 :text]
    [:icon_100 :text]
    [:banner :text]
-   [:last_viewed :timestamp "NOT NULL" "DEFAULT CURRENT_TIMESTAMP"]
+   ;[:last_viewed :timestamp "NOT NULL" "DEFAULT CURRENT_TIMESTAMP"]
    [:times_viewed :int "NOT NULL" "DEFAULT 0"]
+   [:views :timestamp "ARRAY" "NOT NULL" "DEFAULT ARRAY[]::timestamp[]"]
    [:subscription_level :int "NOT NULL" "DEFAULT 1"]
    [:address :text]
    [:city :text]

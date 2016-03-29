@@ -3,24 +3,44 @@
             [sigil.db.issues :as issues]
             [sigil.db.orgs :as orgs]
             [clj-time.jdbc]
-            [clj-time.core :as time])
+            [clj-time.core :as time]
+            [cheshire.core :as json])
   (:use [hiccup.core]))
 
 
-(defn get-chart-data-by-org
+;; (defn get-chart-data-by-org
+;;   [org start stop]
+;;   (charts/create-org-data-chart org "Test Title" "Time" "Views" start stop :last_viewed))
+
+
+(defn views-chart
   [org start stop]
-  [:svg {:height 500
-         :width 500
-         :id "graph"
-         :style {:outline "2px solid black"
-                 :background-color "#fff"}}
-   [:rect {:x 10
-           :y 10
-           :height 20
-           :width 20
-           :key 1
-           :style {:fill "black" :stroke "black" :stroke-width 1}}]
-   ])
+  (map #(hash-map :viewDate (clj-time.coerce/to-long %)
+                  :viewCount 1) (filter #(time/within?
+                                        (clj-time.coerce/from-long start)
+                                        (clj-time.core/plus
+                                         (clj-time.coerce/from-long stop)
+                                         (clj-time.core/days 1))
+                                        (clj-time.coerce/from-sql-time %))
+                                    (:views org))))
+
+
+(defn default-org-chart
+  [req]
+  (let [org (orgs/get-org-by-url (:org (:params req)))
+        start-time (time/minus (time/now) (time/days 7))
+        stop-time (time/now)]
+    ;(println (views-chart org start-time stop-time))
+    (json/generate-string (views-chart org start-time stop-time))))
+
+(defn custom-org-chart
+  [req]
+  (let [org (orgs/get-org-by-url (:org (:params req)))
+        data-tag (:tag (:params req))
+        start-time (read-string (:start (:params req)))
+        stop-time (read-string (:stop (:params req)))]
+    (cond
+      (= data-tag "Views") (json/generate-string (views-chart org start-time stop-time)))))
 
 
 (def sort-by-views-to-votes-ratio (partial sort-by #(/ (count (:views %)) (:total_votes %))))
