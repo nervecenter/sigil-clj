@@ -3,6 +3,7 @@
             [sigil.db.core :as db]
             [clj-time.local :as time]
             [sigil.db.users :as users]
+            [sigil.db.orgs]
             [clj-time.jdbc]))
 
 
@@ -19,15 +20,28 @@
 
 (defn get-hottest-issues-by-org
   [org]
-  (into [] (sql/query db/spec ["SELECT * FROM issues WHERE org_id = ?;" (:org_id org)])))
+  (into [] (sql/query db/spec ["SELECT * FROM issues WHERE org_id = ? ORDER BY last_voted ASC" (:org_id org)])))
+
+(defn get-hottest-issues-by-org-id
+  [org_id]
+  (into [] (sql/query db/spec ["SELECT * FROM issues WHERE org_id = ? ORDER BY last_voted ASC" org_id])))
 
 (defn get-issues-by-org
   [org]
   (into [] (sql/query db/spec ["SELECT * FROM issues WHERE org_id = ?;" (:org_id org)])))
 
-;; (defn get-landing-issues
-;;   []
-;;   (into [] (sql/query db/spec ["SELECT DISTINCT ON (issue_id) issues.title, users.username FROM issues LEFT JOIN users ON (issues.user_id = users.user_id);"])))
+(defn get-issues-by-user
+  [user]
+  (into [] (sql/query db/spec ["SELECT * FROM issues WHERE user_id = ?" (:user_id user)])))
+
+(defn get-user-home-page-issues-and-posters
+  [user]
+  (let [user-issues (get-issues-by-user user)
+        hot-issues  (map #(get-hottest-issues-by-org-id %) (set (map :org_id user-issues)))]
+    
+    (map #(hash-map :issue %
+                    :poster (users/get-user-by-id (:user_id %)))
+         (set (flatten (conj user-issues hot-issues))))))
 
 (defn get-responded-issues-by-org
   [org]

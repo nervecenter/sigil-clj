@@ -2,9 +2,10 @@
   (:require [sigil.views.partials.footer :as footer]
             [hiccup.page :refer [html5 include-css include-js]]
             [hiccup.form :refer [form-to]]
-            [sigil.db.issues :refer [get-landing-issues-with-posters]]))
+            [sigil.db.issues :refer [get-landing-issues-with-posters]]
+            [sigil.views.partials.issue :as part-issue]))
 
-(declare  landing-handler issue-section landing-page head landing-navbar splash)
+(declare landing-handler issue-section landing-page head landing-navbar splash)
 
 (def not-nil? (complement nil?))
 
@@ -37,17 +38,17 @@
      [:div.panel.panel-default
       [:div.panel-body
        (for [i (flatten icol1)]
-         (sigil.views.partials.issue/issue-partial "/" (:issue i) (:poster i) true))]]]
+         (part-issue/issue-partial "/" (:issue i) (:poster i) true))]]]
     [:div#middle-col.col-lg-4
      [:div.panel.panel-default
       [:div.panel-body
        (for [i (flatten icol2)]
-         (sigil.views.partials.issue/issue-partial "/" (:issue i) (:poster i) true))]]]
+         (part-issue/issue-partial "/" (:issue i) (:poster i) true))]]]
     [:div#right-col.col-lg-4
      [:div.panel.panel-default
       [:div.panel-body
        (for [i (flatten icol3)]
-         (sigil.views.partials.issue/issue-partial "/" (:issue i) (:poster i) true))]]]]])
+         (part-issue/issue-partial "/" (:issue i) (:poster i) true))]]]]])
 
 (def head
   [:head

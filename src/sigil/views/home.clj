@@ -3,7 +3,7 @@
             [sigil.views.partials.sidebar :refer [sidebar-partial]]
             [sigil.views.layout :as layout]
             [sigil.auth :refer [user-or-nil user-org-or-nil]]
-            ;;[sigil.db.issues :refer [get-home-page-issues]]
+            [sigil.db.issues :as issues]
             [hiccup.core :refer [html]]))
 
 (declare home-body home-handler)
@@ -12,8 +12,8 @@
   ;; Home page expects user
   (let [user (user-or-nil req)
         user-org (user-org-or-nil user)
-        ;;issues (get-home-page-issues)
-        issues nil]
+        issues (issues/get-user-home-page-issues-and-posters user)]
+    (println (count issues))
     (layout/render req
                    user
                    user-org
@@ -31,5 +31,5 @@
       [:br]
       [:p.empty-home-text "Want to find companies? Use the " [:b "search bar"] " up top, or just " [:b [:a {:href "/companies"} "browse all companies on Sigil"]] "."]]]
     (for [i issues]
-      (issue-partial uri i user true))]
+      (issue-partial uri (:issue i) (:poster i) true))]
    (sidebar-partial nil user)))
