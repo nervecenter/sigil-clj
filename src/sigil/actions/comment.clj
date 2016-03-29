@@ -7,7 +7,7 @@
 
 (def not-nil? (complement nil?))
 
-
+;;TODO -- rework the db-trans part
 (defn post-comment
   [req]
   (let [new-comment-data (:form-params req)

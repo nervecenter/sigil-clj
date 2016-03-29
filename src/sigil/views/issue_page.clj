@@ -2,7 +2,7 @@
   (:require [sigil.views.layout :as layout]
             [sigil.auth :refer [user-or-nil user-org-or-nil user-is-admin-of-org?]]
             [sigil.helpers :refer [get-issue-with-user-and-org-by-issue-id]]
-            [sigil.db.officialresponses :refer [get-official-responses-by-issue]]
+            [sigil.db.officialresponses :refer [get-official-responses-by-issue get-responses-with-responders-by-issue]]
             [sigil.db.comments :refer [get-comments-by-issue get-comments-with-commenters-by-issue]]
             [sigil.db.votes :refer [user-voted-on-issue?]]
             [sigil.views.partials.sidebar :refer [sidebar-partial]]
@@ -38,7 +38,7 @@
                         (if (some? user)
                           (user-voted-on-issue? user issue)
                           false)
-                        nil ;(get-responses-with-responders-by-issue-id (:issue_id issue))
+                        (get-responses-with-responders-by-issue issue)
                         (get-comments-with-commenters-by-issue issue)
                         )))))
 
@@ -74,7 +74,7 @@
                       (:issue_id issue) "/")}
           (:title issue)]]
         [:p.pull-left
-         [:img.issue-panel-icon {:src (str "/" (:icon_30 org))}]
+         [:img.issue-panel-icon {:src (:icon_30 org)}]
          [:a {:href (:org_url org)} (:org_name org)]]
         [:p.pull-right "Posted by " (:username (:poster issue))]]]]
      [:div.panel-body (:text issue)]]
@@ -84,12 +84,12 @@
        [:div.panel-body
         [:div.media
          [:div.pull-left
-          [:img.media-object {:src (str "/" (:icon_100 (:responder r)))}]]
+          [:img.media-object {:src (:icon_100 (:responder r))}]]
          [:div.media-body
           [:h4.media-heading
            (:username (:responder r))
            [:small [:i "Posted some time ago"]]]
-          [:p (:text r)]]]]])
+          [:p (:text (:response r))]]]]])
     (if (user-is-admin-of-org? user org)
       [:div.panel.panel-default
        [:div.panel-heading "Make an official response"]
@@ -101,7 +101,8 @@
            {:class "form-control panel-input-box"
             :id "input-re"
             :placeholder "Address this suggestion for your customers"}
-           "response")]
+           "response")
+          (hidden-field "issue-id" (:issue_id issue))]
          (submit-button {:class "btn btn-primary"
                          :id "submit-response"}
                         "Submit response"))]]

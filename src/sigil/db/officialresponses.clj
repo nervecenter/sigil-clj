@@ -2,6 +2,7 @@
   (:require [clojure.java.jdbc :as sql]
             [sigil.db.core :as db]
             [clj-time.local :as time]
+            [sigil.db.users :as users]
             [clj-time.jdbc]))
 
 ;;-------------------------------------------------------------
@@ -18,6 +19,12 @@
 (defn get-latest-official-response-by-issue
   [issue]
   (first (into [] (sql/query db/spec ["SELECT * FROM official_responses WHERE issue_id = ? ORDER BY edited_at DESC LIMIT 1" (:issue_id issue)]))))
+
+(defn get-responses-with-responders-by-issue
+  [issue]
+  (let [responses (get-official-responses-by-issue issue)]
+    (map #(hash-map :response %
+                    :responder (users/get-user-by-id (:user_id %))) responses)))
 
 (defn get-official-responses-by-org
   [org]
@@ -43,7 +50,7 @@
   (sql/execute! db-conn ["UPDATE official_responses SET unhelpful_votes = unhelpful_votes - 1 WHERE official_response_id = ?" official_response_id]))
 
 (defn create-official-response
-  [db-conn {:keys [:issue_id :org_id :user_id :text] :as new-official}]
+  [db-conn [new-official]]
   (sql/insert! db-conn
                :official_responses
                new-official))

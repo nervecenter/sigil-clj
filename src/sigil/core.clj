@@ -34,6 +34,7 @@
             [sigil.actions.image :as image-actions]
             [sigil.actions.tag :as tag-actions]
             [sigil.actions.user :as user-actions]
+            [sigil.actions.officialresponse :as official-actions]
             [sigil.db.migrations :as mig]
 
             [ring.middleware.resource :refer [wrap-resource]]
@@ -82,9 +83,10 @@
   (POST "/register" req (user-register-post req))
   (GET "/orgregister" req (org-register-get req))
   (POST "/orgregister" req (org-register-post req))
+  (POST "/postofficial" req (official-actions/post-official-response req))
   (POST "/submitcomment" req (comment-actions/post-comment req))
   (GET "/printrequest" req (html [:p {} req]))
-  ;(GET "/printrequest/:x" req (html [:p {} req]))
+  (GET "/printrequest/:x" req (html [:p {} req]))
   (GET "/404" req (not-found-handler req))
   (GET "/search" req (search-page-handler req))
   (GET "/searchbar" req (search-actions/auto-complete-search req))
