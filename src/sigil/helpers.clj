@@ -50,28 +50,20 @@
         users-commented (comments/get-users-by-issue-comments issue)]
     (clojure.set/union users-voted users-commented)))
 
+(defn create-note
+  [msg url icon too]
+  (hash-map :to_user_id (:user_id too)
+            :note_message msg
+            :url url
+            :icon icon))
+
 (defn create-notes
   "Creates a vector of notification maps to be inserted."
-  ;; ([from & too]
-  ;;  (map #(hash-map :from_user_id (:user_id from)
-  ;;                          :to_user_id (:user_id %)) too))
-  ;; ([msg from & too]
-  ;;  (map #(hash-map :from_user_id (:user_id from)
-  ;;                    :to_user_id (:user_id %)
-  ;;                    :note_message msg
-  ;;                    ) too))
-  ([issue msg from too]
-   (map #(hash-map :from_user_id (:user_id from)
-                   :to_user_id (:user_id %1)
+  ([msg url icon too]
+   (map #(hash-map :to_user_id (:user_id %1)
                    :note_message msg
-                   :issue_id (:issue_id issue)) too))
-  ;; ([issue comment  msg from & too]
-  ;;  (map #(hash-map :from_user_id (:user_id from)
-  ;;                    :to_user_id (:user_id %)
-  ;;                    :note_message msg
-  ;;                    :issue_id (:issue_id issue)
-  ;;                    :comment_id (:comment_id comment)) too))
-  )
+                   :url url
+                   :icon icon) too)))
 
 
 

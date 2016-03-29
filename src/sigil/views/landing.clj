@@ -38,17 +38,17 @@
      [:div.panel.panel-default
       [:div.panel-body
        (for [i (flatten icol1)]
-         (part-issue/issue-partial "/" (:issue i) (:poster i) true))]]]
+         (part-issue/issue-partial "/" (:issue i) (:poster i) false))]]]
     [:div#middle-col.col-lg-4
      [:div.panel.panel-default
       [:div.panel-body
        (for [i (flatten icol2)]
-         (part-issue/issue-partial "/" (:issue i) (:poster i) true))]]]
+         (part-issue/issue-partial "/" (:issue i) (:poster i) false))]]]
     [:div#right-col.col-lg-4
      [:div.panel.panel-default
       [:div.panel-body
        (for [i (flatten icol3)]
-         (part-issue/issue-partial "/" (:issue i) (:poster i) true))]]]]])
+         (part-issue/issue-partial "/" (:issue i) (:poster i) false))]]]]])
 
 (def head
   [:head

@@ -13,7 +13,6 @@
   (let [user (user-or-nil req)
         user-org (user-org-or-nil user)
         issues (issues/get-user-home-page-issues-and-posters user)]
-    (println (count issues))
     (layout/render req
                    user
                    user-org
