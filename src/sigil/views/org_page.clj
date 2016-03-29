@@ -9,6 +9,7 @@
             [sigil.views.partials.sidebar :refer [sidebar-partial]]
             [sigil.views.not-found :refer [not-found-handler]])
   (:use hiccup.form
+        hiccup.page
         hiccup.core))
 
 (declare org-page-handler org-page-body)
@@ -43,32 +44,21 @@
       [:a.btn.btn-info {:href (str "/" (:org_url org) "/responses")} "Responses"]]
      [:div.panel
       [:div.panel-body
-       (form-to
-        {:id "issue-search-post-form"}
-        [:post "/postissue"]
+       [:form#issue-search-post-form
+        {:method "post" :action "/postissue"}
         [:div.form-group
          (label {:id "suggest-label"} "title" "I suggest you...")
          (text-area {:id "issues-by-org-search"
                      :class "form-control org-feedback-input-box"
                      :data-orgid (:org_id org)}
-                    "title")
-         (label {:class ""} "issue-text" "More details about your suggestion...")
-         (text-area {:id "text-suggest-area"
-                     :class ""} "text")
-         (hidden-field "org-id" (:org_id org))]
+                    "title")]
         [:div#new-feedback-group.form-group
-         (submit-button {:id "new-feedback-button"
-                         :class "btn btn-primary pull-right"
-                         :style {:padding "4px 9px"}
-                         } "Submit this as new feedback")
-         (label {:class "pull-right" :style "margin:5px 10px;"} "new-feedback" "Has nobody posted what you're suggesting?")]
-        [:div#tag-select-group.form-group
-         (label "tag-select" "Tag your feedback by product, department, or category:")
-         [:select#tag-select.form-control {:name "tag-select"}
-          (for [t tags]
-            [:option {:value (:tag_id t)} (:tag_name t)])]])]]
-     [:div.issues
+         [:a#new-feedback-button.btn.btn-primary.pull-right
+          {:style "padding:4px 9px"}
+          "Submit this as new feedback"]
+         (label {:class "pull-right" :style "margin:5px 10px;"} "new-feedback" "Has nobody posted what you're suggesting?")]]]]
+     [:div#issues
       (for [i issues]
         (issue-partial (:uri req) i org user true))]]
-  (sidebar-partial org user)))
+   (sidebar-partial org user)))
 

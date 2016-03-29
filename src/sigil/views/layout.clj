@@ -107,4 +107,5 @@
                 "/js/voting.js"
                 "/js/subscriptions.js"
                 "/js/search.js"
-                "/js/notifications.js")]))
+                "/js/notifications.js"
+                "/js/issue-form.js")]))
