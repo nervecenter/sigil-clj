@@ -18,34 +18,28 @@ var typeTimer; // Our timer
 
 $('#issues-by-org-search').keyup(function () {
     clearTimeout(typeTimer);
-    typeTimer = setTimeout(SearchIssuesByOrg, 800);
+    typeTimer = setTimeout(SearchIssuesByOrg, 500);
 });
 
 $('#issues-by-org-search').keydown(function () {
     clearTimeout(typeTimer);
     var $issues = $("#issues");
     if ($issues.first().id != "loader") {
-        $issues.html("<img id=\"loader\" src=\"/Content/Images/ajax-loader.gif\">");
+        $issues.html("<img id=\"loader\" src=\"/images/ajax-loader.gif\">");
     }
 });
 
 function SearchIssuesByOrg() {
     var $searchBox = $('#issues-by-org-search');
-    var searchQuery = { id: $searchBox.data('orgid'), term: $searchBox.val() };
-    $.ajax({
-        url: '/searchissuesbyorg/',
-        type: 'POST',
-        data: JSON.stringify(searchQuery),
-        dataType: 'json',
-        contentType: 'application/json; charset=utf-8',
-        async: false,
-        success: function (data) {
-            $("#issues").html("");
-            $("#issues").append(data);
-        },
-        error: function () {
-            //alert('Search didn\'t work.');
-        }
+    var searchQuery = { id: $searchBox.data('orgid'),
+                        term: $searchBox.val() };
+
+    $.get("/searchissuesbyorg", searchQuery, function (data) {
+        $("#issues").html("").append(data);
+    }).error(function() {
+        var $wrong = $("<h3>")
+            .html("Something went wrong. :( Try again later.")
+        $("#issues").html("").append($wrong);
     });
 }
 
