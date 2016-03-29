@@ -10,7 +10,7 @@
 (defn register-org-and-admin
   [org admin]
   (if (= :success (db/db-trans [orgs/create-org (assoc org
-                                                       :icon_20 (rand-nth db/default_icon_20)
+                                                       :icon_20 (rand-nth db/default_icon_30)
                                                        :icon_100 (rand-nth db/default_icon_100)
                                                        :banner (rand-nth db/default_banner))]
                             [users/create-user (assoc admin :icon_100 (rand-nth db/default_icon_100))]))

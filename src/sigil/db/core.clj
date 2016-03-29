@@ -11,7 +11,7 @@
 (def spec "postgresql://localhost:5432/sigildb") ;; I wanted to alias this ns in the other model files but I didn't want it to be db/db everywhere
 
 
-(def default_icon_20 ["/db_imgs/default/default_20.png"])
+(def default_icon_30 ["/db_imgs/default/default_30.png"])
 (def default_icon_100 ["/db_imgs/default/default100_1.png" "/db_imgs/default/default100_2.png" "/db_imgs/default/default100_3.png" "/db_imgs/default/default100_4.png" "/db_imgs/default/default100_5.png"])
 (def default_banner ["/db_imgs/default/defaultbanner.png"])
 
@@ -28,7 +28,7 @@
 ;; (defn vec->arr [array-vector]
 ;;   (.createArrayOf (sql/get-connection spec) "long" (into-array Long array-vector)))
 
-;;Allows us to convert 
+;;Allows us to convert clojure vectors of type T to postgres arrays of a compatible type.
 (extend-protocol clojure.java.jdbc/ISQLParameter
   clojure.lang.IPersistentVector
   (set-parameter [v ^java.sql.PreparedStatement stmt ^long i]

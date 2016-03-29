@@ -11,7 +11,7 @@
         new-tag-form (:form-params req)
         new-tag {:tag_url (new-tag-form "tag-url")
                  :tag_name (new-tag-form "tag-name")
-                 :icon_30 (rand-nth db/default_icon_20)
+                 :icon_30 (rand-nth db/default_icon_30)
                  :org_id (:org_id org)}]
     (do
       (db/db-trans [tags/create-tag new-tag])
