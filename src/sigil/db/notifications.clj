@@ -9,15 +9,18 @@
 ;;-----------------------------------------------------------------
 ; Querys
 
+(defn get-notification-by-id
+  [id]
+  (first (sql/query db/spec ["SELECT * FROM notifications WHERE note_id = ?" id])))
 
 (defn get-user-notifications
   [user]
-  (into [] (sql/query db/spec ["SELECT * FROM notifications WHERE to_user_id = ?" (:user_id user)])))
+  (into [] (sql/query db/spec ["SELECT * FROM notifications WHERE user_id = ? AND archived = FALSE" (:user_id user)])))
 
 (defn get-number-notifications-by-user
   [user]
   (if (some? user)
-    (:count (first (sql/query db/spec ["SELECT COUNT(*) FROM notifications WHERE to_user_id = ?" (:user_id user)])))
+    (:count (first (sql/query db/spec ["SELECT COUNT(*) FROM notifications WHERE user_id = ? AND archived = FALSE" (:user_id user)])))
     0))
 
 ;;-----------------------------------------------------------------
@@ -40,7 +43,7 @@
   ([note] (delete-notification note false))
   ([note perm]
    (if perm
-     (sql/delete! db/spec :notiications ["note_id = ?" (:note_id note)])
+     (sql/delete! db/spec :notifications ["note_id = ?" (:note_id note)])
      (archive-notification note))))
 
 (defn notification_model
@@ -49,8 +52,8 @@
   (sql/create-table-ddl
    :notifications
    [:note_id :bigserial "PRIMARY KEY"]
-   [:to_user_id :bigint "NOT NULL"]
-   [:note_message :text "DEFAULT ''"]
+   [:user_id :bigint "NOT NULL"]
+   [:message :text "DEFAULT ''"]
    [:url :text "NOT NULL"]
    [:icon :text "NOT NULL"]
    [:created_at :timestamp "NOT NULL" "DEFAULT CURRENT_TIMESTAMP"]

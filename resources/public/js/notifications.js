@@ -22,64 +22,58 @@ function shownotifications() {
 
     $("#navbar-header").append($shade);
 
-    $.get("/check_notes",
-        function (data) {
-            if (data.response == "none") {
-                var $nonotes = $("<h5>")
-                    .attr("style", "text-align:center;")
-                    .html("No notifications. You're all caught up. :)")
-                $("#note-parent").append($nonotes);
-            } else {
-                $("#note-parent").append(data);
+    $.get("/checknotes", function (data) {
+        var notes = JSON.parse(data);
+        if (notes[0] == 0) {
+            var $nonotes = $("<h5>").attr("style", "text-align:center;").html("No notifications. You're all caught up. :)")
+            $("#note-parent").append($nonotes);
+        } else {
+            $.each(notes, function (index, note) {
+                //img container for the user icon
+                var $img = $("<img>")
+                    .addClass("media-object")
+                    .addClass("notification-icon")
+                    .attr("src", note.icon);
+                //icon for from user -- need to change return value of from userid to a link to their icon instead
+                var $imganchor = $("<a>")
+                    .addClass("media-left")
+                    .append($img);
 
-                /*$.each(data, function (index, Note) {
-                    //img container for the user icon
-                    var $img = $("<img>")
-                        .addClass("media-object")
-                        .addClass("notification-icon")
-                        .attr("src", Note.icon);
-                    //icon for from user -- need to change return value of from userid to a link to their icon instead
-                    var $imganchor = $("<a>")
-                        .addClass("media-left")
-                        .append($img);
+                //link container that allows clicking the notification to take you to where it is
+                var $message = $("<a>")
+                    .attr("href", note.url)
+                    .html(note.message);
 
-                    //link container that allows clicking the notification to take you to where it is
-                    var $notificationtext = $("<a>")
-                        .attr("href", Note.url)
-                        .html(Note.title);
+                var $deletebutton = $("<span>")
+                    .addClass("glyphicon glyphicon-remove-sign")
+                    .click({ id: note.id }, deletenotification);
+                // var $deleteanchor = $("<a>")
+                //     .append($deletebutton)
+                //     .attr("href", "#");
+                var $controls = $("<div>")
+                    .addClass("media-right")
+                    .append($deletebutton);
 
-                    var $deletebutton = $("<span>")
-                        .addClass("glyphicon glyphicon-remove-sign");
-                    var $deleteanchor = $("<a>")
-                        .append($deletebutton)
-                        .attr("href", "#")
-                        .click({ id: Note.id }, deletenotification);
-                    var $controls = $("<div>")
-                        .addClass("media-right")
-                        .append($deleteanchor);
+                //div container that includes the title and link
+                var $mediabody = $("<div>")
+                    .addClass("media-body")
+                    .append($message);
 
-                    //div container that includes the title and link
-                    var $mediabody = $("<div>")
-                        .addClass("media-body")
-                        .append($notificationtext);
-
-                    //parent div for entire notification
-                    var $media = $("<div>")
-                        .addClass("media")
-                        .append($imganchor)
-                        .append($mediabody)
-                        .append($controls);
-                    $("#note-parent").append($media);
-                });*/
-            }
+                //parent div for entire notification
+                var $media = $("<div>")
+                    .addClass("media")
+                    .append($imganchor)
+                    .append($mediabody)
+                    .append($controls);
+                $("#note-parent").append($media);
+            });
         }
-    );
-
+    });
 }
 
 function deletenotification(event) {
     var $note = $(this);
-    $.post("/delete_notification/" + event.data.id, function () {
+    $.post("/deletenote", { id: event.data.id }, function () {
         $note.parent().parent().remove();
         if ($("#note-parent").html() == "") {
             var $nonotes = $("<h5>")
@@ -97,10 +91,11 @@ function hidenotifications() {
 }
 
 function refreshnumnotes() {
-    $.get("/num_notes", function (data) {
-        if (data.numnotes > 0) {
+    $.get("/numnotes", function (data) {
+        var parsed = JSON.parse(data);
+        if (parsed.numnotes > 0) {
             $("#num-notes-back").show();
-            $("#num-notes").html(data.numnotes).show();
+            $("#num-notes").html(parsed.numnotes).show();
         } else {
             $("#num-notes-back").hide();
             $("#num-notes").hide();
