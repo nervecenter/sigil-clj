@@ -2,20 +2,23 @@
   (:require [sigil.views.partials.footer :as footer]
             [hiccup.page :refer [html5 include-css include-js]]
             [hiccup.form :refer [form-to]]
-            [sigil.db.issues :refer [get-landing-issues]]))
+            [sigil.db.issues :refer [get-landing-issues-with-posters]]))
 
 (declare  landing-handler issue-section landing-page head landing-navbar splash)
 
-(defn landing-handler []
-  (landing-page (get-landing-issues)))
+(def not-nil? (complement nil?))
 
-(defn landing-page [issues]
+(defn landing-handler []
+  (let [issue-cols (get-landing-issues-with-posters)]
+    (landing-page (first issue-cols) (second issue-cols) (nth issue-cols 2 []))))
+
+(defn landing-page [col-1-issues col-2-issues col-3-issues]
   (html5
    head
    [:body.page
     landing-navbar
     splash
-    (issue-section issues)
+    (issue-section col-1-issues col-2-issues col-3-issues)
     footer/footer
 
     (include-js "js/jquery-1.11.3.js"
@@ -26,16 +29,25 @@
                 "js/subscriptions.js"
                 "js/search.js")]))
 
-(defn issue-section [issues]
+(defn issue-section [icol1 icol2 icol3]
+  "Takes 3 lists of issues for display on the landing page."
   [:div.container.landing-container
    [:div.row
     [:div#left-col.col-lg-4
      [:div.panel.panel-default
       [:div.panel-body
-       (for [i issues]
-         (sigil.views.partials.issue/issue-partial "/" i nil true))]]]
-    [:div#middle-col.col-lg-4 "Middle column goes here."]
-    [:div#right-col.col-lg-4 "Right column goes here."]]])
+       (for [i (flatten icol1)]
+         (sigil.views.partials.issue/issue-partial "/" (:issue i) (:poster i) true))]]]
+    [:div#middle-col.col-lg-4
+     [:div.panel.panel-default
+      [:div.panel-body
+       (for [i (flatten icol2)]
+         (sigil.views.partials.issue/issue-partial "/" (:issue i) (:poster i) true))]]]
+    [:div#right-col.col-lg-4
+     [:div.panel.panel-default
+      [:div.panel-body
+       (for [i (flatten icol3)]
+         (sigil.views.partials.issue/issue-partial "/" (:issue i) (:poster i) true))]]]]])
 
 (def head
   [:head
