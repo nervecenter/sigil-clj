@@ -30,7 +30,9 @@ function shownotifications() {
                     .html("No notifications. You're all caught up. :)")
                 $("#note-parent").append($nonotes);
             } else {
-                $.each(data, function (index, Note) {
+                $("#note-parent").append(data);
+
+                /*$.each(data, function (index, Note) {
                     //img container for the user icon
                     var $img = $("<img>")
                         .addClass("media-object")
@@ -68,7 +70,7 @@ function shownotifications() {
                         .append($mediabody)
                         .append($controls);
                     $("#note-parent").append($media);
-                });
+                });*/
             }
         }
     );
