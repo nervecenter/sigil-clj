@@ -40,7 +40,7 @@
        [:div.panel.panel-default
         [:div.panel-heading
          [:a {:href (str "/" (:org_url (:org box)))}
-          [:img {:src (:icon30 (:org box))
+          [:img {:src (:icon_30 (:org box))
                  :style "margin-right:5px;"}]
           (:org_name (:org box))]]
         [:div.panel-body
@@ -51,7 +51,7 @@
        [:div.panel.panel-default
         [:div.panel-heading
          [:a {:href (str "/" (:org_url (:org box)))}
-          [:img {:src (:icon30 (:org box))
+          [:img {:src (:icon_30 (:org box))
                  :style "margin-right:5px;"}]
           (:org_name (:org box))]]
         [:div.panel-body
@@ -62,7 +62,7 @@
        [:div.panel.panel-default
         [:div.panel-heading
          [:a {:href (str "/" (:org_url (:org box)))}
-          [:img {:src (:icon30 (:org box))
+          [:img {:src (:icon_30 (:org box))
                  :style "margin-right:5px;"}]
           (:org_name (:org box))]]
         [:div.panel-body

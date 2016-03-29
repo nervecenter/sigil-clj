@@ -12,15 +12,15 @@
   ;; Home page expects user
   (let [user (user-or-nil req)
         user-org (user-org-or-nil user)
-        issues (issues/get-user-home-page-issues-and-posters user)]
-    (println (count issues))
+        user-issues (issues/get-issues-by-user user)
+        issue-boxes (issues/get-twelve-org-issue-boxes)]
     (layout/render req
                    user
                    user-org
                    "Sigil"
-                   (home-body (:uri req) user issues))))
+                   (home-body (:uri req) user user-issues issue-boxes))))
 
-(defn home-body [uri user issues]
+(defn home-body [uri user user-issues issue-boxes]
   (html
    [:div.col-md-9.col-lg-9
     [:div.panel.panel-default
@@ -30,6 +30,19 @@
       [:p.empty-home-text "Here's the latest feedback on Sigil."]
       [:br]
       [:p.empty-home-text "Want to find companies? Use the " [:b "search bar"] " up top, or just " [:b [:a {:href "/companies"} "browse all companies on Sigil"]] "."]]]
-    (for [i issues]
-      (issue-partial uri (:issue i) (:poster i) true))]
+    [:div.panel.panel-info
+     [:div.panel-body
+      [:h4 {:style "margin-top:10px;"} "Issues you've posted:"]]]
+    (for [i user-issues]
+      (issue-partial uri i user true))
+    (for [box issue-boxes]
+      (html
+       [:div.panel.panel-default
+        [:div.panel-heading
+         [:a {:href (str "/" (:org_url (:org box)))}
+          [:img {:src (:icon_30 (:org box))
+                 :style "margin-right:5px;"}]
+          (:org_name (:org box))]]]
+       (for [issue (:issues box)]
+         (issue-partial "/" issue user true))))]
    (sidebar-partial nil user)))
