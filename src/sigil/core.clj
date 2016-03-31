@@ -37,7 +37,7 @@
             [sigil.actions.user :as user-actions]
             [sigil.actions.officialresponse :as official-actions]
             [sigil.actions.data :as data-actions]
-            [sigil.db.migrations :as mig]
+            [sigil.db.core :as db]
 
             [ring.middleware.resource :refer [wrap-resource]]
             [ring.middleware.content-type :refer [wrap-content-type]]

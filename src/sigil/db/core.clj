@@ -53,23 +53,33 @@
         :fail))
     (catch Exception e
       (do
-        (create-error (str e))
+        
         (if (isa? (type e) SQLException)
-          (create-error (str (.getNextException e))))
+          (create-error {:error_message (str e)
+                         :additional_info (str (.getNextException e))
+                         })
+          (create-error {:error_message (str e)}))
         :fail))))
 
   ;; Error Logging
+
+
+(defn update-error
+  [db-conn [error_id updated-rows]]
+  (sql/update! db-conn :errors updated-rows ["error_id = ?" error_id]))
 
 (defn errors
   ([] (into [] (sql/query spec ["SELECT * FROM errors"])))
   ([id] (first (sql/query spec ["SELECT * FROM errors WHERE error_id = ?" id]))))
 
 (defn create-error
-  ([msg & error_assocs]
+  ([{:as new-error}]
    (sql/insert! spec
                 :errors
-                [:error_message :user_assoc :org_assoc :issue_assoc]
-                [msg (get error_assocs 0) (get error_assocs 1) (get error_assocs 2)])))
+                new-error
+                ;[:error_message :user_assoc :org_assoc :issue_assoc]
+                ;[msg (get error_assocs 0) (get error_assocs 1) (get error_assocs 2)]
+                )))
 
 (defn error_model
   "Defines the error model in the db"
@@ -77,9 +87,13 @@
   (sql/create-table-ddl
    :errors
    [:error_id :bigserial "PRIMARY KEY"]
-   [:error_message :varchar "NOT NULL"]
+   [:error_message :text "NOT NULL"]
+   [:additional_info :text ]
    [:user_assoc :int]
    [:org_assoc :int]
    [:issue_assoc :int]
    [:created_at :timestamp "NOT NULL" "DEFAULT CURRENT_TIMESTAMP"]
-   [:viewed :boolean "NOT NULL" "DEFAULT false"]))
+   [:viewed :boolean "NOT NULL" "DEFAULT false"]
+   [:viewed_at :timestamp]
+   [:viewers_msg :text]
+   [:viewed_by :bigint]))

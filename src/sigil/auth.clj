@@ -2,6 +2,7 @@
   (:require [clojure.java.jdbc :refer [query]]
             [sigil.db.orgs :as orgs]
             [sigil.db.votes :as votes]
+            [sigil.db.roles :as roles]
             [buddy.sign.jwe :as jwe]
             [buddy.core.keys :refer [public-key private-key]]
             [sigil.db.users :refer [get-user-by-id]]))
@@ -41,10 +42,10 @@
 
 (defn user-has-role? [user role]
   (cond
-    (= role :org-admin) (if (some #{"org-admin"} (:roles user))
+    (= role :org-admin) (if (contains? (:roles user) (:role_id (roles/get-org-admin-role)))
                           true
                           false)
-    (= role :site-admin) (if (some #{"site-admin"} (:roles user))
+    (= role :site-admin) (if (contains? (:roles user) (:role_id (roles/get-org-admin-role)))
                            true
                            false)))
 

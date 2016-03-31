@@ -11,7 +11,8 @@
         [sigil.db.topics]
         [sigil.db.users]
         [sigil.db.officialresponses]
-        [sigil.db.votes]))
+        [sigil.db.votes]
+        [sigil.db.roles]))
 
 (def org_seed [{:org_url "sigil"
                 :org_name "Sigil"
@@ -43,6 +44,9 @@
                 :icon_30 (str (rand-nth db/default_icon_30))
                 :icon_100 (str (rand-nth db/default_icon_100))
                 :banner (str (rand-nth db/default_banner))}])
+
+(def role_seed [{:role_name "org-admin"}
+                {:role_name "site-admin"}])
 
 (def tag_seed [{:tag_url "beta"
                 :tag_name "Beta Feedback"
@@ -126,13 +130,13 @@
                  :username "Nerve"
                  :pass_hash (buddy.hashers/encrypt "Sigiltech1027!")
                  :icon_100 (str (rand-nth db/default_icon_100))
-                 :roles ["org-admin" "site-admin"]
+                 :roles [1 2]
                  :org_id 1}
                 {:email "dominiccox@sigil.tech"
                  :username "Dominic"
                  :pass_hash (buddy.hashers/encrypt "323232")
                  :icon_100 (str (rand-nth db/default_icon_100))
-                 :roles ["org-admin" "site-admin"]
+                 :roles [1 2]
                  :org_id 1}
                 ])
 
@@ -148,6 +152,7 @@
   []
   (do
     (doall (map #(db/db-trans [create-org %]) org_seed))
+    (doall (map #(db/db-trans [create-role %]) role_seed))
     (doall (map #(db/db-trans [create-user %]) user_seed))
     (doall (map #(db/db-trans [create-tag %]) tag_seed))
     (doall (map #(db/db-trans [create-issue %]) issue_seed))

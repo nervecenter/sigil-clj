@@ -9,7 +9,8 @@
             [sigil.db.votes]
             [sigil.db.topics]
             [sigil.db.officialresponses]
-            [sigil.db.notifications]))
+            [sigil.db.notifications]
+            [sigil.db.roles]))
 
 
 (defn create-db-tables
@@ -24,6 +25,7 @@
                       (official_response_model)
                       (topic_model)
                       (notification_model)
+                      (roles_model)
                       (db/error_model)))
 
 
@@ -39,4 +41,5 @@
                       (sql/drop-table-ddl :errors)
                       (sql/drop-table-ddl :topics)
                       (sql/drop-table-ddl :notifications)
+                      (sql/drop-table-ddl :roles)
                       (sql/drop-table-ddl :votes)))
