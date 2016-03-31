@@ -57,8 +57,12 @@
   (POST "/login" req (login-post req))
   (GET "/logout" req (logout-handler req))
   (GET "/companies" req (org-list-handler req))
+  ;;need to lock down the next five routes so that only org-admins can access and call.
   (GET "/default_graph" req (data-actions/default-org-chart req))
-  (GET "/custom_graph" req (data-actions/custom-org-chart req)) 
+  (GET "/custom_graph" req (data-actions/custom-org-chart req))
+  (GET "/customtopissues" req (data-actions/custom-top-issues req))
+  (GET "/customunrespondedissues" req (data-actions/custom-unresponded-issues req))
+  (GET "/customunderdogissues" req (data-actions/custom-underdog-issues req))
   (GET "/orgsettings" req (if (authenticated? req)
                             (org-settings-handler req)
                             (not-found-handler req)))

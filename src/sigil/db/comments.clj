@@ -25,6 +25,10 @@
   (:comment_id (first (sql/query db/spec ["SELECT * FROM comments WHERE user_id = ? ORDER BY created_at DESC" (:user_id user)]))))
 
 
+(defn get-org-comments
+  [org]
+  (into [] (sql/query db/spec ["SELECT comments.comment_id, comments.created_at FROM comments INNER JOIN issues ON (comments.issue_id = issues.issue_id AND issues.org_id = ?)" (:org_id org)])))
+
 (defn get-comments-with-commenters-by-issue
   [issue]
   (let [issue-comments (get-comments-by-issue issue)]

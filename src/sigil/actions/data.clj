@@ -3,10 +3,13 @@
             [sigil.db.issues :as issues]
             [sigil.db.orgs :as orgs]
             [sigil.db.votes :as votes]
+            [sigil.db.comments :as comments]
             [clj-time.jdbc]
             [clj-time.core :as time]
             [clj-time.periodic :as ptime]
-            [cheshire.core :as json])
+            [cheshire.core :as json]
+            [sigil.auth :as auth]
+            [sigil.views.partials.issue :refer [issue-partial]])
   (:use [hiccup.core]))
 
 
@@ -78,24 +81,25 @@
                                                     (:created_at %))
                                                   org-votes))))))))
 
-(defn default-org-chart
-  [req]
-  (let [org (orgs/get-org-by-url (:org (:params req)))
-        start-time (time/minus (time/now) (time/days 7))
-        stop-time (time/now)]
-    ;(println (views-chart org start-time stop-time))
-    (json/generate-string (views-chart org start-time stop-time))))
+(defn comment-chart
+  [org start stop]
+  (let [start-date (clj-time.coerce/from-long start)
+        end-date (clj-time.core/plus (clj-time.coerce/from-long stop) (clj-time.core/days 2)) ;;need to add day to end to make inclusive.
+        num-days (diff-between-dates start-date end-date)
+        time-period (take num-days (ptime/periodic-seq start-date (time/days 1)))
+        org-comments (comments/get-org-comments org)]
+    (map #(hash-map :viewDate (first (first %))
+                    :viewCount (second (first %)))
+         (flatten (conj (flatten (map #(hash-map (clj-time.coerce/to-long (strip-time %)) 0) time-period))
 
-(defn custom-org-chart
-  [req]
-  (let [org (orgs/get-org-by-url (:org (:params req)))
-        data-tag (:tag (:params req))
-        start-time (read-string (:start (:params req)))
-        stop-time (read-string (:stop (:params req)))]
-    (cond
-      (= data-tag "Views") (json/generate-string (views-chart org start-time stop-time))
-      (= data-tag "Votes") (json/generate-string (votes-chart org start-time stop-time)))))
-
+                        
+                        (frequencies (map #(clj-time.coerce/to-long (strip-time
+                                                                     (clj-time.coerce/to-date-time (:created_at %))))
+                                          (filter #(time/within?
+                                                    start-date
+                                                    end-date
+                                                    (:created_at %))
+                                                  org-comments))))))))
 
 (def sort-by-views-to-votes-ratio (partial sort-by #(/ (count (:views %)) (:total_votes %))))
 
@@ -104,8 +108,7 @@
   ([org start stop] (get-top-issues-by-org org start stop 10))
   ([org start stop num]
    (let [org-issues (issues/get-issues-by-org org)]
-     (sort-by-views-to-votes-ratio (filter #(time/within? (time/interval start stop) (:created_at %)) org-issues))
-     )))
+     (sort-by-views-to-votes-ratio (filter #(time/within? (time/interval start stop) (:created_at %)) org-issues)))))
 
 (defn get-top-unresponded-issues-by-org
   ([org start stop] (get-top-unresponded-issues-by-org org start stop 10))
@@ -122,3 +125,49 @@
      (sort-by-views-to-votes-ratio (filter #(time/within? (time/interval start stop) (:created_at %)) org-issues))
      )))
 
+
+
+(defn default-org-chart
+  [req]
+  (let [org (orgs/get-org-by-url (:org (:params req)))
+        start-time (time/minus (time/now) (time/days 7))
+        stop-time (time/now)]
+    ;(println (views-chart org start-time stop-time))
+    (json/generate-string (views-chart org start-time stop-time))))
+
+(defn custom-org-chart
+  [req]
+  (let [org (orgs/get-org-by-url (:org (:params req)))
+        data-tag (:tag (:params req))
+        start-time (read-string (:start (:params req)))
+        stop-time (read-string (:stop (:params req)))]
+    (cond
+      (= data-tag "Views") (json/generate-string (views-chart org start-time stop-time))
+      (= data-tag "Votes") (json/generate-string (votes-chart org start-time stop-time))
+      (= data-tag "Comments") (json/generate-string (comment-chart org start-time stop-time)))))
+
+
+
+(defn custom-top-issues
+  [req]
+  (let [org (orgs/get-org-by-url (:org (:params req)))
+        start-time (clj-time.coerce/from-long (read-string (:start (:params req))))
+        stop-time (time/plus (clj-time.coerce/from-long (read-string (:stop (:params req)))) (time/days 1))
+        user (auth/user-or-nil req)]
+    (html [:div (map #(issue-partial (:uri req) % user true) (get-top-issues-by-org org start-time stop-time))])))
+
+(defn custom-unresponded-issues
+  [req]
+  (let [org (orgs/get-org-by-url (:org (:params req)))
+        start-time (clj-time.coerce/from-long (read-string (:start (:params req))))
+        stop-time (time/plus (clj-time.coerce/from-long (read-string (:stop (:params req)))) (time/days 1))
+        user (auth/user-or-nil req)]
+   (html [:div (map #(issue-partial (:uri req) % user true) (get-top-unresponded-issues-by-org org start-time stop-time))])))
+
+(defn custom-underdog-issues
+  [req]
+  (let [org (orgs/get-org-by-url (:org (:params req)))
+        start-time (clj-time.coerce/from-long (read-string (:start (:params req))))
+        stop-time (time/plus (clj-time.coerce/from-long (read-string (:stop (:params req)))) (time/days 1))
+        user (auth/user-or-nil req)]
+   (html [:div (map #(issue-partial (:uri req) % user true) (get-top-rising-issues-by-org org start-time stop-time))])))

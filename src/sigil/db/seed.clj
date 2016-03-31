@@ -53,6 +53,23 @@
                 :org_id 1
                 :icon_30 (rand-nth db/default_icon_30)}]) ;;hard setting org id as one in hopes of db being fresh
 
+(def comment_seed
+  [{:issue_id 1
+    :user_id 1
+    :text "Yea a bacon button would increase my quality of life"}
+   {:issue_id 2
+    :user_id 1
+    :text "Yea Bacon!"}
+   {:issue_id 1
+    :user_id 2
+    :text "I don't think a money printer will help solve their problems."}
+   {:issue_id 2
+    :user_id 2
+    :text "Money printers are expensive. Who'll pay for it?"}
+   {:issue_id 2
+    :user_id 1
+    :text "I think they should pay for it if they really want it."}])
+
 (def issue_seed [{:org_id 1
                   :user_id 1
                   :title "I need a button that gives me bacon."
@@ -156,6 +173,7 @@
     (doall (map #(db/db-trans [create-user %]) user_seed))
     (doall (map #(db/db-trans [create-tag %]) tag_seed))
     (doall (map #(db/db-trans [create-issue %]) issue_seed))
+    (doall (map #(db/db-trans [create-comment %]) comment_seed))
     (doall (map #(db/db-trans [create-topic %]) topic_seed))
     (doall (map #(db/db-trans [create-vote %]) vote_seed))))
 
