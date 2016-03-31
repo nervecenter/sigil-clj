@@ -159,9 +159,13 @@
     (doall (map #(db/db-trans [create-topic %]) topic_seed))
     (doall (map #(db/db-trans [create-vote %]) vote_seed))))
 
+
+
+
 (defn drop-create-seed
   []
   (do
-    (migrate/drop-db-tables)
+    (migrate/drop-create-db)
+    ;(migrate/drop-db-tables)
     (migrate/create-db-tables)
     (seed-db)))

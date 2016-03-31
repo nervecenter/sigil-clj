@@ -48,17 +48,15 @@
   (when-not (nil? @server)
     (do (stop-server) (repl/refresh) (start-server))))
 
-(defn rebuild-and-seed
-  "Drops the current db tables and then rebuilds and seeds."
-  []
-  (sigil.db.seed/drop-create-seed))
+;; (defn rebuild-and-seed
+;;   "Drops the current db tables and then rebuilds and seeds."
+;;   []
+;;   (sigil.db.seed/drop-create-seed))
 
 (defn build-and-seed
   []
   "Builds and seeds database tables"
-  (do
-    (sigil.db.migrations/create-db-tables)
-    (sigil.db.seed/seed-db)))
+  (sigil.db.seed/drop-create-seed))
 
 (def default-sigil-map
   {:sigil-root "src/sigil"})

@@ -28,18 +28,25 @@
                       (roles_model)
                       (db/error_model)))
 
+;; don't need anymore since droping the database deletes all the tables as well but keeps for future example.
+;; (defn drop-db-tables
+;;   []
+;;   (sql/db-do-commands db/spec
+;;                       (sql/drop-table-ddl :orgs)
+;;                       (sql/drop-table-ddl :users)
+;;                       (sql/drop-table-ddl :tags)
+;;                       (sql/drop-table-ddl :issues)
+;;                       (sql/drop-table-ddl :comments)
+;;                       (sql/drop-table-ddl :official_responses)
+;;                       (sql/drop-table-ddl :errors)
+;;                       (sql/drop-table-ddl :topics)
+;;                       (sql/drop-table-ddl :notifications)
+;;                       (sql/drop-table-ddl :roles)
+;;                       (sql/drop-table-ddl :votes)))
 
-(defn drop-db-tables
-  []
-  (sql/db-do-commands db/spec
-                      (sql/drop-table-ddl :orgs)
-                      (sql/drop-table-ddl :users)
-                      (sql/drop-table-ddl :tags)
-                      (sql/drop-table-ddl :issues)
-                      (sql/drop-table-ddl :comments)
-                      (sql/drop-table-ddl :official_responses)
-                      (sql/drop-table-ddl :errors)
-                      (sql/drop-table-ddl :topics)
-                      (sql/drop-table-ddl :notifications)
-                      (sql/drop-table-ddl :roles)
-                      (sql/drop-table-ddl :votes)))
+(defn drop-create-db []
+  (sql/with-db-connection [conn "postgresql://localhost:5432/postgres"]
+    (with-open [s (.createStatement (:connection conn))]
+      (.addBatch s (str "drop database sigildb;"))
+      (.addBatch s (str "create database sigildb;"))
+      (seq (.executeBatch s)))))
