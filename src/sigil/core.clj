@@ -95,7 +95,7 @@
   (GET "/404" req (not-found-handler req))
   (GET "/search" req (search-page-handler req))
   (GET "/searchbar" req (search-actions/auto-complete-search req))
-  (GET "/searchorgissues/:org-id/:term" req (search-actions/search-org-issues req))
+  (GET "/searchorgissues" req (search-actions/search-org-issues-handler req))
   (context "/:org_url{[a-z0-9]{4,}}" req
     (GET "/" req (org-page-handler req))
     (GET "/data" req (org-data-handler req))

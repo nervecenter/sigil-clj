@@ -34,7 +34,7 @@ function SearchIssuesByOrg() {
     var searchQuery = { id: $searchBox.data('orgid'),
                         term: $searchBox.val() };
 
-    $.get("/searchissuesbyorg", searchQuery, function (data) {
+    $.get("/searchorgissues", searchQuery, function (data) {
         $("#issues").html("").append(data);
     }).error(function() {
         var $wrong = $("<h3>")

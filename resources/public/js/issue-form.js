@@ -1,11 +1,11 @@
 ﻿$("#product-select-group").hide();
 
-$("#issues-by-org-search").keyup(function () {
+/*$("#issues-by-org-search").keyup(function () {
     $("#new-feedback-group").show();
     $(this).off("keyup");
 });
 
-$("#new-feedback-group").hide();
+$("#new-feedback-group").hide();*/
 
 $("#new-feedback-button").click(function () {
     var $issuesearchpostform = $("#issue-search-post-form");

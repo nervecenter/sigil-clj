@@ -44,8 +44,7 @@
 (defn delete-notification-handler
   [req]
   (let [user (auth/user-or-nil req)
-        notification (notes/get-notification-by-id ((:form-params req) "id"))]
-    (println req)
+        notification (notes/get-notification-by-id (read-string (:id (:params req))))]
     (if (not= (:user_id user) (:user_id notification))
       {:status 403}
       (do

@@ -1,9 +1,12 @@
 (ns sigil.actions.search
   (:require [sigil.helpers :refer [search-orgs-tags-topics]]
             [clojure.string :as str]
+            [sigil.auth :refer [user-or-nil]]
             [sigil.db.issues :as issues]
             [sigil.db.orgs :refer [get-org-by-id get-five-orgs-by-term]]
-            [cheshire.core :as json]))
+            [sigil.views.partials.issue :refer [issue-partial]]
+            [cheshire.core :as json]
+            [hiccup.core :refer [html]]))
 
 (defn auto-complete-search
   [req]
@@ -39,11 +42,24 @@
 ; Org_page search issues
 
 ;;TODO:: Need to jsonify the return issues
-(defn search-org-issues
+(defn search-org-issues-handler
   [req]
-  (let [search-params (:route-params req)
-        org (get-org-by-id (search-params :org-id))
-        term (search-params :term)]
-    (if (not= term "")
-      (filter #(str/starts-with? (:title %) term) (issues/get-issues-by-org org))
-      ())))
+  (let [user (user-or-nil req)
+        org (get-org-by-id (read-string (:id (:params req))))
+        term (:term (:params req))]
+    (if (= term "")
+      (let [all-issues (issues/get-issues-by-org org)]
+          (reduce str (map #(html (issue-partial (str "/" (:org_url org))
+                                                 %
+                                                 user
+                                                 true))
+                           all-issues)))
+      (let [matched-issues (filter #(str/starts-with? (:title %) term)
+                                   (issues/get-issues-by-org org))]
+        (if (= 0 (count matched-issues))
+          "<h3>No issues found that match your search.</h3>"
+          (reduce str (map #(html (issue-partial (str "/" (:org_url org))
+                                           %
+                                           user
+                                           true))
+                           matched-issues)))))))

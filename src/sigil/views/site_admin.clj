@@ -71,5 +71,4 @@
        (if (some? (first errors))
          (for [e errors]
            (error-partial e))
-         [:h3 "No new errors."])
-       ]]]]])
+         [:h3 "No new errors."])]]]]])
