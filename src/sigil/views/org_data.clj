@@ -77,8 +77,9 @@
             [:option {:value "Views"} "Views"]
             [:option {:value "Votes"} "Votes"]
             [:option {:value "Comments"} "Comments"]
-            [:option {:value "Follows"} "Follows"]
-            [:option {:value "All"} "All"]]
+            ;[:option {:value "Follows"} "Follows"]
+            ;[:option {:value "All"} "All"]
+          ]
          (text-field {:id "dpstart"
                       :class "form-control pull-left"}
                      "start-date"

@@ -162,21 +162,22 @@ function Custom_Org_Data() {
     );
 
     // GET TOP 10 ISSUES FOR PERIOD
-    $.get("/customtopissues/" + orgURL + "/" + start_date_ms + "/" + stop_date_ms,
+    $.get("/customtopissues",{org: orgURL, tag: dataOption, start: start_date_ms, stop: stop_date_ms},
         function (top_issues) {
             $("#top-issues-parent").html("").html(top_issues);
         }
     );
 
     // GET TOP 10 UNRESPONDED ISSUES FOR PERIOD
-    $.get("/customunrespondedissues/" + orgURL + "/" + start_date_ms + "/" + stop_date_ms,
+    $.get("/customunrespondedissues",
+          {org: orgURL, tag: dataOption, start: start_date_ms, stop: stop_date_ms},
         function (unresponded_issues) {
             $("#response-issues-parent").html("").html(unresponded_issues);
         }
     );
 
     // GET TOP 10 RISING ISSUES FOR PERIOD
-    $.get("/customunderdogissues/" + orgURL + "/" + start_date_ms + "/" + stop_date_ms,
+    $.get("/customunderdogissues/",{org: orgURL, tag: dataOption, start: start_date_ms, stop: stop_date_ms},
         function (rising_issues) {
             $("#rising-issues-parent").html("").html(rising_issues);
         }
@@ -191,7 +192,7 @@ function Custom_Org_Data() {
     })*/
 }
 
-function Custom_Issue_Chart() {
+/*function Custom_Issue_Chart() {
     var dataOption = document.getElementById('selected-data').value;
     var start_date = jsDateToCSharp($("#datepickerStart").datepicker("getDate"));
     var stop_date = jsDateToCSharp($("#datepickerStop").datepicker("getDate"));
@@ -222,7 +223,7 @@ function Custom_Issue_Chart() {
             default_chart.draw(chart_data, default_options);
         }
     });
-}
+}*/
 
 
 function jsDateToCSharp(date)
