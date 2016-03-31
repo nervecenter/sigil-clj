@@ -1,24 +1,53 @@
 (ns sigil.actions.notifications
   (:require [sigil.db.notifications :as notes]
-            [sigil.auth :as auth]))
+            [sigil.auth :as auth]
+            [hiccup.core :refer [html]]
+            [cheshire.core :as json]))
 
 ;;----------------------------------------
 ;; notification GETs
 
-(def not-nil? (complement nil?))
-
-(defn get-number-user-notifications
+(defn number-notes-handler
   [req]
   (let [user (auth/user-or-nil req)]
-    (if (not-nil? user)
-      (count (notes/get-user-notifications user))
-      0)))
+    (json/generate-string
+     {:numnotes (if (some? user)
+                  (notes/get-number-notifications-by-user user)
+                  0)})))
 
-
-;;TODO:: Need to jsonify the return of notifications
-(defn get-user-notifications
+(defn check-notes-handler
   [req]
-  (let [user (auth/user-or-nil req)]
-    (if (not-nil? user)
-      (notes/get-user-notifications user)
-      [])))
+  (let [user (auth/user-or-nil req)
+        num-notes (notes/get-number-notifications-by-user user)]
+    (if (= 0 num-notes)
+      (json/generate-string [0])
+      (let [notifications (notes/get-user-notifications user)]
+        (json/generate-string (for [n notifications]
+                                {:id (:note_id n)
+                                 :icon (:icon n)
+                                 :url (:url n)
+                                 :message (:message n)})))
+      ;; (let [notifications (notes/get-user-notifications user)]
+      ;;   (html
+      ;;    (for [n notifications]
+      ;;      [:div.media
+      ;;       [:a.media-left
+      ;;        [:img.media-object.notification-icon
+      ;;         {:src (:icon n)}]]
+      ;;       [:div.media-body
+      ;;        [:a {:href (:url n)} (:message n)]]
+      ;;       [:div.media-right
+      ;;        [:a {:href (str "/deletenote/" (:note_id n))}
+      ;;         [:span.glyphicon.glyphicon-remove-sign]]]])))
+      )))
+
+(defn delete-notification-handler
+  [req]
+  (let [user (auth/user-or-nil req)
+        notification (notes/get-notification-by-id ((:form-params req) "id"))]
+    (println req)
+    (if (not= (:user_id user) (:user_id notification))
+      {:status 403}
+      (do
+        (notes/delete-notification notification)
+        {:status 200}))))

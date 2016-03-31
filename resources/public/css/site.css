@@ -1,3 +1,8 @@
+.glyphicon-remove-sign:hover {
+    cursor: hand;
+    cursor: pointer;
+}
+
 .navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus {
     color: #FFF;
     background-color: transparent;

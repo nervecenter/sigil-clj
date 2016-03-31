@@ -23,6 +23,7 @@
             [sigil.views.not-found :refer [not-found-handler]]
             [sigil.views.org-data :refer [org-data-handler]]
             [sigil.views.search-page :refer [search-page-handler]]
+            [sigil.views.site-admin :refer [site-admin-handler]]
 
             [sigil.auth :refer [authenticated?]]
 
@@ -77,12 +78,13 @@
   (POST "/usericon100" req (if (authenticated? req)
                              (image-actions/update-user-icon req)
                              {:status 403}))
-
+  (GET "/siteadmin" req (site-admin-handler req))
   (GET "/register" req (user-register-get req))
   (POST "/userpasschange" req (user-actions/change-user-password req))
   (POST "/postissue" req (issue-actions/add-issue-post req))
-  (GET "/usernotes" req (note-actions/get-user-notifications req))
-  (GET "/countusernotes" req (note-actions/get-number-user-notifications req))
+  (GET "/numnotes" req (note-actions/number-notes-handler req))
+  (GET "/checknotes" req (note-actions/check-notes-handler req))
+  (POST "/deletenote" req (note-actions/delete-notification-handler req))
   (POST "/register" req (user-register-post req))
   (GET "/orgregister" req (org-register-get req))
   (POST "/orgregister" req (org-register-post req))
