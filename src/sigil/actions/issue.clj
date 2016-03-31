@@ -34,7 +34,8 @@
     (if (not (votes/user-voted-on-issue? user issue))
       (do
         (db/db-trans [votes/create-vote {:user_id (:user_id user)
-                                         :issue_id (:issue_id issue)}]
+                                         :issue_id (:issue_id issue)
+                                         :org_id (:org_id issue)}]
                      [issues/issue-voted issue])
         {:status 200})
       {:status 403})))

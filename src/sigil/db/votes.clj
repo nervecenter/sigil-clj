@@ -31,6 +31,10 @@
   [issue]
   (set (into [] (sql/query db/spec ["SELECT user_id FROM votes WHERE issue_id = ?" (:issue_id issue)]))))
 
+(defn get-votes-by-org
+  [org]
+  (into [] (sql/query db/spec ["SELECT * FROM votes WHERE org_id = ?" (:org_id org)])))
+
 ;;----------------------------------------------------------------
 ; Updates/Inserts/Deletes
 
@@ -51,6 +55,7 @@
    :votes
    [:vote_id :bigserial "PRIMARY KEY"]
    [:user_id :bigint "NOT NULL"]
+   [:org_id :bigint "NOT NULL"]
    [:issue_id :bigint "NOT NULL"]
    [:comment_id :bigint "DEFAULT NULL"]
    [:official_response_id :bigint]

@@ -2,8 +2,10 @@
   (:require [sigil.db.core :as db]
             [sigil.db.issues :as issues]
             [sigil.db.orgs :as orgs]
+            [sigil.db.votes :as votes]
             [clj-time.jdbc]
             [clj-time.core :as time]
+            [clj-time.periodic :as ptime]
             [cheshire.core :as json])
   (:use [hiccup.core]))
 
@@ -13,17 +15,68 @@
 ;;   (charts/create-org-data-chart org "Test Title" "Time" "Views" start stop :last_viewed))
 
 
+(defn date-formula
+  "Used to covert dates into 'days' for comparison. http://mathforum.org/library/drmath/view/66857.html"
+  [d]
+  (if (< (time/month d) 3)
+    (let [year (- (time/year d) 1)
+          month (+ (time/month d) 12)]
+      (+ (- (+ (* 365 year) (Math/floor (/ year 4))) (/ year 100)) (Math/floor (/ year 400)) (time/day d) (Math/floor (/ (+ (* 153 month) 8) 5))))
+    (let [year (time/year d)
+          month (time/month d)]
+      (+ (- (+ (* 365 year) (Math/floor (/ year 4))) (/ year 100)) (Math/floor (/ year 400)) (time/day d) (Math/floor (/ (+ (* 153 month) 8) 5))))))
+
+
+(defn diff-between-dates
+  "Returns the difference between two dates, a and b, where a < b, in days. "
+  [a b]
+  (- (date-formula b) (date-formula a)))
+
+
+(defn strip-time
+  [d]
+  (time/date-time (time/year d) (time/month d) (time/day d)))
+
+
 (defn views-chart
   [org start stop]
-  (map #(hash-map :viewDate (clj-time.coerce/to-long %)
-                  :viewCount 1) (filter #(time/within?
-                                        (clj-time.coerce/from-long start)
-                                        (clj-time.core/plus
-                                         (clj-time.coerce/from-long stop)
-                                         (clj-time.core/days 1))
-                                        (clj-time.coerce/from-sql-time %))
-                                    (:views org))))
+  (let [start-date (clj-time.coerce/from-long start)
+        end-date (clj-time.core/plus (clj-time.coerce/from-long stop) (clj-time.core/days 2)) ;;need to add day to end to make inclusive.
+        num-days (diff-between-dates start-date end-date)
+        time-period (take num-days (ptime/periodic-seq start-date (time/days 1)))]
+    (map #(hash-map :viewDate (first (first %))
+                    :viewCount (second (first %)))
+         (flatten (conj (flatten (map #(hash-map (clj-time.coerce/to-long (strip-time %)) 0) time-period))
 
+                        
+                        (frequencies (map #(clj-time.coerce/to-long (strip-time
+                                                                     (clj-time.coerce/to-date-time  %)))
+                                          (filter #(time/within?
+                                                    start-date
+                                                    end-date
+                                                    (clj-time.coerce/from-sql-time %))
+                                                  (:views org)))))))))
+
+
+(defn votes-chart
+  [org start stop]
+  (let [start-date (clj-time.coerce/from-long start)
+        end-date (clj-time.core/plus (clj-time.coerce/from-long stop) (clj-time.core/days 2)) ;;need to add day to end to make inclusive.
+        num-days (diff-between-dates start-date end-date)
+        time-period (take num-days (ptime/periodic-seq start-date (time/days 1)))
+        org-votes (votes/get-votes-by-org org)]
+    (map #(hash-map :viewDate (first (first %))
+                    :viewCount (second (first %)))
+         (flatten (conj (flatten (map #(hash-map (clj-time.coerce/to-long (strip-time %)) 0) time-period))
+
+                        
+                        (frequencies (map #(clj-time.coerce/to-long (strip-time
+                                                                     (clj-time.coerce/to-date-time (:created_at %))))
+                                          (filter #(time/within?
+                                                    start-date
+                                                    end-date
+                                                    (:created_at %))
+                                                  org-votes))))))))
 
 (defn default-org-chart
   [req]
@@ -40,7 +93,8 @@
         start-time (read-string (:start (:params req)))
         stop-time (read-string (:stop (:params req)))]
     (cond
-      (= data-tag "Views") (json/generate-string (views-chart org start-time stop-time)))))
+      (= data-tag "Views") (json/generate-string (views-chart org start-time stop-time))
+      (= data-tag "Votes") (json/generate-string (votes-chart org start-time stop-time)))))
 
 
 (def sort-by-views-to-votes-ratio (partial sort-by #(/ (count (:views %)) (:total_votes %))))

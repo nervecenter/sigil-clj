@@ -92,25 +92,35 @@
 
 ;;There needs be a matching vote seed for every issue seed
 (def vote_seed [{:user_id 1
-                 :issue_id 1}
+                 :issue_id 1
+                 :org_id 1}
                 {:user_id 2
-                 :issue_id 2}
+                 :issue_id 2
+                 :org_id 1}
                 {:user_id 1
-                 :issue_id 3}
+                 :issue_id 3
+                 :org_id 2}
                 {:user_id 2
-                 :issue_id 4}
+                 :issue_id 4
+                 :org_id 2}
                 {:user_id 1
-                 :issue_id 5}
+                 :issue_id 5
+                 :org_id 3}
                 {:user_id 2
-                 :issue_id 6}
+                 :issue_id 6
+                 :org_id 3}
                 {:user_id 1
-                 :issue_id 7}
+                 :issue_id 7
+                 :org_id 4}
                 {:user_id 2
-                 :issue_id 8}
+                 :issue_id 8
+                 :org_id 4}
                 {:user_id 1
-                 :issue_id 9}
+                 :issue_id 9
+                 :org_id 5}
                 {:user_id 2
-                 :issue_id 10}])
+                 :issue_id 10
+                 :org_id 5}])
 
 (def user_seed [{:email "cjcollazo@sigil.tech"
                  :username "Nerve"
