@@ -3,8 +3,10 @@
             [sigil.db.officialresponses :refer [get-latest-official-response-by-issue]]
             [sigil.db.orgs :refer [get-org-by-issue]]
             [sigil.db.users :refer [get-user-by-issue]]
+            [sigil.auth :as auth]
             [sigil.helpers :refer [get-return]]
-            [hiccup.core :refer [html]]))
+            [hiccup.core :refer [html]])
+  (:use [hiccup.form]))
 
 (declare issue-partial issue-panel issue-without-panel)
 
@@ -21,6 +23,7 @@
     (if in-panel?
       ;; We need: a response
       (issue-panel uri
+                   user
                    issue
                    issue-org
                    issue-user
@@ -28,15 +31,17 @@
                    user-voted?
                    (get-latest-official-response-by-issue (:issue_id issue)))
       (issue-without-panel uri
+                           user
                            issue
                            issue-org
                            issue-user
                            authenticated?
                            user-voted?)))))
 
-(defn issue-panel [uri issue issue-org issue-user authenticated? user-voted? response]
+(defn issue-panel [uri user issue issue-org issue-user authenticated? user-voted? response]
   [:div.panel.panel-info.issue-panel-partial
    (issue-without-panel uri
+                        user
                         issue
                         issue-org
                         issue-user
@@ -49,7 +54,7 @@
         [:span (str (subs (:text response) 0 100) "...")]
         [:span {:text response}])])])
 
-(defn issue-without-panel [uri issue issue-org issue-user authenticated? user-voted?]
+(defn issue-without-panel [uri user issue issue-org issue-user authenticated? user-voted?]
   [:div.panel-body
    [:div.media
     [:div.media-object.pull-left.votebutton-box
@@ -75,4 +80,12 @@
      [:p.pull-right
       (str "Posted at " (clj-time.coerce/to-local-date (:created_at issue)) " by ") 
       [:img {:src (:icon_30 issue-user)}]
-      (:username issue-user)]]]])
+      (:username issue-user)
+      [:br]
+      (if (auth/user-has-role? user :site-admin)
+        [:form {:method "post" :action "/deleteissue"}
+         (hidden-field "org-id" (:org_id issue-org))
+         (hidden-field "issue-id" (:issue_id issue))
+         (submit-button {:class "btn btn-primary"
+                         :id "delete-issue"}
+                        "Delete Issue")])]]]])

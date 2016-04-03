@@ -26,6 +26,21 @@
       ;;else redirect and let them know whats wrong....
       )))
 
+(defn delete-issue-post
+  [req]
+  (let [new-issue-data (:form-params req)
+        user (auth/user-or-nil req)
+        issue_org (orgs/get-org-by-id (long (read-string (new-issue-data "org-id"))))
+        issue-to-delete (issues/get-issue-by-id (read-string (new-issue-data "issue-id")))
+        vote-to-delete (votes/get-user-issue-vote user issue-to-delete)]
+    (if (= :success (do
+                      (issues/delete-issue issue-to-delete true)
+                      (db/db-trans [votes/delete-vote vote-to-delete])))
+      {:status 302
+       :headers {"Location" ((:headers req) "referer")}}
+      ;;else redirect and let them know whats wrong....
+      )))
+
 
 (defn vote-issue
   [req]
