@@ -20,13 +20,25 @@
                       (db/db-trans [comments/create-comment new-comment])
                       (db/db-trans [votes/create-vote {:user_id (:user_id user)
                                                        :issue_id (:issue_id issue)
+                                                       :org_id (:org_id issue)
                                                        :comment_id (comments/get-last-user-comment-id user)}])))
       {:status 302
        :headers {"Location" (str ((:headers req) "referer"))}})))
 
-(defn delete-comment
+(defn delete-comment-post
   [req]
-  ())
+  (let [new-comment-data (:form-params req)
+        user (auth/user-or-nil req)
+        comment-to-delete (comments/get-comment-by-id (read-string (new-comment-data "comment-id")))
+        vote-to-delete (votes/get-user-comment-vote user comment-to-delete)]
+    (if (= :success (do
+                      (comments/delete-comment comment-to-delete true)
+                      (db/db-trans [votes/delete-vote vote-to-delete])
+                      ))
+      {:status 302
+       :headers {"Location" ((:headers req) "referer")}}
+      ;;else redirect and let them know whats wrong....
+      )))
 
 (defn vote-comment
   [req]

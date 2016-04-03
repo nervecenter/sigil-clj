@@ -1,6 +1,6 @@
 (ns sigil.views.issue-page
   (:require [sigil.views.layout :as layout]
-            [sigil.auth :refer [user-or-nil user-org-or-nil user-is-admin-of-org?]]
+            [sigil.auth :refer [user-or-nil user-org-or-nil user-is-admin-of-org? user-has-role?]]
             [sigil.helpers :refer [get-issue-with-user-and-org-by-issue-id]]
             [sigil.db.officialresponses :refer [get-official-responses-by-issue get-responses-with-responders-by-issue]]
             [sigil.db.comments :refer [get-comments-by-issue get-comments-with-commenters-by-issue]]
@@ -120,7 +120,14 @@
             [:h4.media-heading
              (:username (:commenter c))
              [:small [:i "Posted on " (:created_at (:comment c))]]]
-            [:p (:text (:comment c))]]]))
+            [:p (:text (:comment c))]
+            [:p.pull-right
+             (if (user-has-role? user :site-admin)
+               [:form {:method "post" :action "/deletecomment"}
+                (hidden-field "comment-id" (:comment_id (:comment c)))
+                (submit-button {:class "btn btn-primary"
+                                :id "delete-comment"}
+                               "Delete Comment")])]]]))
       (if (some? user)
         (form-to
          [:post "/submitcomment"]
