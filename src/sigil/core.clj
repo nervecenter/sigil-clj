@@ -14,6 +14,7 @@
             [sigil.views.login :refer [login-get login-post]]
             [sigil.views.usertest :refer [usertest-handler]]
             [sigil.views.org-page :refer [org-page-handler]]
+            [sigil.views.org-responses :refer [org-responses-handler]]
             [sigil.views.org-list :refer [org-list-handler]]
             [sigil.views.issue-page :refer [issue-page-handler]]
             [sigil.views.org-settings :refer [org-settings-handler]]
@@ -103,6 +104,7 @@
   (context "/:org_url{[a-z0-9]{4,}}" req
     (GET "/" req (org-page-handler req))
     (GET "/data" req (org-data-handler req))
+    (GET "/responses" req (org-responses-handler req))
     (GET "/:issue_id{[0-9]+}" req (issue-page-handler req))
     )
   (POST "/voteup" req (issue-actions/vote-issue req))

@@ -47,26 +47,37 @@
              :style "width:25px;height:25px;"}]
       (:org_name org)]]
     [:br]
-    [:a {:href (:website org)}
-     [:img.sub-org-icon {:src "images/website.png"}]]
+    [:a {:href (str "http://" (:website org))}
+     [:img.sub-org-icon {:src "/images/website.png"}]
+     (:website org)]
     [:br]
-    [:hr.sidebar-divider]
-    [:span "Data button might go here."]
-    [:hr.sidebar-divider]
-    [:h4 {:style "margin-bottom:10px"} "Tags:"]
-    (for [t org-tags]
-      (html
-       [:img.sub-org-icon {:src (str "/" (:icon_20 t))}]
-       (:tag_name t)
-       [:br]))]])
+    [:a {:href (str "http://maps.google.com?q=" "Seattle, Washington")
+         :target "_blank"}
+     [:img.sub-org-icon {:src "/images/map.png"}]
+     "Address"]
+    [:br]
+    [:span
+     [:img.sub-org-icon {:src "/images/telephone.png"}]
+     "555-555-5555"]
+    ;; [:br]
+    ;; [:hr.sidebar-divider]
+    ;; [:span "Data button might go here."]
+    ;; [:hr.sidebar-divider]
+    ;; [:h4 {:style "margin-bottom:10px"} "Tags:"]
+    ;; (for [t org-tags]
+    ;;   (html
+    ;;    [:img.sub-org-icon {:src (str "/" (:icon_20 t))}]
+    ;;    (:tag_name t)
+    ;;    [:br]))
+    ]])
 
 (def link-box
   (html
    [:div.panel.panel-default
     [:div.panel-body
-     [:a {:href "/companies"} "Browse companies on Sigil"]
+     [:a {:href "/companies"} "Browse restaurants on Sigil"]
      [:hr.sidebar-divider]
-     [:a {:href "/features"} [:b "Sigil for your business"]]]]))
+     [:a {:href "/features"} [:b "Sigil for your restaurant"]]]]))
 
 ;;(defn favorites-box [user-favorites]
 ;;  [:div.panel.panel-default
@@ -84,8 +95,8 @@
 
 (defn ad-box []
   (condp = (rand-int 2)
-    0 (ad "mailto:contact@sigil.tech" "images/advertise.png" false)
-    1 (ad "/sigil" "images/feedback-ad.png" true)))
+    0 (ad "mailto:contact@sigil.tech" "/images/advertise.png" false)
+    1 (ad "/sigil" "/images/feedback-ad.png" true)))
 
 (def sidebar-footer
   (html

@@ -26,7 +26,7 @@
                    issue-user
                    authenticated?
                    user-voted?
-                   (get-latest-official-response-by-issue (:issue_id issue)))
+                   (get-latest-official-response-by-issue issue))
       (issue-without-panel uri
                            issue
                            issue-org
@@ -35,14 +35,16 @@
                            user-voted?)))))
 
 (defn issue-panel [uri issue issue-org issue-user authenticated? user-voted? response]
-  [:div.panel.panel-info.issue-panel-partial
+  [(if (and (:responded issue) (some? response))
+     :div.panel.panel-info.issue-panel-partial
+     :div.panel.panel-default.issue-panel-partial)
    (issue-without-panel uri
                         issue
                         issue-org
                         issue-user
                         authenticated?
                         user-voted?)
-   (if (some? response)
+   (if (and (:responded issue) (some? response))
      [:div.panel-footer
       [:b "Response: "]
       (if (> (count (:text response)) 100)
@@ -73,6 +75,6 @@
       [:img.issue-panel-icon {:src (:icon_30 issue-org)}]
       [:a {:href (str "/" (:org_url issue-org))} (:org_name issue-org)]]
      [:p.pull-right
-      (str "Posted at " (clj-time.coerce/to-local-date (:created_at issue)) " by ") 
+      (str "Posted at " (clj-time.coerce/to-local-date (:created_at issue)) " by ")
       [:img {:src (:icon_30 issue-user)}]
       (:username issue-user)]]]])

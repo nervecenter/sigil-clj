@@ -20,7 +20,7 @@
 (defn org-list-body [user orgs]
   (html
    [:div#main-col.col-md-9.col-lg-9
-    [:h2 "List of all companies"]
+    [:h2 "List of all restaurants"]
     [:div.panel.panel-default
      [:div.panel-body
       (for [o orgs]
