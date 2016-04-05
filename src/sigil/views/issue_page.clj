@@ -69,13 +69,17 @@
           [:img.votelogin {:src "/images/notevoted.png"}])
         [:br]
         [:span.voteamount
-         {:id (str "count-" (:issue_id issue))} (:votes issue)]]
+         {:id (str "count-" (:issue_id issue))} (:total_votes issue)]]
        [:div.media-body
         [:h4.media-heading (:title issue)]
         [:p.pull-left
          [:img.issue-panel-icon {:src (:icon_30 org)}]
          [:a {:href (str "/" (:org_url org))} (:org_name org)]]
-        [:p.pull-right "Posted by " (:username (:poster issue))]]]]
+        [:p.pull-right
+         "Posted by "
+         (:username (:poster issue))
+         " on "
+         (clj-time.coerce/to-local-date (:created_at issue))]]]]
      [:div.panel-body (:text issue)]]
     (for [r responses]
       [:div.panel.panel-primary
@@ -118,13 +122,13 @@
            [:div.media-body
             [:h4.media-heading
              (:username (:commenter c))
-             [:small [:i "Posted on " (:created_at (:comment c))]]]
-            [:p (:text (:comment c))]
+             [:small [:i " Posted on " (clj-time.coerce/to-local-date (:created_at c))]]]
+            [:p (:text c)]
             [:p.pull-right
              (if (user-has-role? user :site-admin)
                [:form {:method "post" :action "/deletecomment"}
-                (hidden-field "comment-id" (:comment_id (:comment c)))
-                (submit-button {:class "btn btn-primary"
+                (hidden-field "comment-id" (:comment_id c))
+                (submit-button {:class "btn btn-xs btn-primary"
                                 :id "delete-comment"}
                                "Delete Comment")])]]]))
       (if (some? user)

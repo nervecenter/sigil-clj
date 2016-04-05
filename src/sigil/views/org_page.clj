@@ -28,10 +28,7 @@
                          user-org
                          (str "Sigil - " (:org_name org))
                          (org-page-body req user org tags issues))))
-      (not-found-handler req)
-      ;;{:status 302
-      ;; :headers {"Location" "/404"}}
-      )))
+      (not-found-handler req))))
 
 (defn org-page-body [req user org tags issues]
   (html

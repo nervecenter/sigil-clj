@@ -8,7 +8,7 @@
       [:ul.footer-list
        [:li
         [:a {:href "/"}
-         [:img {:src "images/logo-small.png"}]]]
+         [:img {:src "/images/logo-small.png"}]]]
        [:li
         [:a.footer-link {:href ""} "A focal point for feedback."]]]]
      [:div.col-sm-6.col-md-4
