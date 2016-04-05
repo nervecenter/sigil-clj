@@ -1,3 +1,7 @@
+.tiny-hr {
+    margin: 5px auto 5px;
+}
+
 .glyphicon-remove-sign:hover {
     cursor: hand;
     cursor: pointer;

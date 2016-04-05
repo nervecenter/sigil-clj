@@ -41,21 +41,20 @@
 (defn org-box [org org-tags]
   [:div.panel.panel-default
    [:div.panel-body
-    [:h3 {:style "margin: 10px auto -10px;"}
+    [:h3 {:style "margin: 10px auto 18px;"}
      [:a {:href (:org_url org)}
       [:img {:src (:icon_30 org)
              :style "width:25px;height:25px;"}]
       (:org_name org)]]
-    [:br]
     [:a {:href (str "http://" (:website org))}
      [:img.sub-org-icon {:src "/images/website.png"}]
      (:website org)]
-    [:br]
+    [:hr.tiny-hr]
     [:a {:href (str "http://maps.google.com?q=" "Seattle, Washington")
          :target "_blank"}
      [:img.sub-org-icon {:src "/images/map.png"}]
      "Address"]
-    [:br]
+    [:hr.tiny-hr]
     [:span
      [:img.sub-org-icon {:src "/images/telephone.png"}]
      "555-555-5555"]

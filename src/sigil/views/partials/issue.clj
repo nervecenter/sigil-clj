@@ -80,14 +80,14 @@
       [:img.issue-panel-icon {:src (:icon_30 issue-org)}]
       [:a {:href (str "/" (:org_url issue-org))} (:org_name issue-org)]]
      [:p.pull-right
-      (str "Posted at " (clj-time.coerce/to-local-date (:created_at issue)) " by ") 
+      (str "Posted at " (clj-time.coerce/to-local-date (:created_at issue)) " by ")
       [:img {:src (:icon_30 issue-user)}]
       (:username issue-user)
-      [:br]
       (if (auth/user-has-role? user :site-admin)
         [:form {:method "post" :action "/deleteissue"}
          (hidden-field "org-id" (:org_id issue-org))
          (hidden-field "issue-id" (:issue_id issue))
-         (submit-button {:class "btn btn-primary"
+         (submit-button {:class "btn btn-xs btn-primary"
                          :id "delete-issue"}
-                        "Delete Issue")])]]]])
+                        "Delete Issue")])
+      ]]]])
