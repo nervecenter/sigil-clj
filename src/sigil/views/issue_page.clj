@@ -1,6 +1,6 @@
 (ns sigil.views.issue-page
   (:require [sigil.views.layout :as layout]
-            [sigil.auth :refer [user-or-nil user-org-or-nil user-is-admin-of-org?]]
+            [sigil.auth :refer [user-or-nil user-org-or-nil user-is-admin-of-org? user-has-role?]]
             [sigil.db.issues :refer [get-issue-with-poster-by-id]]
             [sigil.db.officialresponses :refer [get-official-responses-by-issue get-responses-with-responders-by-issue]]
             [sigil.db.comments :refer [get-comments-by-issue get-comments-with-commenters-by-issue]]

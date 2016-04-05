@@ -38,7 +38,7 @@
                            authenticated?
                            user-voted?)))))
 
-(defn issue-panel [uri issue issue-org issue-user authenticated? user-voted? response]
+(defn issue-panel [uri user issue issue-org issue-user authenticated? user-voted? response]
   [(if (and (:responded issue) (some? response))
      :div.panel.panel-info.issue-panel-partial
      :div.panel.panel-default.issue-panel-partial)
