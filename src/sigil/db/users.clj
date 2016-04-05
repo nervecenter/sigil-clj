@@ -17,6 +17,10 @@
 (defn get-user-favorites [user]
   (first (sql/query db/spec ["SELECT favorites FROM users WHERE user_id = ?" (:user_id user)])))
 
+(defn get-user-by-username
+  [username]
+  (first (sql/query db/spec ["SELECT * FROM users WHERE username = ?" username])))
+
 (defn get-user-roles
   [user]
   (first (sql/query db/spec ["SELECT roles FROM users WHERE user_id = ?" (:user_id user)])))
@@ -33,8 +37,8 @@
   (sql/execute! db-conn ["UPDATE users SET last_login = LOCALTIMESTAMP, times_visited = times_visited + 1 WHERE user_id = ?" user_id]))
 
 (defn update-user
-  [db-conn [user updated-rows]]
-  (sql/update! db-conn :users updated-rows ["user_id = ?" (:user_id user)]))
+  [db-conn [user-and-updated-rows]]
+  (sql/update! db-conn :users (second user-and-updated-rows) ["user_id = ?" (:user_id (first user-and-updated-rows))]))
 
 (defn create-user
   [db-conn [new-user]]

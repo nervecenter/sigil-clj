@@ -14,12 +14,14 @@
         validations ((:query-params req) "invalid")
         passwords-not-match? (if (= validations "m") true false)
         short-username? (if (= validations "u") true false)
-        short-password? (if (= validations "p") true false)]
+        short-password? (if (= validations "p") true false)
+        user-exists? (if (= validations "e") true false)]
     (user-register-page req
                         return
                         passwords-not-match?
                         short-username?
-                        short-password?)))
+                        short-password?
+                        user-exists?)))
 
 (defn user-register-post [req]
   (let [register-data (:form-params req)
@@ -38,6 +40,10 @@
       (< (count password) 6)
       {:status 302
        :headers {"Location" (str "register?invalid=p&return=" return)}}
+      (or (not (nil? (sigil.db.users/get-user-by-email email)))
+          (not (nil? (sigil.db.users/get-user-by-username username))))
+      {:status 302
+       :headers {"Location" (str "regiser?invalid=e&return=" return)}}
       :else
       (do
         ;; Add the user
@@ -62,7 +68,8 @@
    return
    passwords-not-match?
    short-username?
-   short-password?]
+   short-password?
+   user-exists?]
   (html5
    (layout/head "Sigil - Register")
    [:body.page
@@ -74,9 +81,10 @@
                            return
                            passwords-not-match?
                            short-username?
-                           short-password?)]]]]))
+                           short-password?
+                           user-exists?)]]]]))
 
-(defn user-register-body [req return passwords-not-match? short-username? short-password?]
+(defn user-register-body [req return passwords-not-match? short-username? short-password? user-exists?]
   [:div.container.maxw-400
    [:h2 "Join Sigil today"]
    [:div.row
@@ -85,11 +93,13 @@
       [:div.panel-body
 
        (if passwords-not-match?
-         [:h3 "Password confirmation does not match."] nil)
+         [:h3 {:style "color:red;"} "Password confirmation does not match."] nil)
        (if short-username?
-         [:h3 "Username must be at least 5 characters."] nil)
+         [:h3 {:style "color:red;"} "Username must be at least 5 characters."] nil)
        (if short-password?
-         [:h3 "Password must be at least 6 characters."] nil)
+         [:h3 {:style "color:red;"} "Password must be at least 6 characters."] nil)
+       (if user-exists?
+         [:h3 {:style "color:red;"} "A user with the provided email or username already exists. " [:a {:href "/login"} "Login"]])
 
        (form-to
         [:post "/register"]

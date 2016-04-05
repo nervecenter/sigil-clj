@@ -68,7 +68,7 @@
          (if (some? user-org)
            [:ul.nav.navbar-nav.navbar-right
             [:li
-             [:a {:href (:org_url user-org)} (str (:org_name user-org) " Page")]]
+             [:a {:href "/"(:org_url user-org)} (str (:org_name user-org) " Page")]]
             [:li
              [:a {:href "/orgsettings"} (str (:org_name user-org) " Settings")]]]
            nil)

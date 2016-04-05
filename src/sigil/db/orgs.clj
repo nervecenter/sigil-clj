@@ -18,6 +18,10 @@
   [term]
   (sql/query db/spec ["SELECT *, levenshtein(org_name, ?) FROM orgs ORDER BY levenshtein(org_name, ?) ASC LIMIT 5;" term term]))
 
+(defn get-org-by-name
+  [name]
+  (first (sql/query db/spec ["SELECT * FROM orgs WHERE org_name = ?" name])))
+
 (defn get-org-by-url
   [url]
   (first (sql/query db/spec ["SELECT * FROM orgs WHERE org_url = ?;" url])))
@@ -74,7 +78,6 @@
    [:icon_30 :text]
    [:icon_100 :text]
    [:banner :text]
-   ;[:last_viewed :timestamp "NOT NULL" "DEFAULT CURRENT_TIMESTAMP"]
    [:times_viewed :int "NOT NULL" "DEFAULT 0"]
    [:views :timestamp "ARRAY" "NOT NULL" "DEFAULT ARRAY[]::timestamp[]"]
    [:subscription_level :int "NOT NULL" "DEFAULT 1"]

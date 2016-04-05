@@ -19,3 +19,13 @@ $(".btn-file :file").change(function () {
     var label = $(this).val().replace(/\\/g, '/').replace(/.*\//, '');
     $(this).parent().parent().parent().children().last().attr("value", label);
 });
+
+
+$("#policy-accept").change(function () {
+  var checked = $(this).prop("checked");
+  if (checked) {
+    $("#sign-up-button").removeClass("disabled");
+  } else {
+    $("#sign-up-button").addClass("disabled");
+  }
+});
