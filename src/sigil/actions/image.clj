@@ -40,7 +40,7 @@
   (let [upload-params (:params req)
         org-icon-file (upload-params :icon-30-upload)
         org (auth/user-org-or-nil (auth/user-or-nil req))
-        new-file-name (str (:org_name org) "_30.png")
+        new-file-name (str (:org_url org) "_30.png")
         db-path (str "/db_imgs/org/" new-file-name)
         save-path (str "resources/public/" db-path)]
     (if (not (nil? org))
@@ -55,7 +55,7 @@
   (let [upload-params (:params req)
         org-icon-file (upload-params :icon-100-upload)
         org (auth/user-org-or-nil (auth/user-or-nil req))
-        new-file-name (str (:org_name org) "_100.png")
+        new-file-name (str (:org_url org) "_100.png")
         db-path (str "/db_imgs/org/" new-file-name)
         save-path (str "resources/public/" db-path)]
     (do
@@ -69,7 +69,7 @@
   (let [upload-params (:params req)
         org-icon-file (upload-params :banner-upload)
         org (auth/user-org-or-nil (auth/user-or-nil req))
-        new-file-name (str (:org_name org) "_banner.png")
+        new-file-name (str (:org_url org) "_banner.png")
         db-path (str "/db_imgs/org/" new-file-name)
         save-path (str "resources/public/" db-path)]
     (do

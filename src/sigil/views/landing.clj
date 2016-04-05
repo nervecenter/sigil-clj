@@ -93,6 +93,8 @@
      [:ul.nav.navbar-nav.navbar-right
       [:li.pull-right
        [:a.header-link {:href "register"} "Sign Up"]]
+      ;; [:li.pull-right
+      ;;  [:a.header-link {:href "orgregister"} "Sign Up Your Resturant"]]
       [:li.pull-right
        [:a.header-link {:href "login?return=/"} "Log In"]]]]]])
 

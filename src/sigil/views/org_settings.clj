@@ -37,7 +37,7 @@
           [:div.panel
            [:div.panel-body
             [:img.img-rounded.img-responsive.img-relief
-             {:src (:banner org)}]
+             {:src (str (:banner org) "?3243294")}]
             [:h4 "Banner files: 1000 x 200 px .jpg or .png"]
             [:form {:action "/orgbanner" :method "post" :enctype "multipart/form-data"}
              [:div.form-group

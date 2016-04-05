@@ -82,6 +82,9 @@
          [:ul.nav.navbar-nav.navbar-right
           [:li
            [:a {:href (str "/register?return=" uri)} "Sign Up"]]]
+         ;; [:ul.nav.navbar-nav.navbar-right
+         ;;  [:li
+         ;;   [:a {:href (str "/orgregister")} "Sign Up Your Resturant"]]]
          [:ul.nav.navbar-nav.navbar-right
           [:li
            [:a {:href (str "/login?return=" uri)}]]]))]]]))
@@ -110,4 +113,5 @@
                 "/js/notifications.js"
                 "/js/issue-form.js"
                 "/js/bootstrap-datepicker.js"
-                "https://www.google.com/jsapi" "/js/graph.js")]))
+                "https://www.google.com/jsapi"
+                "/js/graph.js")]))
