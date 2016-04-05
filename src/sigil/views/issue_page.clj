@@ -1,10 +1,11 @@
 (ns sigil.views.issue-page
   (:require [sigil.views.layout :as layout]
-            [sigil.auth :refer [user-or-nil user-org-or-nil user-is-admin-of-org? user-has-role?]]
-            [sigil.helpers :refer [get-issue-with-user-and-org-by-issue-id]]
+            [sigil.auth :refer [user-or-nil user-org-or-nil user-is-admin-of-org?]]
+            [sigil.db.issues :refer [get-issue-with-poster-by-id]]
             [sigil.db.officialresponses :refer [get-official-responses-by-issue get-responses-with-responders-by-issue]]
             [sigil.db.comments :refer [get-comments-by-issue get-comments-with-commenters-by-issue]]
             [sigil.db.votes :refer [user-voted-on-issue?]]
+            [sigil.db.orgs :refer [get-org-by-url]]
             [sigil.views.partials.sidebar :refer [sidebar-partial]]
             )
   (:use [hiccup.form]
@@ -22,9 +23,9 @@
     ;; Each response should contain responding user for icon, name, etc.
   ;; List of comments on the issue
   ;; Each comment should have commenting user for icon, name
-  (let [[issue issue-user org] (get-issue-with-user-and-org-by-issue-id (:issue_id (:route-params req)))
-        ;org (get-org-by-url (:org_url (:route-params req)))
-        user (user-or-nil req)]
+  (let [user (user-or-nil req)
+        issue (get-issue-with-poster-by-id (read-string (:issue_id (:route-params req))))
+        org (get-org-by-url (:org_url (:route-params req)))]
     (do (sigil.db.core/db-trans [sigil.db.issues/issue-view-inc (:issue_id issue)])
       (layout/render
        req
@@ -49,11 +50,14 @@
     [:img.img-rounded.img-responsive.org-banner-small
      {:src (:banner org)}]
     [:div.btn-group.btn-group-sm.btn-group-justified
-     {:style {:margin "20px"}}
+     {:style "margin-bottom: 20px"}
      [:a.btn.btn-warning {:href (:org_url org)} "Main feed"]
-     [:a.btn.btn-info {:href (str (:org_url org) "/responses")}]]
+     [:a.btn.btn-info
+      {:href (str "/" (:org_url org) "/responses")}
+      "Responses"]]
     [:div.panel.panel-default.issue-panel-partial
      [:div.panel-body
+      {:style "padding-bottom: 0px;"}
       [:div.media
        [:div.media-object.pull-left.votebutton-box
         (if authenticated?
@@ -67,15 +71,10 @@
         [:span.voteamount
          {:id (str "count-" (:issue_id issue))} (:votes issue)]]
        [:div.media-body
-        [:h4.media-heading
-         [:a
-          {:href (str "/"
-                      (:org_url org) "/"
-                      (:issue_id issue) "/")}
-          (:title issue)]]
+        [:h4.media-heading (:title issue)]
         [:p.pull-left
          [:img.issue-panel-icon {:src (:icon_30 org)}]
-         [:a {:href (:org_url org)} (:org_name org)]]
+         [:a {:href (str "/" (:org_url org))} (:org_name org)]]
         [:p.pull-right "Posted by " (:username (:poster issue))]]]]
      [:div.panel-body (:text issue)]]
     (for [r responses]

@@ -5,7 +5,9 @@
             [sigil.db.users :as users]
             [sigil.db.orgs :as orgs]
             [sigil.db.orgs]
-            [clj-time.jdbc]))
+            [clj-time.jdbc]
+            [sigil.db.users :refer [get-user-by-id]]
+            [sigil.db.orgs :refer [get-org-by-id]]))
 
 
 ;;-----------------------------------------------------------------
@@ -14,6 +16,12 @@
 (defn get-issue-by-id
   [id]
   (first (sql/query db/spec ["SELECT * FROM issues WHERE issue_id = ?;"  id])))
+
+(defn get-issue-with-poster-by-id
+  [id]
+  (let [issue (first (sql/query db/spec ["SELECT * FROM issues WHERE issue_id = ?;"  id]))
+        user (get-user-by-id (:user_id issue))]
+    (assoc issue :poster user)))
 
 (defn get-issue-insert-id
   [issue]

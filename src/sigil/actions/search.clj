@@ -41,7 +41,6 @@
 ;;-------------------------------------------------
 ; Org_page search issues
 
-;;TODO:: Need to jsonify the return issues
 (defn search-org-issues-handler
   [req]
   (let [user (user-or-nil req)

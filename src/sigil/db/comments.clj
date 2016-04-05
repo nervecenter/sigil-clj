@@ -32,8 +32,8 @@
 (defn get-comments-with-commenters-by-issue
   [issue]
   (let [issue-comments (get-comments-by-issue issue)]
-    (map #(hash-map :comment %
-                    :commenter (users/get-user-by-id (:user_id %))) issue-comments)))
+    (map #(assoc % :commenter (users/get-user-by-id (:user_id %)))
+         issue-comments)))
 
 
 (defn get-users-by-issue-comments

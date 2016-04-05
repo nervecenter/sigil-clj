@@ -26,7 +26,6 @@
     (include-js "js/jquery-1.11.3.js"
                 "js/jquery-ui-1.9.2.custom.min.js"
                 "js/bootstrap.js"
-                "js/typeahead.js"
                 "js/voting.js"
                 "js/subscriptions.js"
                 "js/search.js")]))
@@ -103,7 +102,7 @@
     [:div.row {:style "margin-bottom:30px;"}
      [:div.col-lg-12.col-centered {:style "max-width:350px;"}
       [:img.img-responsive {:src "images/logo-600-beta.png"}]
-      [:h3 {:style "margin-top:0 auto 0;"} "A focal point for feedback."]]]
+      [:h3 {:style "margin-top:0 auto 0;font-size: 19px;"} "Rethinking restaurant feedback."]]]
     [:div.row
      [:div.col-lg-12.col-centered.email-div
       (form-to {:role "search" :style "width:100%;"} [:put "/search"]
@@ -113,8 +112,8 @@
                   :placeholder "Search for a company, person, or product"
                   :style "width:100%;"}]])]]
     [:div.row.small-links
-     [:a {:href "features"} "See how Sigil can revamp feedback for your company"]
+     [:a {:href "features"} "See how Sigil can revamp feedback for your restaurant"]
      " | "
      [:a {:href "register"} "Start giving your own feedback"]
      " | "
-     [:a {:href "companies"} "See all the companies on Sigil"]]]])
+     [:a {:href "companies"} "See all the restaurants on Sigil"]]]])

@@ -23,8 +23,8 @@
 (defn get-responses-with-responders-by-issue
   [issue]
   (let [responses (get-official-responses-by-issue issue)]
-    (map #(hash-map :response %
-                    :responder (users/get-user-by-id (:user_id %))) responses)))
+    (map #(assoc % :responder (users/get-user-by-id (:user_id %)))
+         responses)))
 
 (defn get-official-responses-by-org
   [org]
