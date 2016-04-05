@@ -7,7 +7,7 @@ function shownotifications() {
 
     var $callout = $("<img>")
         .addClass("callout")
-        .attr("src", "images/callout.png");
+        .attr("src", "/images/callout.png");
 
     var $panel = $("<div>")
         .addClass("panel")
