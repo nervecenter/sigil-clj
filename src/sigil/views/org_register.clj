@@ -52,8 +52,8 @@
         email (register-data "email")
         password (register-data "password")
         confirm-password (register-data "confirm-password")
-        org (zipmap [:org_name :org_url :website :address :city :state :zip_code]
-                    (map #(register-data %) ["org-name" "org-url" "website" "address" "city" "state" "zip-code"]))
+        org (zipmap [:org_name :org_url :website :address :city :state :zip_code :phone-num :hours]
+                    (map #(register-data %) ["org-name" "org-url" "website" "address" "city" "state" "zip-code" "phone-number" "hours"]))
         return (register-data "return")]
     (cond
       (not= password confirm-password)
@@ -157,6 +157,18 @@
                       :placeholder "Zip-Code"
                       :class "form-control"} "zip-code")]
 
+        [:div.form-group
+         (label "Phone Number" "Resturant's Phone number")
+         (text-field {:id "phone-number"
+                      :placeholder "Phone #"
+                      :class "form-control"} "phone-number")]
+
+        [:div.form-group
+         (label "Hours" "Hours Of Operation")
+         (text-field {:id "hours"
+                      :placeholder "Hours"
+                      :class "form-control"} "hours")]
+        
         [:h4 "Create the Sigil account for your company's first administrator."]
         [:div.form-group
          (label "email" "Email")

@@ -85,6 +85,8 @@
    [:city :text]
    [:state :text]
    [:zip_code :text]
+   [:hours :text "NOT NULL" "DEFAULT 'No hours given.'"]
+   [:phone_number :text "NOT NULL" "DEFAULT 'No phone given.'"]
    [:org_is_active :boolean "NOT NULL" "DEFAULT TRUE"]
    [:org_approved :boolean "NOT NULL" "DEFAULT FALSE"]))
 
