@@ -16,34 +16,38 @@
 
 (def org_seed [{:org_url "sigil"
                 :org_name "Sigil"
-                :website "beta.sigil.tech"
+                :website "sigil.tech"
+                :address "10707 Ayrshire Dr"
+                :city "Tampa"
+                :state "FL"
+                :zip_code "33626"
+                :phone "813-334-3699"
                 :icon_30 (str (rand-nth db/default_icon_30))
                 :icon_100 (str (rand-nth db/default_icon_100))
                 :banner (str (rand-nth db/default_banner))}
-               {:org_url "burgstpete"
-                :org_name "The Burg"
-                :website "www.theburg.com"
+               {:org_url "crowleys"
+                :org_name "Crowley's Downtown"
+                :website "www.crowleyspub.com"
+                :address "269 Central Ave"
+                :city "St. Petersburg"
+                :state "FL"
+                :zip_code "33701"
+                :phone "727-821-1111"
+                :icon_30 "/db_imgs/org/crowleys_30.png"
+                :icon_100 "/db_imgs/org/crowleys_100.png"
+                :banner "/db_imgs/org/crowleys_banner.png"}
+               {:org_url "theburgbar"
+                :org_name "The Burg Bar & Grille"
+                :website "www.theburgbar.com"
+                :address "1752 Central Ave"
+                :city "St. Petersburg"
+                :state "FL"
+                :zip_code "33712"
+                :phone "727-894-2874"
                 :icon_30 (str (rand-nth db/default_icon_30))
                 :icon_100 (str (rand-nth db/default_icon_100))
                 :banner (str (rand-nth db/default_banner))}
-               {:org_url "worldbeer"
-                :org_name "World Of Beer"
-                :website "www.worldofbeer.com"
-                :icon_30 (str (rand-nth db/default_icon_30))
-                :icon_100 (str (rand-nth db/default_icon_100))
-                :banner (str (rand-nth db/default_banner))}
-               {:org_url "ceviche"
-                :org_name "Ceviche"
-                :website "www.Ceviche.com"
-                :icon_30 (str (rand-nth db/default_icon_30))
-                :icon_100 (str (rand-nth db/default_icon_100))
-                :banner (str (rand-nth db/default_banner))}
-               {:org_url "dunderbocks"
-                :org_name "Dunderbocks"
-                :website "www.DunderBocks.com"
-                :icon_30 (str (rand-nth db/default_icon_30))
-                :icon_100 (str (rand-nth db/default_icon_100))
-                :banner (str (rand-nth db/default_banner))}])
+               ])
 
 (def role_seed [{:role_name "org-admin"}
                 {:role_name "site-admin"}])
@@ -80,36 +84,21 @@
                   :text "Doesn't grow on trees! Lorem ipsum etc."}
                  {:org_id 2
                   :user_id 1
-                  :title "Your Horseradish is too strong"
-                  :text "Doesn't grow on trees! Lorem ipsum etc."}
+                  :title "Offer smaller gravy portion."
+                  :text "With my fish and chips, I get a huge cup of gravy, and use not nearly all of it. I'd hate it to go to waste, so serve a little less."}
                  {:org_id 2
                   :user_id 2
-                  :title "How about staffing one more waitress for Saturday's?"
-                  :text "Doesn't grow on trees! Lorem ipsum etc."}
+                  :title "Add more wait staff Saturday nights."
+                  :text "There weren't enough and those waiting were stressed and handling too much. Consider scheduling more!"}
                  {:org_id 3
                   :user_id 1
-                  :title "Terrible Service"
-                  :text "Doesn't grow on trees! Lorem ipsum etc."}
+                  :title "Offer more options for vegan crossfitters."
+                  :text "I know it doesn't fit the theme, but I have expectations."}
                  {:org_id 3
                   :user_id 2
-                  :title "Found a hair in my soup"
-                  :text "Doesn't grow on trees! Lorem ipsum etc."}
-                 {:org_id 4
-                  :user_id 1
-                  :title "One of the best sausages I ever had."
-                  :text "Doesn't grow on trees! Lorem ipsum etc."}
-                 {:org_id 4
-                  :user_id 2
-                  :title "Needs more garlic in the beer."
-                  :text "Doesn't grow on trees! Lorem ipsum etc."}
-                 {:org_id 5
-                  :user_id 1
-                  :title "The Giant preztals are the bees knees"
-                  :text "Doesn't grow on trees! Lorem ipsum etc."}
-                 {:org_id 5
-                  :user_id 2
-                  :title "Why not zoidburg?"
-                  :text "Doesn't grow on trees! Lorem ipsum etc."}])
+                  :title "The tables should be cleaner when newly seated."
+                  :text "Whoever is cleaning tables seems to only wipe them down once! Not very hygienic."}
+                 ])
 
 ;;There needs be a matching vote seed for every issue seed
 (def vote_seed [{:user_id 1
@@ -130,18 +119,7 @@
                 {:user_id 2
                  :issue_id 6
                  :org_id 3}
-                {:user_id 1
-                 :issue_id 7
-                 :org_id 4}
-                {:user_id 2
-                 :issue_id 8
-                 :org_id 4}
-                {:user_id 1
-                 :issue_id 9
-                 :org_id 5}
-                {:user_id 2
-                 :issue_id 10
-                 :org_id 5}])
+                 ])
 
 (def user_seed [{:email "cjcollazo@sigil.tech"
                  :username "Nerve"
@@ -155,6 +133,12 @@
                  :icon_100 (str (rand-nth db/default_icon_100))
                  :roles [1 2]
                  :org_id 1}
+                {:email "kicrowley@gmail.com"
+                 :username "Matt"
+                 :pass_hash (buddy.hashers/encrypt "crowleys")
+                 :icon_100 "/db_imgs/org/crowleys_100.png"
+                 :roles [1]
+                 :org_id 2}
                 ])
 
 (def topic_seed [{:topic_url "testtopic"
@@ -176,9 +160,6 @@
     (doall (map #(db/db-trans [create-comment %]) comment_seed))
     (doall (map #(db/db-trans [create-topic %]) topic_seed))
     (doall (map #(db/db-trans [create-vote %]) vote_seed))))
-
-
-
 
 (defn drop-create-seed
   []

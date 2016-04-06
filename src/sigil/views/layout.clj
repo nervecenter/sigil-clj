@@ -13,7 +13,7 @@
            :content "width=device-width, initial-scale=1.0"}]
 
    [:link {:rel "shortcut icon"
-           :href "images/favicon.png"}]
+           :href "/images/favicon.png"}]
 
    (include-css "/css/jquery-ui-1.9.2.custom.css"
                 "/css/bootstrap-flatly.css"
@@ -84,7 +84,7 @@
            [:a {:href (str "/register?return=" uri)} "Sign Up"]]]
          [:ul.nav.navbar-nav.navbar-right
           [:li
-           [:a {:href (str "/login?return=" uri)}]]]))]]]))
+           [:a {:href (str "/login?return=" uri)} "Log In"]]]))]]]))
 
 (defn render
   "Renders the default layout with navbar and footer. Expects the request, the current user or nil, the user's org or nil, the title of the page, and the body of the page usually rendered somewhere in the page view."

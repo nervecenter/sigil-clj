@@ -91,8 +91,8 @@
          [:div.media-body
           [:h4.media-heading
            (:username (:responder r))
-           [:small [:i "Posted some time ago"]]]
-          [:p (:text (:response r))]]]]])
+           [:small [:i " Posted " (clj-time.coerce/to-local-date (:created_at r))]]]
+          [:p (:text r)]]]]])
     (if (user-is-admin-of-org? user org)
       [:div.panel.panel-default
        [:div.panel-heading "Make an official response"]

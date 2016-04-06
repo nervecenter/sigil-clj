@@ -46,18 +46,20 @@
       [:img {:src (:icon_30 org)
              :style "width:25px;height:25px;"}]
       (:org_name org)]]
-    [:a {:href (str "http://" (:website org))}
+    [:a {:href (str "http://" (:website org))
+         :target "_blank"}
      [:img.sub-org-icon {:src "/images/website.png"}]
      (:website org)]
     [:hr.tiny-hr]
-    [:a {:href (str "http://maps.google.com?q=" "Seattle, Washington")
-         :target "_blank"}
-     [:img.sub-org-icon {:src "/images/map.png"}]
-     "Address"]
+    (let [address (str (:address org) ", " (:city org) ", " (:state org) " " (:zip_code org))]
+      [:a {:href (str "http://maps.google.com?q=" (str (:org_name org) ", " address))
+           :target "_blank"}
+       [:img.sub-org-icon {:src "/images/map.png"}]
+       address])
     [:hr.tiny-hr]
     [:span
      [:img.sub-org-icon {:src "/images/telephone.png"}]
-     "555-555-5555"]
+     (:phone org)]
     ;; [:br]
     ;; [:hr.sidebar-divider]
     ;; [:span "Data button might go here."]

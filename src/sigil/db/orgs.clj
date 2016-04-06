@@ -85,6 +85,7 @@
    [:city :text]
    [:state :text]
    [:zip_code :text]
+   [:phone :text]
    [:org_is_active :boolean "NOT NULL" "DEFAULT TRUE"]
    [:org_approved :boolean "NOT NULL" "DEFAULT FALSE"]))
 
