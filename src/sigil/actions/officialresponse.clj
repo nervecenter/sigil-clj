@@ -17,8 +17,9 @@
                       :org_id (:org_id user-org)
                       :text (new-official-data "response")}]
     (if (= :success
-           (db/db-trans [offrep/create-official-response new-official]))
-      (do (help/notify (help/create-notes "An issue you have shown interest in has been responsed too." return (:icon_100 user) (vec (help/get-all-users-of-issue issue))))
+           (db/db-trans [offrep/create-official-response new-official]
+                        [issues/issue-set-responded issue]))
+      (do (help/notify (help/create-notes "An issue you have shown interest in has been responsed to." return (:icon_100 user) (vec (help/get-all-users-of-issue issue))))
         {:status 302
          :headers {"Location" return}}))))
 

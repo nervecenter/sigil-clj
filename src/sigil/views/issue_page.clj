@@ -66,7 +66,7 @@
                             :data-issueid (:issue_id issue)}]
             [:img.voteup {:src "/images/notvoted.png"
                           :data-issueid (:issue_id issue)}])
-          [:img.votelogin {:src "/images/notevoted.png"}])
+          [:img.votelogin {:src "/images/notvoted.png"}])
         [:br]
         [:span.voteamount
          {:id (str "count-" (:issue_id issue))} (:total_votes issue)]]

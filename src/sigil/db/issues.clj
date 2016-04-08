@@ -63,6 +63,10 @@
   [db-conn [issue_id]]
   (sql/execute! db-conn ["UPDATE issues SET views = array_append(views, LOCALTIMESTAMP), times_viewed = 1 + times_viewed WHERE issue_id = ?" issue_id]))
 
+(defn issue-set-responded
+  [db-conn [issue_id]]
+  (sql/execute! db-conn ["UPDATE issues SET responded = TRUE WHERE issue_id = ?" issue_id]))
+
 (defn issue-voted
   "Increments issues total_votes and sets last_voted to current time."
   [db-conn [issue]]
