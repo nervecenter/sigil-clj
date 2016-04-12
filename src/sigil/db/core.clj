@@ -35,10 +35,11 @@
     (let [conn (.getConnection stmt)
           meta (.getParameterMetaData stmt)
           type-name (.getParameterTypeName meta i)]
-      (if-let [elem-type (when (= (first type-name) \_) (apply str (rest type-name)))]
+      (if-let [elem-type (when (= (first type-name)
+                                  \_)
+                           (apply str (rest type-name)))]
         (.setObject stmt i (.createArrayOf conn elem-type (to-array v)))
         (.setObject stmt i v)))))
-
 
 (defn db-trans
   "Accepts db insert and update functions in the form [f1 a1 a2...] [f2 a1 a2....]. Where f is the db insert or update function followed by the necessary function arguements which is all contained in a vector.
@@ -47,13 +48,15 @@
   [& fs]
   (try
     (sql/with-db-transaction [db-conn spec]
-      (if (= (count fs) (count (flatten (map (fn [[& f]]
-                                               ((first f) db-conn (rest f))) fs))))
+      (if (= (count fs)
+             (count
+              (flatten
+               (map (fn [[& f]]
+                      ((first f) db-conn (rest f))) fs))))
         :success
         :fail))
     (catch Exception e
       (do
-        
         (if (isa? (type e) SQLException)
           (create-error {:error_message (str e)
                          :additional_info (str (.getNextException e))

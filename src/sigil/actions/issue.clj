@@ -12,18 +12,25 @@
   (let [new-issue-data (:form-params req)
         user (auth/user-or-nil req)
         issue_org (orgs/get-org-by-id (long (read-string (new-issue-data "org-id"))))
-        new-issue (assoc (zipmap [:title :text]
-                                 (map #(new-issue-data %) ["title" "text"]))
-                         :user_id (:user_id user)
-                         :org_id (:org_id issue_org)
-                         :tags [(long (read-string (new-issue-data "tag-select")))])]
-    (if (= :success (do
-                      (db/db-trans [issues/create-issue new-issue])
-                      (db/db-trans [votes/create-vote {:user_id (:user_id user)
-                                                       :issue_id (:issue_id (issues/get-issue-insert-id new-issue))}])))
+        new-issue {:title (new-issue-data "title")
+                   :text (new-issue-data "text")
+                   :user_id (:user_id user)
+                   :org_id (:org_id issue_org)
+                   ;;:tags [(long (read-string (new-issue-data "tag-select")))]
+                   }]
+    (if (= :success
+           (do
+             (db/db-trans [issues/create-issue new-issue])
+             (let [created-issue (issues/get-issue-by-user-and-title user (:title new-issue))]
+               (db/db-trans [votes/create-vote {:user_id (:user_id user)
+                                                :issue_id (:issue_id created-issue)
+                                                :org_id (:org_id created-issue)}]))))
       {:status 302
-       :headers {"Location" (str (:org_url issue_org) "/" (:issue_id (issues/get-issue-insert-id new-issue)))}}
+       :headers {"Location" (str "/" (:org_url issue_org)
+                                 "/" (:issue_id (issues/get-issue-by-user-and-title user (:title new-issue))))}}
       ;;else redirect and let them know whats wrong....
+      {:status 302
+       :headers {"Location" "/404"}}
       )))
 
 (defn delete-issue-post

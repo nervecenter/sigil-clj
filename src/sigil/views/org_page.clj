@@ -53,7 +53,8 @@
          [:a#new-feedback-button.btn.btn-primary.pull-right
           {:style "padding:4px 9px"}
           "Submit this as new feedback"]
-         (label {:class "pull-right" :style "margin:5px 10px;"} "new-feedback" "Has nobody posted what you're suggesting?")]]]]
+         (label {:class "pull-right" :style "margin:5px 10px;"} "new-feedback" "Has nobody posted what you're suggesting?")]
+        (hidden-field "org-id" (:org_id org))]]]
      [:div#issues
       (for [i issues]
         (issue-partial (:uri req) i org user true))]]

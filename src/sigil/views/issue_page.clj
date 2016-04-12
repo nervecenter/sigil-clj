@@ -51,7 +51,7 @@
      {:src (:banner org)}]
     [:div.btn-group.btn-group-sm.btn-group-justified
      {:style "margin-bottom: 20px"}
-     [:a.btn.btn-warning {:href (:org_url org)} "Main feed"]
+     [:a.btn.btn-warning {:href (str "/" (:org_url org))} "Main feed"]
      [:a.btn.btn-info
       {:href (str "/" (:org_url org) "/responses")}
       "Responses"]]
