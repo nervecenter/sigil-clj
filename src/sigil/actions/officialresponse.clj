@@ -20,13 +20,14 @@
     (if (= :success
            (db/db-trans [create-official-response new-official]
                         [issue-set-responded issue]))
-      (help/notify
-       (help/create-notes "An issue you have shown interest in has been responsed to."
-                          return
-                          (:icon_100 user)
-                          (vec (help/get-all-users-of-issue issue))))
-      {:status 302
-       :headers {"Location" return}}
+      (do
+        (help/notify
+         (help/create-notes "An issue you have shown interest in has been responsed to."
+                            return
+                            (:icon_100 user)
+                            (vec (help/get-all-users-of-issue issue))))
+        {:status 302
+         :headers {"Location" return}})
       {:status 302
        :headers {"Location" "/404"}})))
 

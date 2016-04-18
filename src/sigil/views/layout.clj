@@ -41,13 +41,13 @@
      [:div#collapser.navbar-collapse.collapse
       (form-to
        {:class "navbar-form navbar-left"}
-       [:post "/search"]
+       [:get "/search"]
        [:div.form-group {:style "width:100%;"}
         (text-field {:id "site-search-box"
                      :data-provide "typeahead"
                      :class "form-control typeahead"
                      :placeholder "Search for a restaurant"}
-                    "search-term")])
+                    "search")])
       ;; Logged in part
       (if (some? user)
         (html

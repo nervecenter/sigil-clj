@@ -4,7 +4,8 @@
             [sigil.db.tags :refer [get-tags-by-org]]
             [sigil.views.layout :as layout]
             [hiccup.core :refer [html]]
-            [hiccup.form :refer [form-to file-upload text-field submit-button]]))
+            [hiccup.form :refer [form-to file-upload text-field submit-button]]
+            [sigil.views.not-found :refer [not-found-handler]]))
 
 (declare org-settings-handler org-settings-body)
 
@@ -20,7 +21,7 @@
          org
          (str "Sigil - " (:org_name org) " Settings")
          (org-settings-body org tags)))
-      "404")))
+      (not-found-handler req))))
 
 (defn org-settings-body [org tags]
   (let [org_url (:org_url org)]

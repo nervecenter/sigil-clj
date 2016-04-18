@@ -32,13 +32,14 @@
   (get-user-by-id (extract-user-id req)))
 
 (defn user-or-nil [req]
-  (if (authenticated? req) (user-identity req) nil))
+  (if (authenticated? req)
+    (user-identity req)
+    nil))
 
 (defn user-org-or-nil [user]
-  (let [user-org (:org_id user)]
-      (if (not= user-org 0)
-        (orgs/get-org-by-id user-org)
-        nil)))
+  (if (not= (:org_id user) 0)
+    (orgs/get-org-by-id (:org_id user))
+    nil))
 
 (defn user-has-role? [user role]
   (cond
@@ -50,7 +51,9 @@
                            false)))
 
 (defn user-is-org-admin? [user]
-  (and (user-has-role? user :org-admin) (not= 0 (:org_id user))))
+  ;;(and (user-has-role? user :org-admin)
+  (not= 0 (:org_id user)))
+;;)
 
 (defn user-is-admin-of-org? [user org]
   (= (:org_id org) (:org_id user))
