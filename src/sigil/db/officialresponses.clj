@@ -18,7 +18,7 @@
 
 (defn get-latest-official-response-by-issue
   [issue]
-  (first (into [] (sql/query db/spec ["SELECT * FROM official_responses WHERE issue_id = ? ORDER BY edited_at DESC LIMIT 1" (:issue_id issue)]))))
+  (first (sql/query db/spec ["SELECT * FROM official_responses WHERE issue_id = ? ORDER BY edited_at DESC LIMIT 1" (:issue_id issue)])))
 
 (defn get-responses-with-responders-by-issue
   [issue]

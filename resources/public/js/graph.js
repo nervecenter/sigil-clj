@@ -1,4 +1,4 @@
-﻿// To use google charts you must load 
+﻿// To use google charts you must load
 //<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 // //as well as this file on the page you want a chart to appear
 
@@ -9,39 +9,34 @@ google.load('visualization', '1', { 'packages': ['corechart'] });
 
 $(document).ready(function () {
     if (document.getElementById('org_chart_div') != null) {
-      var orgURL = get_org_url();
-      
-        $.get(
-           "/default_graph",
-          {org: orgURL},
-           function (org_data) {
+        var orgURL = get_org_url();
+        $.get("/default_graph", {org: orgURL}, function (org_data) {
             //alert("Graphs are cool");
-             var clean_org_data = JSON.parse(org_data);
+            var clean_org_data = JSON.parse(org_data);
             var chart_data = new google.visualization.DataTable();
             chart_data.addColumn({ type: 'date', id: "Date" });
             chart_data.addColumn({ type: 'number', id: "Count" });
-            
+
             $.each(clean_org_data, function (index, data) {
-              chart_data.addRow([new Date(data.viewDate), data.viewCount]);
+                chart_data.addRow([new Date(data.viewDate), data.viewCount]);
             });
-            
+
             var default_options = {
-              title: 'Org Data',
-              hAxis: { title: 'Past Week', },
-              vAxis: { title: 'Number of Users' }
+                title: 'Org Data',
+                hAxis: { title: 'Past Week', },
+                vAxis: { title: 'Number of Users' }
             };
-            
+
             var default_chart = new google.visualization.LineChart(document.getElementById('org_chart_div'));
             default_chart.draw(chart_data, default_options);
-          }
-        );
+        });
     }
     else if(document.getElementById('issue_chart_div') != null)
     {
         var orgURL = get_org_url();
         var issueURL = get_issue_url();
         $.ajax({
-            url: "/default_graph/" + orgURL +"/"+issueURL,
+            url: "/default_graph/" + orgURL + "/" + issueURL,
             success: function (issue_data) {
                 //alert("Graphs are cool");
                 var chart_data = new google.visualization.DataTable();
@@ -76,11 +71,11 @@ $(document).ready(function () {
             showing = !showing;
             $controlsCopy = $("#data-controls").clone();
             $("#data-controls").remove();
-            $hider.attr("src", "/Content/Images/heirarchy-hidden.png");
+            $hider.attr("src", "/images/plus.png");
         } else if (!showing) {
             showing = !showing;
             $("#data-header").after($controlsCopy);
-            $hider.attr("src", "/Content/Images/heirarchy-extended.png");
+            $hider.attr("src", "/images/minus.png");
             BindDatePickers();
             BindDataButton();
         }
@@ -136,52 +131,61 @@ function Custom_Org_Data() {
     var start_date_ms = jsDateToCSharp(start_date_str);
     var stop_date_ms = jsDateToCSharp(stop_date_str);
 
-    $.get("/custom_graph",{org: orgURL, tag: dataOption, start: start_date_ms, stop: stop_date_ms},
-        function (org_data) {
-          var clean_org_data = JSON.parse(org_data);
-            var chart_data = new google.visualization.DataTable();
-            chart_data.addColumn({ type: 'date', id: "Date" });
-            chart_data.addColumn({ type: 'number', id: "Count" });
+    $.get("/custom_graph", {org: orgURL,
+                            tag: dataOption,
+                            start: start_date_ms,
+                            stop: stop_date_ms}, function (org_data) {
+        var clean_org_data = JSON.parse(org_data);
+        var chart_data = new google.visualization.DataTable();
+        chart_data.addColumn({ type: 'date', id: "Date" });
+        chart_data.addColumn({ type: 'number', id: "Count" });
 
-            $("#data-period").html("from " + start_date_str + " to " + stop_date_str);
+        $("#data-period").html("from " + start_date_str + " to " + stop_date_str);
 
-            $.each(clean_org_data, function (index, data) {
-                chart_data.addRow([new Date(data.viewDate), data.viewCount]);
-            });
+        $.each(clean_org_data, function (index, data) {
+            chart_data.addRow([new Date(data.viewDate), data.viewCount]);
+        });
 
-            var default_options = {
-                title: dataOption + "Data",
-                hAxis: { title: date_dif_days.toFixed(0) + ' days ending with ' + $("#dpend").val() },
-                vAxis: { title: 'Number of Users' }
-            };
+        var default_options = {
+            title: dataOption + "Data",
+            hAxis: { title: date_dif_days.toFixed(0) + ' days ending with ' + $("#dpend").val() },
+            vAxis: { title: 'Number of Users' }
+        };
 
-            var default_chart = new google.visualization.LineChart(document.getElementById('org_chart_div'));
-            
-            default_chart.draw(chart_data, default_options);
-        }
-    );
+        var default_chart = new google.visualization.LineChart(document.getElementById('org_chart_div'));
+
+        default_chart.draw(chart_data, default_options);
+    });
 
     // GET TOP 10 ISSUES FOR PERIOD
-    $.get("/customtopissues",{org: orgURL, tag: dataOption, start: start_date_ms, stop: stop_date_ms},
-        function (top_issues) {
-            $("#top-issues-parent").html("").html(top_issues);
-        }
-    );
+    $.get("/customtopissues",
+          {org: orgURL,
+           tag: dataOption,
+           start: start_date_ms,
+           stop: stop_date_ms},
+          function (top_issues) {
+              $("#top-issues-parent").html("").html(top_issues);
+          });
 
     // GET TOP 10 UNRESPONDED ISSUES FOR PERIOD
     $.get("/customunrespondedissues",
-          {org: orgURL, tag: dataOption, start: start_date_ms, stop: stop_date_ms},
-        function (unresponded_issues) {
-            $("#response-issues-parent").html("").html(unresponded_issues);
-        }
-    );
+          {org: orgURL,
+           tag: dataOption,
+           start: start_date_ms,
+           stop: stop_date_ms},
+          function (unresponded_issues) {
+              $("#response-issues-parent").html("").html(unresponded_issues);
+          });
 
     // GET TOP 10 RISING ISSUES FOR PERIOD
-    $.get("/customunderdogissues/",{org: orgURL, tag: dataOption, start: start_date_ms, stop: stop_date_ms},
-        function (rising_issues) {
-            $("#rising-issues-parent").html("").html(rising_issues);
-        }
-    );
+    $.get("/customunderdogissues/",
+          {org: orgURL,
+           tag: dataOption,
+           start: start_date_ms,
+           stop: stop_date_ms},
+          function (rising_issues) {
+              $("#rising-issues-parent").html("").html(rising_issues);
+          });
 
     /*var issueURL = "/custom_data/"+orgURL+"/"+start_date_ms+"/"+stop_date_ms;
     $.ajax({
@@ -237,7 +241,7 @@ function get_org_url() {
     var url = window.location.href;
 
     var orgURL = url.split("/")[3];
-   
+
     //need to add a callback to db to verify this is actually an org
     return orgURL;
 };

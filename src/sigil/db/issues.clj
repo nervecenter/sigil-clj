@@ -23,9 +23,9 @@
         user (get-user-by-id (:user_id issue))]
     (assoc issue :poster user)))
 
-(defn get-issue-insert-id
-  [issue]
-  (first (sql/query db/spec ["SELECT issue_id FROM issues WHERE title = ? AND text = ?" (:title issue) (:text issue)])))
+(defn get-issue-by-user-and-title
+  [user title]
+  (first (sql/query db/spec ["SELECT * FROM issues WHERE title = ? AND user_id = ?" title (:user_id user)])))
 
 (defn get-hottest-issues-by-org
   [org]
@@ -62,6 +62,10 @@
 (defn issue-view-inc
   [db-conn [issue_id]]
   (sql/execute! db-conn ["UPDATE issues SET views = array_append(views, LOCALTIMESTAMP), times_viewed = 1 + times_viewed WHERE issue_id = ?" issue_id]))
+
+(defn issue-set-responded
+  [db-conn [issue]]
+  (sql/execute! db-conn ["UPDATE issues SET responded = TRUE WHERE issue_id = ?" (:issue_id issue)]))
 
 (defn issue-voted
   "Increments issues total_votes and sets last_voted to current time."

@@ -28,10 +28,7 @@
                          user-org
                          (str "Sigil - " (:org_name org))
                          (org-page-body req user org tags issues))))
-      (not-found-handler req)
-      ;;{:status 302
-      ;; :headers {"Location" "/404"}}
-      )))
+      (not-found-handler req))))
 
 (defn org-page-body [req user org tags issues]
   (html
@@ -56,7 +53,8 @@
          [:a#new-feedback-button.btn.btn-primary.pull-right
           {:style "padding:4px 9px"}
           "Submit this as new feedback"]
-         (label {:class "pull-right" :style "margin:5px 10px;"} "new-feedback" "Has nobody posted what you're suggesting?")]]]]
+         (label {:class "pull-right" :style "margin:5px 10px;"} "new-feedback" "Has nobody posted what you're suggesting?")]
+        (hidden-field "org-id" (:org_id org))]]]
      [:div#issues
       (for [i issues]
         (issue-partial (:uri req) i org user true))]]

@@ -13,7 +13,7 @@
            :content "width=device-width, initial-scale=1.0"}]
 
    [:link {:rel "shortcut icon"
-           :href "images/favicon.png"}]
+           :href "/images/favicon.png"}]
 
    (include-css "/css/jquery-ui-1.9.2.custom.css"
                 "/css/bootstrap-flatly.css"
@@ -41,13 +41,13 @@
      [:div#collapser.navbar-collapse.collapse
       (form-to
        {:class "navbar-form navbar-left"}
-       [:post "/search"]
+       [:get "/search"]
        [:div.form-group {:style "width:100%;"}
         (text-field {:id "site-search-box"
                      :data-provide "typeahead"
                      :class "form-control typeahead"
-                     :placeholder "Search for a company, person, or product"}
-                    "search-term")])
+                     :placeholder "Search for a restaurant"}
+                    "search")])
       ;; Logged in part
       (if (some? user)
         (html
@@ -87,7 +87,7 @@
          ;;   [:a {:href (str "/orgregister")} "Sign Up Your Resturant"]]]
          [:ul.nav.navbar-nav.navbar-right
           [:li
-           [:a {:href (str "/login?return=" uri)}]]]))]]]))
+           [:a {:href (str "/login?return=" uri)} "Log In"]]]))]]]))
 
 (defn render
   "Renders the default layout with navbar and footer. Expects the request, the current user or nil, the user's org or nil, the title of the page, and the body of the page usually rendered somewhere in the page view."

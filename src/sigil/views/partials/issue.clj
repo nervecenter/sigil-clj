@@ -14,32 +14,33 @@
   ([uri issue user in-panel?]
    (issue-partial uri issue (get-org-by-issue issue) user in-panel?))
   ([uri issue issue-org user in-panel?]
-  ;; We need: The issue, whether the user is authed, and whether they voted
-  (let [authenticated? (some? user)
-        user-voted? (if authenticated?
-                      (user-voted-on-issue? user issue)
-                      false)
-        issue-user (get-user-by-issue issue)]
-    (if in-panel?
-      ;; We need: a response
-      (issue-panel uri
-                   user
-                   issue
-                   issue-org
-                   issue-user
-                   authenticated?
-                   user-voted?
-                   (get-latest-official-response-by-issue issue))
-      (issue-without-panel uri
-                           user
-                           issue
-                           issue-org
-                           issue-user
-                           authenticated?
-                           user-voted?)))))
+   ;; We need: The issue, whether the user is authed, and whether they voted
+   (let [authenticated? (some? user)
+         user-voted? (if authenticated?
+                       (user-voted-on-issue? user issue)
+                       false)
+         issue-user (get-user-by-issue issue)]
+     (if in-panel?
+       ;; We need: a response
+       (issue-panel uri
+                    user
+                    issue
+                    issue-org
+                    issue-user
+                    authenticated?
+                    user-voted?
+                    (:responded issue)
+                    (get-latest-official-response-by-issue issue))
+       (issue-without-panel uri
+                            user
+                            issue
+                            issue-org
+                            issue-user
+                            authenticated?
+                            user-voted?)))))
 
-(defn issue-panel [uri user issue issue-org issue-user authenticated? user-voted? response]
-  [(if (and (:responded issue) (some? response))
+(defn issue-panel [uri user issue issue-org issue-user authenticated? user-voted? responded? latest-response]
+  [(if responded?
      :div.panel.panel-info.issue-panel-partial
      :div.panel.panel-default.issue-panel-partial)
    (issue-without-panel uri
@@ -49,12 +50,12 @@
                         issue-user
                         authenticated?
                         user-voted?)
-   (if (and (:responded issue) (some? response))
+   (if responded?
      [:div.panel-footer
       [:b "Response: "]
-      (if (> (count (:text response)) 100)
-        [:span (str (subs (:text response) 0 100) "...")]
-        [:span {:text response}])])])
+      (if (> (count (:text latest-response)) 100)
+        [:span (str (subs (:text latest-response) 0 100) "...")]
+        [:span (:text latest-response)])])])
 
 (defn issue-without-panel [uri user issue issue-org issue-user authenticated? user-voted?]
   [:div.panel-body
@@ -80,14 +81,14 @@
       [:img.issue-panel-icon {:src (:icon_30 issue-org)}]
       [:a {:href (str "/" (:org_url issue-org))} (:org_name issue-org)]]
      [:p.pull-right
-      (str "Posted at " (clj-time.coerce/to-local-date (:created_at issue)) " by ") 
+      (str "Posted at " (clj-time.coerce/to-local-date (:created_at issue)) " by ")
       [:img {:src (:icon_30 issue-user)}]
       (:username issue-user)
-      [:br]
       (if (auth/user-has-role? user :site-admin)
         [:form {:method "post" :action "/deleteissue"}
          (hidden-field "org-id" (:org_id issue-org))
          (hidden-field "issue-id" (:issue_id issue))
-         (submit-button {:class "btn btn-primary"
+         (submit-button {:class "btn btn-xs btn-primary"
                          :id "delete-issue"}
-                        "Delete Issue")])]]]])
+                        "Delete Issue")])
+      ]]]])

@@ -11,8 +11,9 @@
         user-org (user-org-or-nil  user)
         search-query ((:query-params req) "search")
         orgs nil;(get-orgs-by-name search-query)
-        topics nil;(get-topics-by-name search-query)
-        tags nil;(get-tags-with-orgs-by-name search-query)
+        issues nil
+        ;;topics nil;(get-topics-by-name search-query)
+        ;;tags nil;(get-tags-with-orgs-by-name search-query)
         ;;users (get-users-by-name search-query)
         ]
     (layout/render req
@@ -20,17 +21,16 @@
                    user-org
                    (str "Sigil - Search for " search-query)
                    (search-page-body (:uri req)
+                                     user
                                      orgs
-                                     topics
-                                     tags
+                                     issues
+                                     ;;topics
+                                     ;;tags
                                      ;;users
                                      ))))
 
-(defn search-page-body [uri
-                        orgs
-                        topics
-                        tags
-                        ;;users
+(defn search-page-body [uri user orgs issues
+                        ;;topics tags users
                         ]
   [:div.column.maxw-1000
    [:div.row
@@ -46,30 +46,30 @@
               [:div.media-body
                [:h3 [:a {:href (:org_url o)} (:org_name o)]]]]
             [:hr]))
-         [:p "No organizations, companies or people matching your search."])]]
+         [:p "No organizations, companies or people matching your search."])]]]
+    [:div.col-lg-6
      [:h3 "Issues"]
      [:div.panel.panel-default
       [:div.panel-body
-       ;; (if (not-empty issues)
-       ;;   (for [i issues]
-       ;;     (html (issue-partial uri i user true)
-       ;;          [:hr]))
-       ;;   [:p "No issues matching your search."])
-       ]]]
-    [:div.col-lg-6
-     [:h3 "Tags"]
-     [:div.panel.panel-default
-      [:div.panel-body
-       (if (not-empty tags)
-         (for [t tags]
-           (html [:div.media
-              [:div.media-left
-               [:img.media-object {:src (str "/" (:icon_100 (:org t)))}]]
-              [:div.media-body
-               [:h3
-                [:a {:href (:org_url (:org t))} (:org_name (:org t))]
-                [:span.label.label-default.pull-right
-                 [:img {:src (str "/" (:icon_30 t))}]
-                 (:tag_name t)]]]]
-            [:hr]))
-         [:p "No tags matching your search."])]]]]])
+       (if (not-empty issues)
+         (for [i issues]
+           (html (issue-partial uri i user true)
+                 [:hr]))
+         [:p "No issues matching your search."])]]
+     ;; [:h3 "Tags"]
+     ;; [:div.panel.panel-default
+     ;;  [:div.panel-body
+     ;;   (if (not-empty tags)
+     ;;     (for [t tags]
+     ;;       (html [:div.media
+     ;;          [:div.media-left
+     ;;           [:img.media-object {:src (str "/" (:icon_100 (:org t)))}]]
+     ;;          [:div.media-body
+     ;;           [:h3
+     ;;            [:a {:href (:org_url (:org t))} (:org_name (:org t))]
+     ;;            [:span.label.label-default.pull-right
+     ;;             [:img {:src (str "/" (:icon_30 t))}]
+     ;;             (:tag_name t)]]]]
+     ;;        [:hr]))
+     ;;     [:p "No tags matching your search."])]]
+     ]]])
