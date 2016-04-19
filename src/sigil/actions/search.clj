@@ -11,12 +11,12 @@
 (defn auto-complete-search
   [req]
   (let [matched (get-five-orgs-by-term (:term (:query-params req)))]
-    (println matched)
+    ;;(println matched)
     (let [sorted (sort-by :leven (map #(hash-map :label (:org_name %)
                                                  :value (:org_url %)
                                                  :leven (:levenshtein %))
                                       matched))]
-      (println sorted)
+      ;;(println sorted)
       (json/generate-string sorted))))
 
 ;; (for [org matched
