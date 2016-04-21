@@ -12,10 +12,11 @@
   [req]
   (let [matched (get-five-orgs-by-term (:term (:query-params req)))]
     ;;(println matched)
-    (let [sorted (sort-by :leven (map #(hash-map :label (:org_name %)
-                                                 :value (:org_url %)
-                                                 :leven (:levenshtein %))
-                                      matched))]
+    (let [sorted (sort-by :leven
+                          (map #(hash-map :label (:org_name %)
+                                          :value (:org_url %)
+                                          :leven (:levenshtein %))
+                               matched))]
       ;;(println sorted)
       (json/generate-string sorted))))
 

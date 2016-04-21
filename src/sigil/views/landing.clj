@@ -11,8 +11,14 @@
 
 (defn landing-handler []
   (let [issue-boxes (get-twelve-org-issue-boxes)
-        cols (partition-by (fn [box] (rand-int 3)) issue-boxes)]
-    (landing-page (first cols) (second cols) (get cols 2))))
+        col-size (int (/ (count issue-boxes) 3))
+        [col1 other-two] (split-at col-size issue-boxes)
+        [col2 col3] (split-at col-size other-two)
+        ;;cols (partition-by (fn [box] (rand-int 3)) issue-boxes)
+        ]
+    ;;(landing-page (first cols) (second cols) (get cols 2))
+    (landing-page col1 col2 col3)
+    ))
 
 (defn landing-page [col-1-issues col-2-issues col-3-issues]
   (html5
