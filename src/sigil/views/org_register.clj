@@ -2,6 +2,7 @@
   (:require [hiccup.core :refer [html]]
             [sigil.auth :refer [user-or-nil]]
             [sigil.views.layout :as layout]
+            [sigil.views.partials.navbar :refer [navbar-partial]]
             [sigil.actions.register :as register]
             [sigil.helpers :refer [get-return]]
             [hiccup.page :refer [html5]])
@@ -31,7 +32,7 @@
    (layout/head "Sigil - Org Register")
    [:body.page
     [:div.wrap
-     (layout/navbar (:uri req))
+     (navbar-partial req nil nil)
      [:div.container.main-container
       [:div.row
        (org-register-body  req

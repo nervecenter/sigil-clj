@@ -50,3 +50,10 @@
       (.addBatch s (str "drop database sigildb;"))
       (.addBatch s (str "create database sigildb;"))
       (seq (.executeBatch s)))))
+
+(defn create-db []
+  (sql/with-db-connection [conn "postgresql://localhost:5432/postgres"]
+    (with-open [s (.createStatement (:connection conn))]
+      (.addBatch s (str "create database sigildb;"))
+      (seq (.executeBatch s))))
+  (create-db-tables))

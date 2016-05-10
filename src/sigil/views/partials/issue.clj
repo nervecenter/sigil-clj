@@ -3,6 +3,7 @@
             [sigil.db.officialresponses :refer [get-latest-official-response-by-issue]]
             [sigil.db.orgs :refer [get-org-by-issue]]
             [sigil.db.users :refer [get-user-by-issue]]
+            [sigil.db.tags :refer [get-tag-by-issue]]
             [sigil.auth :as auth]
             [sigil.helpers :refer [get-return]]
             [hiccup.core :refer [html]])
@@ -19,13 +20,15 @@
          user-voted? (if authenticated?
                        (user-voted-on-issue? user issue)
                        false)
-         issue-user (get-user-by-issue issue)]
+         issue-user (get-user-by-issue issue)
+         issue-tag (get-tag-by-issue issue)]
      (if in-panel?
        ;; We need: a response
        (issue-panel uri
                     user
                     issue
                     issue-org
+                    issue-tag
                     issue-user
                     authenticated?
                     user-voted?
@@ -35,11 +38,12 @@
                             user
                             issue
                             issue-org
+                            issue-tag
                             issue-user
                             authenticated?
                             user-voted?)))))
 
-(defn issue-panel [uri user issue issue-org issue-user authenticated? user-voted? responded? latest-response]
+(defn issue-panel [uri user issue issue-org issue-tag issue-user authenticated? user-voted? responded? latest-response]
   [(if responded?
      :div.panel.panel-info.issue-panel-partial
      :div.panel.panel-default.issue-panel-partial)
@@ -47,6 +51,7 @@
                         user
                         issue
                         issue-org
+                        issue-tag
                         issue-user
                         authenticated?
                         user-voted?)
@@ -57,7 +62,7 @@
         [:span (str (subs (:text latest-response) 0 100) "...")]
         [:span (:text latest-response)])])])
 
-(defn issue-without-panel [uri user issue issue-org issue-user authenticated? user-voted?]
+(defn issue-without-panel [uri user issue issue-org issue-tag issue-user authenticated? user-voted?]
   [:div.panel-body
    [:div.media
     [:div.media-object.pull-left.votebutton-box
@@ -79,7 +84,10 @@
                       "/" (:issue_id issue))} (:title issue)]]
      [:p.pull-left
       [:img.issue-panel-icon {:src (:icon_30 issue-org)}]
-      [:a {:href (str "/" (:org_url issue-org))} (:org_name issue-org)]]
+      [:a {:href (str "/" (:org_url issue-org))} (str (:org_name issue-org) " ")]
+      [:span.label.label-pill.label-default
+       ;;[:img.issue-panel-icon {:src (:icon_30 issue-tag)}]
+       (:tag_name issue-tag)]]
      [:p.pull-right
       (str "Posted at " (clj-time.coerce/to-local-date (:created_at issue)) " by ")
       [:img {:src (:icon_30 issue-user)}]

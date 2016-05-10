@@ -1,58 +1,47 @@
 (ns sigil.views.partials.navbar
-  (:require [sigil.auth :refer [authenticated?
-                                user-identity
-                                is-user-site-admin?
-                                user-has-role?]]
+  (:require [sigil.auth :refer [user-has-role?]]
+            [sigil.db.notifications :refer [get-number-notifications-by-user]]
             [hiccup.core :refer [html]])
   (:use hiccup.form))
 
 (declare navbar-partial navbar)
 
 (defn navbar-partial [req user user-org]
-  ;; For navbar, we need:
-  ;; the request, for return URI
-  ;; the user, for user controls
-  ;; the user's org, for link to org settings if they're org admin
-  (navbar req user user-org))
-
-(def navbar-header
-  (html
-   [:div.navbar-header
-    [:button.navbar-toggle.collapsed {:type "button"
-                                      :data-toggle "collapse"
-                                      :data-target "#collapser"
-                                      :aria-expanded "false"}
-     [:span.sr-only "Toggle navigation"]
-     [:span.icon-bar]
-     [:span.icon-bar]
-     [:span.icon-bar]]
-    [:a.navbar-brand {:href "/" :style "padding: 10px 15px;height:40px;"}
-     [:img {:alt "Sigil" :src "images/symbol-small.png"}]]
-    [:div.navbar-brand "Beta"]]))
+  (navbar (:uri req) user user-org))
 
 (defn navbar
-  ([req]
-   (navbar req nil nil))
-  ([req user user-org]
+  ([uri] (navbar uri nil nil))
+  ([uri user user-org]
    [:div.navbar.navbar-fixed-top.navbar-default
     [:div.container-fluid
-     navbar-header
+     [:div#navbar-header.navbar-header
+      [:button.navbar-toggle.collapsed {:type "button"
+                                        :data-toggle "collapse"
+                                        :data-target "#collapser"
+                                        :aria-expanded "false"}
+       [:span.sr-only "Toggle navigation"]
+       [:span.icon-bar]
+       [:span.icon-bar]
+       [:span.icon-bar]]
+      [:a.navbar-brand {:href "/" :style "padding: 10px 15px;height:40px;"}
+       [:img {:alt "Sigil" :src "/images/symbol-small.png"}]]
+      [:div.navbar-brand "Beta"]]
      [:div#collapser.navbar-collapse.collapse
       (form-to
        {:class "navbar-form navbar-left"}
-       [:post "/search"]
+       [:get "/search"]
        [:div.form-group {:style "width:100%;"}
         (text-field {:id "site-search-box"
                      :data-provide "typeahead"
                      :class "form-control typeahead"
-                     :placeholder "Search for a company, person, or product"}
-                    "search-term")])
+                     :placeholder "Search for a restaurant"}
+                    "search")])
       ;; Logged in part
       (if (some? user)
         (html
          [:ul.nav.navbar-nav.navbar-right
           [:li
-           [:a {:href (str "/logout?return=" (:uri req))} "Log Out"]]]
+           [:a {:href (str "/logout?return=" uri)} "Log Out"]]]
          [:ul.nav.navbar-nav.navbar-right
           [:li
            [:a {:href "/settings"} (:username user)]]]
@@ -60,18 +49,18 @@
           [:li {:style "position:relative;"}
            [:img#header-user-icon.img-rounded.img-responsive
             {:src (:icon_100 user)
-             :style {:height "40px"
-                     :margin-top "10px"}}]
+             :style "height:40px;margin-top:10px;"}]
            [:img#num-notes-back {:src "/images/num-notes-back.png"}]
-           [:h5#num-notes]]]
+           [:h5#num-notes
+            (get-number-notifications-by-user user)]]]
          (if (some? user-org)
            [:ul.nav.navbar-nav.navbar-right
             [:li
-             [:a {:href (:org_url user-org)} (str (:org_name user-org) " Page")]]
+             [:a {:href (str "/" (:org_url user-org))} (str (:org_name user-org) " Page")]]
             [:li
              [:a {:href "/orgsettings"} (str (:org_name user-org) " Settings")]]]
            nil)
-         (if (is-user-site-admin? user)
+         (if (user-has-role? user :site-admin)
            [:ul.nav.navbar-nav.navbar-right
             [:li
              [:a {:href "/sadmin"}]]]
@@ -80,7 +69,7 @@
         (html
          [:ul.nav.navbar-nav.navbar-right
           [:li
-           [:a {:href (str "/register?return=" (:uri req))} "Sign Up"]]]
+           [:a {:href (str "/register?return=" uri)} "Sign Up"]]]
          [:ul.nav.navbar-nav.navbar-right
           [:li
-           [:a {:href (str "/login?return=" (:uri req))}]]]))]]]))
+           [:a {:href (str "/login?return=" uri)} "Log In"]]]))]]]))
