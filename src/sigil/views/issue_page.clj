@@ -6,6 +6,7 @@
             [sigil.db.comments :refer [get-comments-by-issue get-comments-with-commenters-by-issue]]
             [sigil.db.votes :refer [user-voted-on-issue?]]
             [sigil.db.orgs :refer [get-org-by-url]]
+            [sigil.db.tags :refer [get-tag-by-issue]]
             [sigil.views.partials.sidebar :refer [sidebar-partial]]
             )
   (:use [hiccup.form]
@@ -25,6 +26,7 @@
   ;; Each comment should have commenting user for icon, name
   (let [user (user-or-nil req)
         issue (get-issue-with-poster-by-id (read-string (:issue_id (:route-params req))))
+        tag (get-tag-by-issue issue)
         org (get-org-by-url (:org_url (:route-params req)))]
     (do (sigil.db.core/db-trans [sigil.db.issues/issue-view-inc (:issue_id issue)])
       (layout/render
@@ -34,6 +36,7 @@
        (str "Sigil - " (:title issue))
        (issue-page-body user
                         issue
+                        tag
                         org
                         (some? user)
                         (if (some? user)
@@ -44,7 +47,7 @@
                         )))))
 
 (defn issue-page-body
-  [user issue org authenticated? user-voted? responses comments]
+  [user issue tag org authenticated? user-voted? responses comments]
   (html
    [:div.col-md-9.col-lg-9
     [:img.img-rounded.img-responsive.org-banner-small
@@ -74,7 +77,10 @@
         [:h4.media-heading (:title issue)]
         [:p.pull-left
          [:img.issue-panel-icon {:src (:icon_30 org)}]
-         [:a {:href (str "/" (:org_url org))} (:org_name org)]]
+         [:a {:href (str "/" (:org_url org))} (str (:org_name org) " ")]
+         [:span.label.label-pill.label-default
+          ;;[:img.issue-panel-icon {:src (:icon_30 tag)}]
+          (:tag_name tag)]]
         [:p.pull-right
          "Posted by "
          (:username (:poster issue))

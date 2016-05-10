@@ -49,6 +49,11 @@
                      :class "form-control org-feedback-input-box"
                      :data-orgid (:org_id org)}
                     "title")]
+        [:div#tag-select-group.form-group
+         (label {:id "tag-label"} "tag" "Tag your feedback.")
+         [:select.form-control {:name "tag" :id "tag-select"}
+          (for [t tags]
+            [:option {:value (:tag_id t)} (:tag_name t)])]]
         [:div#new-feedback-group.form-group
          [:a#new-feedback-button.btn.btn-primary.pull-right
           {:style "padding:4px 9px"}

@@ -76,9 +76,9 @@
   (html
    [:div.panel.panel-default
     [:div.panel-body
-     [:a {:href "/companies"} "Browse agencies on Sigil"]
+     [:a {:href "/companies"} "Browse gov't offices on Sigil"]
      [:hr.sidebar-divider]
-     [:a {:href "/features"} [:b "Sigil for your agency"]]]]))
+     [:a {:href "/features"} [:b "Sigil for your office"]]]]))
 
 ;;(defn favorites-box [user-favorites]
 ;;  [:div.panel.panel-default

@@ -118,8 +118,8 @@
                   :placeholder "Search for a company, person, or product"
                   :style "width:100%;"}]])]]
     [:div.row.small-links
-     [:a {:href "features"} "See how Sigil can revamp feedback for your agency"]
+     [:a {:href "features"} "See how Sigil can revamp feedback for your public office"]
      " | "
      [:a {:href "register"} "Start giving your own feedback"]
      " | "
-     [:a {:href "companies"} "See all the agencies on Sigil"]]]])
+     [:a {:href "companies"} "See all the offices and agencies on Sigil"]]]])

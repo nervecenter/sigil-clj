@@ -34,7 +34,7 @@
         (text-field {:id "site-search-box"
                      :data-provide "typeahead"
                      :class "form-control typeahead"
-                     :placeholder "Search for a restaurant"}
+                     :placeholder "Search for a government organization"}
                     "search")])
       ;; Logged in part
       (if (some? user)

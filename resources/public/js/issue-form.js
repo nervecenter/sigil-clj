@@ -1,4 +1,4 @@
-﻿$("#product-select-group").hide();
+﻿$("#tag-select-group").hide();
 
 /*$("#issues-by-org-search").keyup(function () {
     $("#new-feedback-group").show();
@@ -14,7 +14,7 @@ $("#new-feedback-button").click(function () {
         .html("Title");
     $("#suggest-label").replaceWith($newlabel);
     $("#new-feedback-group").remove();
-    $("#product-select-group").show();
+    $("#tag-select-group").show();
 
     var $textlabel = $("<label>")
         .attr("for", "text")

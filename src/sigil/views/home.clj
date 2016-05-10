@@ -29,12 +29,15 @@
       [:br]
       [:p.empty-home-text "Here's the latest feedback on Sigil."]
       [:br]
-      [:p.empty-home-text "Want to find companies? Use the " [:b "search bar"] " up top, or just " [:b [:a {:href "/companies"} "browse all companies on Sigil"]] "."]]]
+      [:p.empty-home-text "Want to find public offices? Use the " [:b "search bar"] " up top, or just " [:b [:a {:href "/companies"} "browse all gov't offices on Sigil"]] "."]]]
     [:div.panel.panel-info
      [:div.panel-body
       [:h4 {:style "margin-top:10px;"} "Issues you've posted:"]]]
-    (for [i user-issues]
-      (issue-partial uri i user true))
+    (if (empty? user-issues)
+      [:p {:style "margin-bottom:50px;"}
+       "You haven't posted any feedback yet. Search for an office and help change things!"]
+      (for [i user-issues]
+        (issue-partial uri i user true)))
     (for [box issue-boxes]
       (html
        [:div.panel.panel-default
