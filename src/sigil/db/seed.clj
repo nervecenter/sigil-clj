@@ -94,6 +94,10 @@
                 :tag_name "College of Engineering"
                 :org_id 2
                 :icon_30 (rand-nth db/default_icon_30)}
+               {:tag_id 5
+                :tag_name "Library"
+                :org_id 2
+                :icon_30 (rand-nth db/default_icon_30)}
                ;; Hillsborough
                {:tag_id 3
                 :tag_name "Transportation & Roads"
@@ -102,6 +106,24 @@
                {:tag_id 4
                 :tag_name "Education & Schools"
                 :org_id 3
+                :icon_30 (rand-nth db/default_icon_30)}
+               ;; Tampa
+               {:tag_id 6
+                :tag_name "Transportation & Roads"
+                :org_id 4
+                :icon_30 (rand-nth db/default_icon_30)}
+               {:tag_id 7
+                :tag_name "Utilities"
+                :org_id 4
+                :icon_30 (rand-nth db/default_icon_30)}
+               ;; Gus Bilirakis
+               {:tag_id 8
+                :tag_name "House Bills & Votes"
+                :org_id 5
+                :icon_30 (rand-nth db/default_icon_30)}
+               {:tag_id 9
+                :tag_name "Federal Programs"
+                :org_id 5
                 :icon_30 (rand-nth db/default_icon_30)}
                ])
 
@@ -118,23 +140,59 @@
                  {:org_id 2
                   :user_id 1
                   :tag_id 1
-                  :title "There should be an additional sidewalk crossing the grass east of Engineering."
+                  :total_votes 397
+                  :title "Build an additional sidewalk crossing the grass east of Engineering from the bus stop."
                   :text ipsum}
                  {:org_id 2
                   :user_id 2
                   :tag_id 2
-                  :title "USF should participate in more engineering competitions such as robotics."
+                  :total_votes 578
+                  :title "Engage in more engineering competitions such as robotics and computer vision."
+                  :text ipsum}
+                 {:org_id 2
+                  :user_id 2
+                  :tag_id 5
+                  :total_votes 275
+                  :title "Install programming tools such as Visual Studio on the Digital Media Commons computers."
                   :text ipsum}
                  ;; Hillsborough
                  {:org_id 3
                   :user_id 1
                   :tag_id 3
+                  :total_votes 1664
                   :title "Hillsborough should prioritize welcoming a self-driving taxi fleet to act as public transit."
                   :text ipsum}
                  {:org_id 3
                   :user_id 2
                   :tag_id 4
+                  :total_votes 2802
                   :title "Schools should be incentivized to help children learn, rather than meet arbitrary grade requirements that take time away from legitimate learning."
+                  :text ipsum}
+                 ;; Tampa
+                 {:org_id 4
+                  :user_id 1
+                  :tag_id 6
+                  :total_votes 3756
+                  :title "Place signs downtown and on route to it which warn of high traffic due to events."
+                  :text ipsum}
+                 {:org_id 4
+                  :user_id 2
+                  :tag_id 7
+                  :total_votes 4200
+                  :title "Trash pickup needs to happen farther in from the curb, bins fall in the street too often."
+                  :text ipsum}
+                 ;; Gus Bilirakis
+                 {:org_id 5
+                  :user_id 1
+                  :tag_id 8
+                  :total_votes 3797
+                  :title "Vote no on government warrantless spy program extensions, and please find a way to repeal existing programs."
+                  :text ipsum}
+                 {:org_id 5
+                  :user_id 2
+                  :tag_id 9
+                  :total_votes 3031
+                  :title "Refuse funding from federal programs which strong-arm state and district policy."
                   :text ipsum}
                  ])
 
@@ -153,7 +211,23 @@
     :text "Money printers are expensive. Who'll pay for it?"}
    {:issue_id 2
     :user_id 1
-    :text "I think they should pay for it if they really want it."}])
+    :text "I think they should pay for it if they really want it."}
+   ;; USF sidewalk issue
+   {:issue_id 3
+    :user_id 1
+    :text "Yes! Take it from the bus stop to the parking lot at the south of engineering."}
+   ;; USF engineering issue
+   {:issue_id 4
+    :user_id 2
+    :text "Maybe USF should help find funding for winners, and endorse them."}
+   ;; USF programming tools issue
+   {:issue_id 5
+    :user_id 1
+    :text "Please install Emacs, Java, and Clojure. They're the most useful to me."}
+   {:issue_id 5
+    :user_id 2
+    :text "I'd like a copy of the Godot Engine installed if it's possible."}
+   ])
 
 ;;There needs be a matching vote seed for every issue seed
 (def vote_seed [{:user_id 1
@@ -194,6 +268,10 @@
                  :icon_100 "/db_imgs/org/usf_100.png"
                  :roles [1]
                  :org_id 2}
+                {:email "visitor@usf.edu"
+                 :username "Visitor"
+                 :pass_hash (buddy.hashers/encrypt "visitor")
+                 :icon_100 (str (rand-nth db/default_icon_100))}
                 ])
 
 (def topic_seed [{:topic_url "testtopic"

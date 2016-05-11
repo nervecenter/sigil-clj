@@ -115,7 +115,7 @@
                [:div.form-group {:style "width:100%;"}
                 [:input#site-search-box.form-control
                  {:type "text" :autocomplete "off"
-                  :placeholder "Search for a company, person, or product"
+                  :placeholder "Search for an organization or person"
                   :style "width:100%;"}]])]]
     [:div.row.small-links
      [:a {:href "features"} "See how Sigil can revamp feedback for your public office"]
