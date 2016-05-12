@@ -10,8 +10,8 @@
             [sigil.views.partials.issue :refer [issue-partial]])
   (:use [hiccup.form]
         [hiccup.core]
-        [hiccup.page]
-        ))
+        [hiccup.page]))
+        
 
 (declare org-data-page)
 
@@ -46,7 +46,7 @@
                                       top-issues
                                       top-unresponded-issues
                                       top-rising-issues)))
-      (not-found-handler req))))
+      (not-found-handler req "Non-org-admin user attempted to access org data page."))))
 
 (defn org-data-page [uri
                      user
@@ -107,10 +107,10 @@
                       :selected "selected"} "Pick chart data"]
             [:option {:value "Views"} "Views"]
             [:option {:value "Votes"} "Votes"]
-            [:option {:value "Comments"} "Comments"]
+            [:option {:value "Comments"} "Comments"]]
             ;[:option {:value "Follows"} "Follows"]
             ;[:option {:value "All"} "All"]
-          ]
+          
          (text-field {:id "dpstart"
                       :class "form-control pull-left"}
                      "start-date"
@@ -134,6 +134,6 @@
          [:h4#data-header "Top new and rising issues"]
          [:div#top-rising-issues-parent
           (for [i top-rising-issues]
-            (issue-partial uri i org user true))]]]]]]]
+            (issue-partial uri i org user true))]]]]]]]))
    ;(include-js "/js/graph.js")
-   ))
+   

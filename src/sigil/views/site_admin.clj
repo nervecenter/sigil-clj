@@ -34,7 +34,7 @@
                        user-org
                        "Sigil - Site Administration"
                        (site-admin-body all-orgs roles errors)))
-     (not-found-handler req))))
+     (not-found-handler req "Non-site-admin user attempted to access site admin page."))))
 
 (defn site-admin-body [all-orgs roles errors]
   [:div.container.settings-container

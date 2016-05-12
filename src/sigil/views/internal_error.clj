@@ -1,16 +1,15 @@
-(ns sigil.views.not-found
+(ns sigil.views.internal-error
   (:require [hiccup.core :refer [html]]
             [sigil.views.layout :as layout]
             [sigil.auth :refer [user-or-nil]]
             [sigil.db.core :as db]
             [sigil.db.orgs :refer [get-org-by-user]]))
 
-(declare not-found-handler not-found-body)
+(declare internal-error-handler internal-error-body)
 
-(defn not-found-handler 
-  ([req] (not-found-handler req "Path not found 404."))
-  ([req message]
-    (let [user (user-or-nil req)
+(defn internal-error-handler [req message]
+  ;; Maybe we want to log the req that led to the 404?
+  (let [user (user-or-nil req)
         user-org (get-org-by-user user)]
     (do (db/create-error {:error_message message
                           :additional_info (str req)
@@ -18,14 +17,16 @@
       (layout/render req
                      user
                      user-org
-                     "Sigil - 404 Not Found"
-                     not-found-body)))))
+                     "Sigil - 500 Internal Server Error"
+                     internal-error-body))))
 
-(def not-found-body
+(defn internal-error-body [message]
   (html
    [:div.col-md-4.col-md-offset-4
-    [:h2 "404 - Not found :("]
+    [:h2 "500 - Internal Server Error"]
+    [:h4 "Here's what went wrong:"]
+    [:h3 message]
     [:h3
-     "Maybe you'd like to head back "
+     "Don't worry, we've logged it and are looking into it. Maybe you'd like to head back "
      [:a {:href "/"} "home"]
      "?"]]))

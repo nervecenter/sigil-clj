@@ -3,7 +3,8 @@
             [sigil.db.issues :as issues]
             [sigil.db.orgs :as orgs]
             [sigil.auth :as auth]
-            [sigil.db.votes :as votes]))
+            [sigil.db.votes :as votes]
+            [sigil.views.internal-error :refer [internal-error-handler]]))
 
 (def not-nil? (complement nil?))
 
@@ -30,8 +31,7 @@
        :headers {"Location" (str "/" (:org_url issue-org)
                                  "/" (:issue_id (issues/get-issue-by-user-and-title user (:title new-issue))))}}
       ;;else redirect and let them know whats wrong....
-      {:status 302
-       :headers {"Location" "/404"}}
+      (internal-error-handler req "Error uploading user's issue.")
       )))
 
 (defn delete-issue-post

@@ -28,7 +28,7 @@
                          user-org
                          (str "Sigil - " (:org_name org))
                          (org-page-body req user org tags issues))))
-      (not-found-handler req))))
+      (not-found-handler req "No such org found."))))
 
 (defn org-page-body [req user org tags issues]
   (html

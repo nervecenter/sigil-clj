@@ -3,7 +3,8 @@
             [sigil.auth :as auth]
             [sigil.db.issues :refer [get-issue-by-id issue-set-responded]]
             [sigil.db.core :as db]
-            [sigil.helpers :as help]))
+            [sigil.helpers :as help]
+            [sigil.views.internal-error :refer [internal-error-handler]]))
 
 (defn post-official-response
   [req]
@@ -28,8 +29,7 @@
                             (vec (help/get-all-users-of-issue issue))))
         {:status 302
          :headers {"Location" return}})
-      {:status 302
-       :headers {"Location" "/404"}})))
+      (internal-error-handler req "There was an error uploading your official response."))))
 
 (defn vote-helpful
   [req]

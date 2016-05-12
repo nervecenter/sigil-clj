@@ -22,6 +22,7 @@
             [sigil.views.user-register :refer [user-register-get user-register-post]]
             [sigil.views.org-register :refer [org-register-get org-register-post]]
             [sigil.views.not-found :refer [not-found-handler]]
+            [sigil.views.internal-error :refer [internal-error-handler]]
             [sigil.views.org-data :refer [org-data-handler]]
             [sigil.views.search-page :refer [search-page-handler]]
             [sigil.views.site-admin :refer [site-admin-handler]]
@@ -64,9 +65,7 @@
   (GET "/customtopissues" req (data-actions/custom-top-issues req))
   (GET "/customunrespondedissues" req (data-actions/custom-unresponded-issues req))
   (GET "/customunderdogissues" req (data-actions/custom-underdog-issues req))
-  (GET "/orgsettings" req (if (authenticated? req)
-                            (org-settings-handler req)
-                            (not-found-handler req)))
+  (GET "/orgsettings" req (org-settings-handler req))
   (POST "/orgbanner" req (if (authenticated? req)
                             (image-actions/update-org-banner req)
                             {:status 403}))
@@ -107,8 +106,8 @@
     (GET "/" req (org-page-handler req))
     (GET "/data" req (org-data-handler req))
     (GET "/responses" req (org-responses-handler req))
-    (GET "/:issue_id{[0-9]+}" req (issue-page-handler req))
-    )
+    (GET "/:issue_id{[0-9]+}" req (issue-page-handler req)))
+    
   (POST "/voteup" req (issue-actions/vote-issue req))
   (POST "/unvoteup" req (issue-actions/unvote-issue req))
   ;(GET "/vote/:issue_id/:comment_id" req (comment-actions/vote-comment req))
@@ -124,8 +123,8 @@
       (wrap-not-modified)
       (wrap-cookies)
       (wrap-params)
-      (wrap-multipart-params)
-      ))
+      (wrap-multipart-params)))
+      
 
 (def server-options {:port 8080})
 
