@@ -18,15 +18,17 @@
                      user
                      user-org
                      "Sigil - 500 Internal Server Error"
-                     internal-error-body))))
+                     (internal-error-body message)))))
 
 (defn internal-error-body [message]
   (html
    [:div.col-md-4.col-md-offset-4
     [:h2 "500 - Internal Server Error"]
     [:h4 "Here's what went wrong:"]
-    [:h3 message]
-    [:h3
+    [:br]
+    [:h4 [:b message]]
+    [:br]
+    [:h4
      "Don't worry, we've logged it and are looking into it. Maybe you'd like to head back "
      [:a {:href "/"} "home"]
      "?"]]))
