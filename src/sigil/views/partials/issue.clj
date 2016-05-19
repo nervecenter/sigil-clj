@@ -4,6 +4,7 @@
             [sigil.db.orgs :refer [get-org-by-issue]]
             [sigil.db.users :refer [get-user-by-issue]]
             [sigil.db.tags :refer [get-tag-by-issue]]
+            [sigil.db.reports :refer [user-reported-issue?]]
             [sigil.auth :as auth]
             [sigil.helpers :refer [get-return]]
             [hiccup.core :refer [html]])
@@ -92,6 +93,16 @@
       (str "Posted at " (clj-time.coerce/to-local-date (:created_at issue)) " by ")
       [:img {:src (:icon_30 issue-user)}]
       (:username issue-user)
+      " "
+      (if (and (some? user)
+               (user-reported-issue? user issue))
+        [:span.glyphicon.glyphicon-flag.reported
+         {:data-issueid (:issue_id issue)
+          :aria-hidden "true"}]
+        [:span.glyphicon.glyphicon-flag.unreported
+         {:data-issueid (:issue_id issue)
+          :aria-hidden "true"}]
+        )
       (if (auth/user-has-role? user :site-admin)
         [:form {:method "post" :action "/deleteissue"}
          (hidden-field "org-id" (:org_id issue-org))

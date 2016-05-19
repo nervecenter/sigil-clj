@@ -4,6 +4,7 @@
             [sigil.db.orgs :as orgs]
             [sigil.auth :as auth]
             [sigil.db.votes :as votes]
+            [sigil.db.reports :as reports]
             [sigil.views.internal-error :refer [internal-error-handler]]))
 
 (def not-nil? (complement nil?))
@@ -75,3 +76,31 @@
          [issues/issue-unvoted issue])
         {:status 200})
       {:status 403})))
+
+
+(defn report-issue
+  [req]
+  (let [issue (issues/get-issue-by-id (read-string (:issue_id (:params req))))
+        user (auth/user-or-nil req)]
+    (if (not (reports/user-reported-issue? user issue))
+      (do
+        (db/db-trans [reports/create-report {:user_id (:user_id user)
+                                           :issue_id (:issue_id issue)}])
+        {:status 200})
+      {:status 500
+       :headers {"Content-Type" "text/plain"}
+       :body "User tried to report issue; report already found."})))
+
+(defn unreport-issue
+  [req]
+  (let [issue (issues/get-issue-by-id (read-string (:issue_id (:params req))))
+        user (auth/user-or-nil req)
+        report (reports/get-report-by-user-and-issue user issue)]
+    (if (some? report)
+      (do
+        (db/db-trans
+         [reports/delete-report report])
+        {:status 200})
+      {:status 500
+       :headers {"Content-Type" "text/plain"}
+       :body "User tried to unreport issue; no report exists."})))

@@ -107,9 +107,10 @@
     (GET "/data" req (org-data-handler req))
     (GET "/responses" req (org-responses-handler req))
     (GET "/:issue_id{[0-9]+}" req (issue-page-handler req)))
-    
   (POST "/voteup" req (issue-actions/vote-issue req))
   (POST "/unvoteup" req (issue-actions/unvote-issue req))
+  (POST "/report" req (issue-actions/report-issue req))
+  (POST "/unreport" req (issue-actions/unreport-issue req))
   ;(GET "/vote/:issue_id/:comment_id" req (comment-actions/vote-comment req))
   ;(GET "/unvote/:issue_id/:comment_id" req (comment-actions/unvote-comment req))
   (ANY "*" req (not-found-handler req))
