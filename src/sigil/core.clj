@@ -125,7 +125,6 @@
       (wrap-cookies)
       (wrap-params)
       (wrap-multipart-params)))
-      
 
 (def server-options {:port 8080})
 

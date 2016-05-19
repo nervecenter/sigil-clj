@@ -4,7 +4,7 @@
             [sigil.db.orgs :refer [get-org-by-issue]]
             [sigil.db.users :refer [get-user-by-issue]]
             [sigil.db.tags :refer [get-tag-by-issue]]
-            [sigil.db.reports :refer [user-reported-issue?]]
+            [sigil.db.reports :refer [user-reported-issue? get-number-reports-by-issue]]
             [sigil.auth :as auth]
             [sigil.helpers :refer [get-return]]
             [hiccup.core :refer [html]])
@@ -61,7 +61,20 @@
       [:b "Response: "]
       (if (> (count (:text latest-response)) 100)
         [:span (str (subs (:text latest-response) 0 100) "...")]
-        [:span (:text latest-response)])])])
+        [:span (:text latest-response)])])
+   (if (= (:org_id user) (:org_id issue-org))
+     [:div.panel-footer
+      (if (auth/user-has-role? user :site-admin)
+        [:form {:method "post" :action "/deleteissue"}
+         (hidden-field "org-id" (:org_id issue-org))
+         (hidden-field "issue-id" (:issue_id issue))
+         (submit-button {:class "btn btn-xs btn-primary"
+                         :id "delete-issue"}
+                        "Delete Issue")])
+      [:span.label.label-default
+       (str (get-number-reports-by-issue issue) " Reports")]])
+
+      ])
 
 (defn issue-without-panel [uri user issue issue-org issue-tag issue-user authenticated? user-voted?]
   [:div.panel-body
@@ -103,11 +116,11 @@
          {:data-issueid (:issue_id issue)
           :aria-hidden "true"}]
         )
-      (if (auth/user-has-role? user :site-admin)
-        [:form {:method "post" :action "/deleteissue"}
-         (hidden-field "org-id" (:org_id issue-org))
-         (hidden-field "issue-id" (:issue_id issue))
-         (submit-button {:class "btn btn-xs btn-primary"
-                         :id "delete-issue"}
-                        "Delete Issue")])
+      ;; (if (auth/user-has-role? user :site-admin)
+      ;;   [:form {:method "post" :action "/deleteissue"}
+      ;;    (hidden-field "org-id" (:org_id issue-org))
+      ;;    (hidden-field "issue-id" (:issue_id issue))
+      ;;    (submit-button {:class "btn btn-xs btn-primary"
+      ;;                    :id "delete-issue"}
+      ;;                   "Delete Issue")])
       ]]]])

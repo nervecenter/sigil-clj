@@ -16,7 +16,7 @@
     background-color: transparent;
 }
 
-.panel-footer {
+.panel-info > .panel-footer {
     background-color: rgba(99, 178, 198, 0.62);
 }
 
