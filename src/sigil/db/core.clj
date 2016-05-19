@@ -11,10 +11,10 @@
 ;; I wanted to alias this ns in the other model files but I didn't want it to be db/db everywhere
 (def spec "postgresql://localhost:5432/sigildb")
 
-(try
-  (sql/query spec ["CREATE EXTENSION fuzzystrmatch"])
-  (catch Exception e (str "Successfully added fuzzystrmatch: "
-                          (.getMessage e))))
+;; (try
+;;   (sql/query spec ["CREATE EXTENSION fuzzystrmatch"])
+;;   (catch Exception e (str "Successfully added fuzzystrmatch: "
+;;                           (.getMessage e))))
 
 (def default_icon_30 ["/db_imgs/default/default_30.png"])
 (def default_icon_100 ["/db_imgs/default/default100_1.png" "/db_imgs/default/default100_2.png" "/db_imgs/default/default100_3.png" "/db_imgs/default/default100_4.png" "/db_imgs/default/default100_5.png"])

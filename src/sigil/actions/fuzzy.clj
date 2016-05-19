@@ -9,6 +9,7 @@
 
 (def adjacent-bonus 5)
 (def seperator-bonus 10)
+(def captial-match 15)
 (def camel-bonus 10)
 (def leading-letter-penalty -3)
 (def max-leading-letter-penalty -9)
@@ -16,7 +17,7 @@
 
 (def not-nil? (complement nil?))
 
-(defn fuzzy_match_finish
+(defn fuzzy-match-finish
   [fuzzy-map]
   (let [final-score (+ (get fuzzy-map :score)
                        (if (get fuzzy-map :best-letter)
@@ -40,6 +41,9 @@
                                         (not= item-upper
                                               item-lower))
                                  camel-bonus
+                                 0)
+                               (if (= item-char item-upper)
+                                 captial-match
                                  0))]
     (if (>= new-best-letter-score best-letter-score)
       (assoc partial-fuzzy :score (+ score
@@ -84,7 +88,7 @@
                 :best-lower nil
                 :best-letter-score 0}]
     (if (= (:item-idx fuzzy) (count item))
-      (cons (= (:term-idx fuzzy) (count search-term)) (conj (fuzzy_match_finish-bare fuzzy) item))
+      (cons (= (:term-idx fuzzy) (count search-term)) (conj (fuzzy-match-finish fuzzy) item))
       (let [term-idx (:term-idx fuzzy)
             best-letter (:best-letter fuzzy)
             best-lower (:best-lower fuzzy)
@@ -113,7 +117,7 @@
                                 :best-letter-score 0)
                          fuzzy)]
         (recur (if (or next-match re-match)
-                 (next-or-rematch-bare part-fuzzy term-char item-char next-match)
+                 (next-or-rematch part-fuzzy term-char item-char next-match)
                  (assoc part-fuzzy
                         :score (+ (:score part-fuzzy) unmatched-letter-penalty)
                         :prev-matched? false

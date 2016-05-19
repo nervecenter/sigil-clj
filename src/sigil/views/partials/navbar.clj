@@ -32,6 +32,7 @@
        [:get "/search"]
        [:div.form-group {:style "width:100%;"}
         (text-field {:id "site-search-box"
+                     :name "site-search-box"
                      :data-provide "typeahead"
                      :class "form-control typeahead"
                      :placeholder "Search for an organization"}

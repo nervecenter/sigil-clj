@@ -3,41 +3,32 @@
             [clojure.string :as str]
             [sigil.auth :refer [user-or-nil]]
             [sigil.db.issues :as issues]
-            [sigil.db.orgs :refer [get-org-by-id get-five-orgs-by-term]]
+            [sigil.db.orgs :refer [get-org-by-id ;get-five-orgs-by-term
+                                   get-all-orgs]]
             [sigil.views.partials.issue :refer [issue-partial]]
+            [sigil.actions.fuzzy :as search]
             [cheshire.core :as json]
             [hiccup.core :refer [html]]))
 
 (defn auto-complete-search
   [req]
-  (let [matched (get-five-orgs-by-term (:term (:query-params req)))]
-    ;;(println matched)
-    (let [sorted (sort-by :leven
-                          (map #(hash-map :label (:org_name %)
-                                          :value (:org_url %)
-                                          :leven (:levenshtein %))
-                               matched))]
-      ;;(println sorted)
-      (json/generate-string sorted))))
+  (let [all-orgs (get-all-orgs)
+        term (:term (:params req))
+        matched  (take 10
+                       (reverse
+                        (sort-by :score
+                                 (map #(hash-map :label (:org_name (:original %))
+                                                 :value (:org_url (:original %))
+                                                 :score (second (:result %)))
+                                      (filter #(first (:result %))
+                                                    ;(> (second (:result %)) 0)
+                                                    
+                                              (pmap #(hash-map :result (search/fuzzy-wuzzy term (:org_name %))
+                                                               :original %)
+                                                    all-orgs))))))]
+    (do (println matched)
+      (json/generate-string matched))))
 
-;; (for [org matched
-;;       i (range 0 5)]
-;;   {:label (:org_name org)
-;;    :value (:org_url org)
-;;    :index i}))))
-
-;; Old matching scheme
-;; (for [[k v] matched]
-;;   (cond
-;;     (= k :orgs) (for [org matched]
-;;                   {:label (:org_name org)
-;;                    :value (:org_url org)})
-;;     (= k :tags) (for [tag v]
-;;                   {:label (:tag_name tag)
-;;                    :value (:tag_url tag)})
-;;     (= k :topics) (for [topic v]
-;;                     {:label (:topic_name topic)
-;;                      :value (:topic_url topic)})))
 
 ;;-------------------------------------------------
 ; Org_page search issues
@@ -54,12 +45,17 @@
                                                  user
                                                  true))
                            all-issues)))
-      (let [matched-issues (filter #(str/starts-with? (:title %) term)
-                                   (issues/get-issues-by-org org))]
+      (let [org-issues (issues/get-issues-by-org org)
+            matched-issues (filter #(first (:result %))
+                                   (pmap #(hash-map :result (search/fuzzy-wuzzy term (:title %))
+                                                    :original %)
+                                         org-issues))
+]
         (if (= 0 (count matched-issues))
           "<h3>No issues found that match your search.</h3>"
-          (reduce str (map #(html (issue-partial (str "/" (:org_url org))
-                                           %
-                                           user
-                                           true))
-                           matched-issues)))))))
+          (do (println matched-issues)
+            (reduce str (map #(html (issue-partial (str "/" (:org_url org))
+                                                   (:original %)
+                                                   user
+                                                   true))
+                             matched-issues))))))))
