@@ -19,7 +19,7 @@
                        user-org
                        (str "Sigil - " (:org_name org) " Responses")
                        (org-responses-body (:uri req) user org issues)))
-      (not-found-handler req))))
+      (not-found-handler req "No such org found."))))
 
 (defn org-responses-body [uri user org issues]
   (html

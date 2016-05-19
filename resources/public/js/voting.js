@@ -65,77 +65,32 @@ $(".unvoteup").each(function () {
     $(this).click({ $button: $(this), issueid: $(this).data("issueid") }, unvoteup);
 });
 
+/*
+ *  Reports stuff
+ */
 
-
-
-
-/*function voteup(votebutton, issueid) {
-    $.ajax({
-        type: "POST",
-        url: '/voteup/' + issueid + '/',
-        success: function () {
-            votebutton.classList.remove('voteup');
-            votebutton.classList.add('unvoteup');
-            votebutton.src = "/Content/Images/voted.png";
-            votebutton.setAttribute('onClick', 'unvoteup(this, ' + issueid + ')');
-            var count = document.getElementById("count-" + issueid);
-            count.innerHTML = (parseInt(count.innerHTML, 10) + 1);
-        },
-        error: function (ts) {
-            //alert('Could not vote up.');
-            alert(ts.responseText);
-        }
+function report(event) {
+    $.post("/report", {issue_id: event.data.issueid}, function () {
+        event.data.$button.removeClass("unreported")
+            .addClass("reported")
+            .off("click")
+            .click({ $button: event.data.$button, issueid: event.data.issueid }, unreport);
     });
 }
 
-function unvoteup(votebutton, issueid) {
-    $.ajax({
-        type: "POST",
-        url: '/unvoteup/' + issueid + '/',
-        success: function () {
-            votebutton.classList.remove('unvoteup');
-            votebutton.classList.add('voteup');
-            votebutton.src = "/Content/Images/notvoted-hover.png";
-            votebutton.setAttribute('onClick', 'voteup(this, ' + issueid + ')');
-            var count = document.getElementById("count-" + issueid);
-            count.innerHTML = (parseInt(count.innerHTML, 10) - 1);
-        },
-        error: function (ts) {
-            alert('Could not unvote up.');
-            alert(ts.responseText);
-        }
+function unreport(event) {
+    $.post("/unreport", {issue_id: event.data.issueid}, function () {
+        event.data.$button.removeClass("reported")
+            .addClass("unreported")
+            .off("click")
+            .click({ $button: event.data.$button, issueid: event.data.issueid }, report);
     });
 }
 
+$(".unreported").each(function () {
+    $(this).click({ $button: $(this), issueid: $(this).data("issueid") }, report);
+});
 
-function official_voteup(votebutton, officialId) {
-
-}
-
-function official_unvoteup(votebutton, officialId)
-{
-
-}
-
-function official_votedown(votebutton, officialId)
-{
-
-}
-
-function official_unvotedown(votebutton, officialId)
-{
-
-}
-
-
-function votehover(votebutton) {
-    if (votebutton.classList.contains('voteup')) {
-        votebutton.src = "/Content/Images/notvoted-hover.png";
-    }
-}
-
-function voteunhover(votebutton) {
-    if (votebutton.classList.contains('voteup')) {
-        votebutton.src = "/Content/Images/notvoted.png";
-    }
-}*/
+$(".reported").each(function () {
+    $(this).click({ $button: $(this), issueid: $(this).data("issueid") }, unreport);
+});

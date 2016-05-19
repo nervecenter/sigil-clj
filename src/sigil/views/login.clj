@@ -2,6 +2,7 @@
   (:require [sigil.helpers :refer [get-return]]
             [buddy.hashers :refer [check]]
             [sigil.views.layout :as layout]
+            [sigil.views.partials.navbar :refer [navbar-partial]]
             [hiccup.page :refer [html5]])
   (:use sigil.auth
         sigil.db.users
@@ -21,7 +22,7 @@
      :headers {"Location" "/"}}
     (let [return (get-return req)
           invalid? (if (= "t" ((:query-params req) "invalid")) true false)]
-      (login-page (:uri req) return invalid?))))
+      (login-page req return invalid?))))
 
 (defn login-post
   "Handles POST requests to /login. Attempts to handle login and exchange a token with the client, redirecting to the return address."
@@ -47,13 +48,13 @@
 
 (defn login-page
   "Render the login page. Takes in a string representing the domain URI for the view to be returned to after login success, and an optional collection of validation messages to be rendered at the top of the form."
-  [uri return invalid?]
+  [req return invalid?]
   (html5
    (layout/head "Sigil - Login")
 
    [:body.page
     [:div.wrap
-     (layout/navbar uri)
+     (navbar-partial req nil nil)
      [:div.container.main-container
       [:div.row
        (login-body return

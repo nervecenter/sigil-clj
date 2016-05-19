@@ -17,6 +17,10 @@
   [org]
   (into [] (sql/query db/spec ["SELECT * FROM tags WHERE org_id = ?" (:org_id org)])))
 
+(defn get-tag-by-issue
+  [issue]
+  (first (sql/query db/spec ["SELECT * FROM tags WHERE tag_id = ? LIMIT 1" (:tag_id issue)])))
+
 ;;---------------------------------------------------------------------
 ; Updates/Inserts/Deletes
 
@@ -40,13 +44,14 @@
   (sql/create-table-ddl
    :tags
    [:tag_id :bigserial "PRIMARY KEY"]
-   [:tag_url :text "NOT NULL" "UNIQUE"]
+   ;;[:tag_url :text "NOT NULL" "UNIQUE"]
    [:tag_name :text "NOT NULL" "UNIQUE"]
    [:created_at :timestamp "NOT NULL" "DEFAULT CURRENT_TIMESTAMP"]
    [:icon_30 :text]
-   [:times_viewed :int "NOT NULL" "DEFAULT 0"]
+   ;;[:times_viewed :int "NOT NULL" "DEFAULT 0"]
    [:org_id :bigint "NOT NULL"]
-   [:tag_is_active :boolean "NOT NULL" "DEFAULT TRUE"]))
+   ;;[:tag_is_active :boolean "NOT NULL" "DEFAULT TRUE"]
+   ))
 
 
 

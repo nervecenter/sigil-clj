@@ -111,5 +111,6 @@
    [:last_voted :timestamp "NOT NULL" "DEFAULT CURRENT_TIMESTAMP"]
    [:views :timestamp "ARRAY" "NOT NULL" "DEFAULT ARRAY[]::timestamp[]"]
    [:times_viewed :int "NOT NULL" "DEFAULT 0"]
-   [:tags :bigint "ARRAY" "DEFAULT ARRAY[]::bigint[]"]
+   ;;[:tags :bigint "ARRAY" "DEFAULT ARRAY[]::bigint[]"]
+   [:tag_id :int "NOT NULL" "DEFAULT 0"]
    [:responded :boolean "NOT NULL" "DEFAULT false"]))

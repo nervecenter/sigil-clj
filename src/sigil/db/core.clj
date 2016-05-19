@@ -8,7 +8,8 @@
 
 ;; (def db postgres-debug-db)
 
-(def spec "postgresql://localhost:5432/sigildb") ;; I wanted to alias this ns in the other model files but I didn't want it to be db/db everywhere
+;; I wanted to alias this ns in the other model files but I didn't want it to be db/db everywhere
+(def spec "postgresql://localhost:5432/sigildb")
 
 (try
   (sql/query spec ["CREATE EXTENSION fuzzystrmatch"])

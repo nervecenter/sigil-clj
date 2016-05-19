@@ -108,18 +108,18 @@
     [:div.row {:style "margin-bottom:30px;"}
      [:div.col-lg-12.col-centered {:style "max-width:350px;"}
       [:img.img-responsive {:src "images/logo-600-beta.png"}]
-      [:h3 {:style "margin-top:0 auto 0;font-size: 19px;"} "Rethinking restaurant feedback."]]]
+      [:h3 {:style "margin-top:0 auto 0;font-size: 19px;"} "A focal point for feedback."]]]
     [:div.row
      [:div.col-lg-12.col-centered.email-div
       (form-to {:role "search" :style "width:100%;"} [:put "/search"]
                [:div.form-group {:style "width:100%;"}
                 [:input#site-search-box.form-control
                  {:type "text" :autocomplete "off"
-                  :placeholder "Search for a company, person, or product"
+                  :placeholder "Search for an organization or person"
                   :style "width:100%;"}]])]]
     [:div.row.small-links
-     [:a {:href "features"} "See how Sigil can revamp feedback for your restaurant"]
+     [:a {:href "features"} "See how Sigil can revamp feedback for your public office"]
      " | "
      [:a {:href "register"} "Start giving your own feedback"]
      " | "
-     [:a {:href "companies"} "See all the restaurants on Sigil"]]]])
+     [:a {:href "companies"} "See all the offices and agencies on Sigil"]]]])

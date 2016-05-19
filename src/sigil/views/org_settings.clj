@@ -21,7 +21,7 @@
          org
          (str "Sigil - " (:org_name org) " Settings")
          (org-settings-body org tags)))
-      (not-found-handler req))))
+      (not-found-handler req "Non-org-admin user attempted to access org settings."))))
 
 (defn org-settings-body [org tags]
   (let [org_url (:org_url org)]
