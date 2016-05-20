@@ -71,10 +71,11 @@
          (submit-button {:class "btn btn-xs btn-primary"
                          :id "delete-issue"}
                         "Delete Issue")])
+      " "
       [:span.label.label-default
-       (str (get-number-reports-by-issue issue) " Reports")]])
-
-      ])
+       (str (get-number-reports-by-issue issue) " Reports")]
+      " "
+      [:a.btn.btn-sm.btn-primary {:data-issueid (:issue_id issue)} "Petition removal of this issue"]])])
 
 (defn issue-without-panel [uri user issue issue-org issue-tag issue-user authenticated? user-voted?]
   [:div.panel-body

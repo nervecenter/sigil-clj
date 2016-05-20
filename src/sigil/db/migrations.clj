@@ -11,7 +11,8 @@
             [sigil.db.officialresponses]
             [sigil.db.notifications]
             [sigil.db.roles]
-            [sigil.db.reports]))
+            [sigil.db.reports]
+            [sigil.db.petitions]))
 
 
 (defn create-db-tables
@@ -28,6 +29,7 @@
                       (notification_model)
                       (roles_model)
                       (reports_model)
+                      (petitions_model)
                       (db/error_model)))
 
 ;; don't need anymore since droping the database deletes all the tables as well but keeps for future example.
