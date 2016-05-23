@@ -1,4 +1,7 @@
 .nrepl-*
+*~
+*.swp
+*.swo
 
 pg
 target
