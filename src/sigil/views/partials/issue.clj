@@ -5,6 +5,7 @@
             [sigil.db.users :refer [get-user-by-issue]]
             [sigil.db.tags :refer [get-tag-by-issue]]
             [sigil.db.reports :refer [user-reported-issue? get-number-reports-by-issue]]
+            [sigil.db.petitions :refer [issue-petitioned?]]
             [sigil.auth :as auth]
             [sigil.helpers :refer [get-return]]
             [hiccup.core :refer [html]])
@@ -21,6 +22,7 @@
          user-voted? (if authenticated?
                        (user-voted-on-issue? user issue)
                        false)
+         petitioned? (issue-petitioned? issue)
          issue-user (get-user-by-issue issue)
          issue-tag (get-tag-by-issue issue)]
      (if in-panel?
@@ -33,6 +35,7 @@
                     issue-user
                     authenticated?
                     user-voted?
+                    petitioned?
                     (:responded issue)
                     (get-latest-official-response-by-issue issue))
        (issue-without-panel uri
@@ -44,7 +47,7 @@
                             authenticated?
                             user-voted?)))))
 
-(defn issue-panel [uri user issue issue-org issue-tag issue-user authenticated? user-voted? responded? latest-response]
+(defn issue-panel [uri user issue issue-org issue-tag issue-user authenticated? user-voted? petitioned? responded? latest-response]
   [(if responded?
      :div.panel.panel-info.issue-panel-partial
      :div.panel.panel-default.issue-panel-partial)
@@ -75,7 +78,26 @@
       [:span.label.label-default
        (str (get-number-reports-by-issue issue) " Reports")]
       " "
-      [:a.btn.btn-sm.btn-primary {:data-issueid (:issue_id issue)} "Petition removal of this issue"]])])
+      (if petitioned?
+        [:a.btn.btn-sm.btn-primary.disabled
+         "Petition submitted."]
+        [:a.btn.btn-sm.btn-primary.start-petition
+          {:data-issueid (:issue_id issue)
+           :data-orgid (:org_id issue-org)}
+          "Petition removal of this issue"])
+      ;; [:br]
+      ;; [:form {:method "post" :action "/petitionissue"}
+      ;;  (hidden-field "org-id" (:org_id issue-org))
+      ;;  (hidden-field "issue-id" (:issue_id issue))
+      ;;  [:div.form-group
+      ;;   (text-area {:class "form-control petition-input-box"
+      ;;               :placeholder "Why should this be removed?"}
+      ;;              "body")]
+      ;;  [:div.form-group
+      ;;   (submit-button {:class "btn btn-xs btn-primary"
+      ;;                   :id "petition-issue"}
+      ;;                  "Petition issue with Sigil")]]
+      ])])
 
 (defn issue-without-panel [uri user issue issue-org issue-tag issue-user authenticated? user-voted?]
   [:div.panel-body

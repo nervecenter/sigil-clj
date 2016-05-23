@@ -8,8 +8,8 @@
 (defn get-petitions []
   (sql/query db/spec ["SELECT * FROM petitions ORDER BY created_at DESC;"]))
 
-(defn issue-has-been-petitioned? [issue]
-  (if (not-empty (sql/query db/spec ["SELECT * FROM petitions WHERE petition_id = ?;"(:petition_id petition)]))
+(defn issue-petitioned? [issue]
+  (if (not-empty (sql/query db/spec ["SELECT * FROM petitions WHERE issue_id = ?;"(:issue_id issue)]))
     true
     false))
 
@@ -33,7 +33,7 @@
    :petitions
    [:petition_id :bigserial "PRIMARY KEY"]
    [:user_id :int "NOT NULL"]
-   [:issue_id :int "NOT NULL"]
+   [:issue_id :int "NOT NULL" "UNIQUE"]
    [:org_id :int "NOT NULL"]
    [:body :text "NOT NULL"]
    [:created_at :timestamp "NOT NULL" "DEFAULT CURRENT_TIMESTAMP"]

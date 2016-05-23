@@ -38,6 +38,7 @@
             [sigil.actions.tag :as tag-actions]
             [sigil.actions.user :as user-actions]
             [sigil.actions.officialresponse :as official-actions]
+            [sigil.actions.petitions :as petitions-actions]
             [sigil.actions.data :as data-actions]
             [sigil.db.core :as db]
 
@@ -96,6 +97,7 @@
   (POST "/orgregister" req (org-register-post req))
   (POST "/postofficial" req (official-actions/post-official-response req))
   (POST "/submitcomment" req (comment-actions/post-comment req))
+  (POST "/postpetition" req (petitions-actions/post-petition req))
   (GET "/printrequest" req (html [:p {} req]))
   (GET "/printrequest/:x" req (html [:p {} req]))
   (GET "/404" req (not-found-handler req))

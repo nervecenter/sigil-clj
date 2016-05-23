@@ -1,3 +1,7 @@
+.petition-form {
+    margin-top: 20px;
+}
+
 .reported {
     color: red;
 }
@@ -92,6 +96,14 @@
     min-height: 70px;
     max-width: 100%;
     min-width: 100%;
+}
+
+textarea.petition-input-box {
+    height: 115px;
+    min-height: 115px;
+    max-width: 100%;
+    min-width: 100%;
+    margin-top: 10px;
 }
 
 textarea.org-feedback-input-box {
