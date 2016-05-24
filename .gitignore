@@ -1,11 +1,16 @@
+# Ignore boot REPL logs and other REPL files
 .nrepl-*
+
+# Ignore Vim temporary files like swaps
 *~
 *.swp
 *.swo
 
+# Ignore Postgres and Boot target directories
 pg
 target
 
+# Ignore uploaded images
 resources/public/db_imgs/org/*.png
 resources/public/db_imgs/user/*.png
 resources/public/db_imgs/temp/*
