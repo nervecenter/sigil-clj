@@ -67,6 +67,7 @@
   (GET "/customunrespondedissues" req (data-actions/custom-unresponded-issues req))
   (GET "/customunderdogissues" req (data-actions/custom-underdog-issues req))
   (GET "/orgsettings" req (org-settings-handler req))
+
   (POST "/orgbanner" req (if (authenticated? req)
                             (image-actions/update-org-banner req)
                             {:status 403}))
@@ -101,9 +102,11 @@
   (GET "/printrequest" req (html [:p {} req]))
   (GET "/printrequest/:x" req (html [:p {} req]))
   (GET "/404" req (not-found-handler req))
+
   (GET "/search" req (search-page-handler req))
   (GET "/searchbar" req (search-actions/auto-complete-search req))
   (GET "/searchorgissues" req (search-actions/search-org-issues-handler req))
+
   (context "/:org_url{[a-z0-9]{3,}}" req
     (GET "/" req (org-page-handler req))
     (GET "/data" req (org-data-handler req))
