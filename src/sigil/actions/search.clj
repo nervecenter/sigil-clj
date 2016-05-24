@@ -15,17 +15,18 @@
   (let [all-orgs (get-all-orgs)
         term (:term (:params req))
         matched  (take 10
-                       (reverse
-                        (sort-by :score
-                                 (map #(hash-map :label (:org_name (:original %))
-                                                 :value (:org_url (:original %))
-                                                 :score (second (:result %)))
-                                      (filter #(first (:result %))
+                   (reverse
+                     (sort-by :score
+                              (map #(hash-map :label (:org_name (:original %))
+                                              :value (:org_url (:original %))
+                                              :score (second (:result %)))
+                                   (filter #(first (:result %))
                                                     ;(> (second (:result %)) 0)
                                                     
-                                              (pmap #(hash-map :result (search/fuzzy-wuzzy term (:org_name %))
-                                                               :original %)
-                                                    all-orgs))))))]
+                                           (pmap #(hash-map :result 
+                                                            (search/fuzzy-wuzzy term (:org_name %))
+                                                            :original %)
+                                                 all-orgs))))))]
     (do (println matched)
       (json/generate-string matched))))
 
@@ -42,8 +43,7 @@
       (let [all-issues (issues/get-issues-by-org org)]
           (reduce str (map #(html (issue-partial (str "/" (:org_url org))
                                                  %
-                                                 user
-                                                 true))
+                                                 user))
                            all-issues)))
       (let [org-issues (issues/get-issues-by-org org)
             matched-issues (filter #(first (:result %))
@@ -56,6 +56,5 @@
           (do (println matched-issues)
             (reduce str (map #(html (issue-partial (str "/" (:org_url org))
                                                    (:original %)
-                                                   user
-                                                   true))
+                                                   user))
                              matched-issues))))))))
