@@ -37,7 +37,7 @@
       [:p {:style "margin-bottom:50px;"}
        "You haven't posted any feedback yet. Search for an office and help change things!"]
       (for [i user-issues]
-        (issue-partial uri i user true)))
+        (issue-partial uri i user)))
     (for [box issue-boxes]
       (html
        [:div.panel.panel-default
@@ -47,5 +47,5 @@
                  :style "margin-right:5px;"}]
           (:org_name (:org box))]]]
        (for [issue (:issues box)]
-         (issue-partial "/" issue user true))))]
+         (issue-partial "/" issue user))))]
    (sidebar-partial nil user)))

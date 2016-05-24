@@ -94,4 +94,9 @@
          [:div.btn-group
           (submit-button {:class "btn btn-primary"} "Log In")]
          [:div.btn-group
-          [:a.btn.btn-info {:href "register"} "Sign Up"]]])]]]]])
+          [:a.btn.btn-info 
+           {:href (str "register"
+                       (if (some? return)
+                         (str "?return=" return)
+                         nil))} 
+           "Sign Up"]]])]]]]])

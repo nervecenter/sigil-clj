@@ -1,5 +1,6 @@
 (ns sigil.views.landing
   (:require [sigil.views.partials.footer :as footer]
+            [hiccup.core :refer [html]]
             [hiccup.page :refer [html5 include-css include-js]]
             [hiccup.form :refer [form-to]]
             [sigil.db.issues :refer [get-twelve-org-issue-boxes]]
@@ -17,16 +18,16 @@
         ;;cols (partition-by (fn [box] (rand-int 3)) issue-boxes)
         ]
     ;;(landing-page (first cols) (second cols) (get cols 2))
-    (landing-page col1 col2 col3)
+    (landing-page [col1 col2 col3])
     ))
 
-(defn landing-page [col-1-issues col-2-issues col-3-issues]
+(defn landing-page [issue-cols]
   (html5
    head
    [:body.page
     landing-navbar
     splash
-    (issue-section col-1-issues col-2-issues col-3-issues)
+    (issue-section issue-cols)
     footer/footer
 
     (include-js "js/jquery-1.11.3.js"
@@ -36,43 +37,22 @@
                 "js/subscriptions.js"
                 "js/search.js")]))
 
-(defn issue-section [icol1 icol2 icol3]
+(defn issue-section [cols]
   "Takes 3 lists of issues for display on the landing page."
   [:div.container.landing-container
    [:div.row
-    [:div#left-col.col-lg-4
-     (for [box icol1]
-       [:div.panel.panel-default
-        [:div.panel-heading
-         [:a {:href (str "/" (:org_url (:org box)))}
-          [:img {:src (:icon_30 (:org box))
-                 :style "margin-right:5px;"}]
-          (:org_name (:org box))]]
-        [:div.panel-body
-         (for [issue (:issues box)]
-           (issue-partial "/" issue nil false))]])]
-    [:div#left-col.col-lg-4
-     (for [box icol2]
-       [:div.panel.panel-default
-        [:div.panel-heading
-         [:a {:href (str "/" (:org_url (:org box)))}
-          [:img {:src (:icon_30 (:org box))
-                 :style "margin-right:5px;"}]
-          (:org_name (:org box))]]
-        [:div.panel-body
-         (for [issue (:issues box)]
-           (issue-partial "/" issue nil false))]])]
-    [:div#left-col.col-lg-4
-     (for [box icol3]
-       [:div.panel.panel-default
-        [:div.panel-heading
-         [:a {:href (str "/" (:org_url (:org box)))}
-          [:img {:src (:icon_30 (:org box))
-                 :style "margin-right:5px;"}]
-          (:org_name (:org box))]]
-        [:div.panel-body
-         (for [issue (:issues box)]
-           (issue-partial "/" issue nil false))]])]]])
+    (for [col cols]
+      [:div#left-col.col-lg-4
+        (for [box col]
+          (html
+            [:h3
+             [:a {:href (str "/" (:org_url (:org box)))}
+              [:img {:src (:icon_30 (:org box))
+                   :style "margin-right:5px;"}]
+              (:org_name (:org box))]]
+            (for [issue (:issues box)]
+              (issue-partial "/" issue nil))))])
+    ]])
 
 (def head
   [:head

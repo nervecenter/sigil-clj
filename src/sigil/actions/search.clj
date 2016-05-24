@@ -51,8 +51,7 @@
       (let [all-issues (issues/get-issues-by-org org)]
           (reduce str (map #(html (issue-partial (str "/" (:org_url org))
                                                  %
-                                                 user
-                                                 true))
+                                                 user))
                            all-issues)))
       (let [matched-issues (filter #(str/starts-with? (:title %) term)
                                    (issues/get-issues-by-org org))]
@@ -60,6 +59,5 @@
           "<h3>No issues found that match your search.</h3>"
           (reduce str (map #(html (issue-partial (str "/" (:org_url org))
                                            %
-                                           user
-                                           true))
+                                           user))
                            matched-issues)))))))

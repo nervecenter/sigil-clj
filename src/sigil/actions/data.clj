@@ -154,7 +154,7 @@
         start-time (clj-time.coerce/from-long (read-string (:start (:params req))))
         stop-time (time/plus (clj-time.coerce/from-long (read-string (:stop (:params req)))) (time/days 1))
         user (auth/user-or-nil req)]
-    (html [:div (map #(issue-partial (:uri req) % user true) (get-top-issues-by-org org start-time stop-time))])))
+    (html [:div (map #(issue-partial (:uri req) % user) (get-top-issues-by-org org start-time stop-time))])))
 
 (defn custom-unresponded-issues
   [req]
@@ -162,7 +162,7 @@
         start-time (clj-time.coerce/from-long (read-string (:start (:params req))))
         stop-time (time/plus (clj-time.coerce/from-long (read-string (:stop (:params req)))) (time/days 1))
         user (auth/user-or-nil req)]
-   (html [:div (map #(issue-partial (:uri req) % user true) (get-top-unresponded-issues-by-org org start-time stop-time))])))
+   (html [:div (map #(issue-partial (:uri req) % user) (get-top-unresponded-issues-by-org org start-time stop-time))])))
 
 (defn custom-underdog-issues
   [req]
@@ -170,4 +170,4 @@
         start-time (clj-time.coerce/from-long (read-string (:start (:params req))))
         stop-time (time/plus (clj-time.coerce/from-long (read-string (:stop (:params req)))) (time/days 1))
         user (auth/user-or-nil req)]
-   (html [:div (map #(issue-partial (:uri req) % user true) (get-top-rising-issues-by-org org start-time stop-time))])))
+   (html [:div (map #(issue-partial (:uri req) % user) (get-top-rising-issues-by-org org start-time stop-time))])))

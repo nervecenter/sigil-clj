@@ -126,14 +126,14 @@
          [:h4#data-header "Top issues for selected period"]
          [:div#top-issues-parent
           (for [i top-issues]
-            (issue-partial uri i user true))]
+            (issue-partial uri i user))]
          [:h4#data-header "Top issues awaiting responses"]
          [:div#top-unresponded-issues-parent
           (for [i top-unresponded-issues]
-            (issue-partial uri i user true))]
+            (issue-partial uri i user))]
          [:h4#data-header "Top new and rising issues"]
          [:div#top-rising-issues-parent
           (for [i top-rising-issues]
-            (issue-partial uri i org user true))]]]]]]]))
+            (issue-partial uri i org user))]]]]]]]))
    ;(include-js "/js/graph.js")
    

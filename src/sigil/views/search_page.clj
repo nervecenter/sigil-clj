@@ -53,7 +53,7 @@
       [:div.panel-body
        (if (not-empty issues)
          (for [i issues]
-           (html (issue-partial uri i user true)
+           (html (issue-partial uri i user)
                  [:hr]))
          [:p "No issues matching your search."])]]
      ;; [:h3 "Tags"]
