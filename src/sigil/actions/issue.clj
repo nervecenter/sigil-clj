@@ -35,20 +35,17 @@
       (internal-error-handler req "Error uploading user's issue.")
       )))
 
-(defn delete-issue-post
+(defn archive-issue-post
   [req]
-  (let [new-issue-data (:form-params req)
+  (let [issue-data (:form-params req)
         user (auth/user-or-nil req)
-        issue-org (orgs/get-org-by-id (long (read-string (new-issue-data "org-id"))))
-        issue-to-delete (issues/get-issue-by-id (read-string (new-issue-data "issue-id")))
-        vote-to-delete (votes/get-user-issue-vote user issue-to-delete)]
-    (if (= :success (do
-                      (issues/delete-issue issue-to-delete true)
-                      (db/db-trans [votes/delete-vote vote-to-delete])))
+        issue-org (orgs/get-org-by-id (long (read-string (issue-data "org-id"))))
+        issue-to-archive (issues/get-issue-by-id (read-string (issue-data "issue-id")))]
+    (if (= :success (db/db-trans [issues/archive-issue issue-to-archive]))
       {:status 302
        :headers {"Location" ((:headers req) "referer")}}
       ;;else redirect and let them know whats wrong....
-      )))
+      (internal-error-handler req "Error archiving issue."))))
 
 
 (defn vote-issue

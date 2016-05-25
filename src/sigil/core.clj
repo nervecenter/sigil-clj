@@ -88,7 +88,7 @@
   (GET "/register" req (user-register-get req))
   (POST "/userpasschange" req (user-actions/change-user-password req))
   (POST "/postissue" req (issue-actions/add-issue-post req))
-  (POST "/deleteissue" req (issue-actions/delete-issue-post req))
+  (POST "/archiveissue" req (issue-actions/archive-issue-post req))
   (POST "/deletecomment" req (comment-actions/delete-comment-post req))
   (GET "/numnotes" req (note-actions/number-notes-handler req))
   (GET "/checknotes" req (note-actions/check-notes-handler req))

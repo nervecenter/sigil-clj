@@ -18,37 +18,37 @@
 
 (defn get-issue-by-id
   [id]
-  (first (sql/query db/spec ["SELECT * FROM issues WHERE issue_id = ?;"  id])))
+  (first (sql/query db/spec ["SELECT * FROM issues WHERE issue_id = ? AND archived = false;"  id])))
 
 (defn get-issue-with-poster-by-id
   [id]
-  (let [issue (first (sql/query db/spec ["SELECT * FROM issues WHERE issue_id = ?;"  id]))
+  (let [issue (first (sql/query db/spec ["SELECT * FROM issues WHERE issue_id = ? AND archived = false;"  id]))
         user (get-user-by-id (:user_id issue))]
     (assoc issue :poster user)))
 
 (defn get-issue-by-user-and-title
   [user title]
-  (first (sql/query db/spec ["SELECT * FROM issues WHERE title = ? AND user_id = ?" title (:user_id user)])))
+  (first (sql/query db/spec ["SELECT * FROM issues WHERE title = ? AND user_id = ? AND archived = false" title (:user_id user)])))
 
 (defn get-hottest-issues-by-org
   [org]
-  (into [] (sql/query db/spec ["SELECT * FROM issues WHERE org_id = ? ORDER BY last_voted ASC" (:org_id org)])))
+  (into [] (sql/query db/spec ["SELECT * FROM issues WHERE org_id = ? AND archived = false ORDER BY last_voted ASC" (:org_id org)])))
 
 (defn get-hottest-issues-by-org-id
   [org_id]
-  (into [] (sql/query db/spec ["SELECT * FROM issues WHERE org_id = ? ORDER BY last_voted ASC" org_id])))
+  (into [] (sql/query db/spec ["SELECT * FROM issues WHERE org_id = ? AND archived = false ORDER BY last_voted ASC" org_id])))
 
 (defn get-issues-by-org
   [org]
-  (into [] (sql/query db/spec ["SELECT * FROM issues WHERE org_id = ?;" (:org_id org)])))
+  (into [] (sql/query db/spec ["SELECT * FROM issues WHERE org_id = ? AND archived = false;" (:org_id org)])))
 
 (defn get-issues-by-user
   [user]
-  (into [] (sql/query db/spec ["SELECT * FROM issues WHERE user_id = ?" (:user_id user)])))
+  (into [] (sql/query db/spec ["SELECT * FROM issues WHERE user_id = ? AND archived = false" (:user_id user)])))
 
 (defn get-handful-issues-by-org
   [org]
-  (into [] (sql/query db/spec ["SELECT * FROM issues WHERE org_id = ? ORDER BY random() LIMIT ?;" (:org_id org) (+ 3 (rand-int 3))])))
+  (into [] (sql/query db/spec ["SELECT * FROM issues WHERE org_id = ? AND archived = false ORDER BY random() LIMIT ?;" (:org_id org) (+ 3 (rand-int 3))])))
 
 (defn get-twelve-org-issue-boxes []
   (let [orgs (orgs/get-twelve-random-orgs)]
@@ -57,7 +57,7 @@
 
 (defn get-responded-issues-by-org
   [org]
-  (into [] (sql/query db/spec ["SELECT * FROM issues WHERE org_id = ? AND responded = TRUE" (:org_id org)])))
+  (into [] (sql/query db/spec ["SELECT * FROM issues WHERE org_id = ? AND responded = TRUE AND archived = false" (:org_id org)])))
 
 ;;------------------------------------------------------------------
 ; Updates/Inserts
@@ -90,13 +90,14 @@
                :issues
                new-issue))
 
+(defn archive-issue 
+  [db-conn [issue]]
+  (sql/update! db-conn :issues {:archived true
+                                :edited_at (time/local-now)} ["issue_id = ?" (:issue_id issue)]))
+
 (defn delete-issue
-  ([issue] (delete-issue issue false))
-  ([issue perm]
-   (if perm
-     (sql/delete! db/spec :issues ["issue_id = ?" (:issue_id issue)])
-     (sql/update! db/spec :issues {:user_id 0
-                                   :edited_at (time/local-now)} ["issue_id = ?" (:issue_id issue)]))))
+  [db-conn [issue]]
+  (sql/delete! db-conn :issues ["issue_id = ?" (:issue_id issue)]))
 
 (defn issues_model
   "Defines the tag model in the db"
@@ -116,4 +117,6 @@
    [:times_viewed :int "NOT NULL" "DEFAULT 0"]
    ;;[:tags :bigint "ARRAY" "DEFAULT ARRAY[]::bigint[]"]
    [:tag_id :int "NOT NULL" "DEFAULT 0"]
-   [:responded :boolean "NOT NULL" "DEFAULT false"]))
+   [:responded :boolean "NOT NULL" "DEFAULT false"]
+   [:archived :boolean "NOT NULL" "DEFAULT false"]
+    ))

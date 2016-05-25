@@ -82,7 +82,7 @@
        {:data-issueid (:issue_id issue)
         :aria-hidden "true"}]
       ;; (if (auth/user-has-role? user :site-admin)
-      ;;   [:form {:method "post" :action "/deleteissue"}
+      ;;   [:form {:method "post" :action "/archiveissue"}
       ;;    (hidden-field "org-id" (:org_id issue-org))
       ;;    (hidden-field "issue-id" (:issue_id issue))
       ;;    (submit-button {:class "btn btn-xs btn-primary"
@@ -95,16 +95,21 @@
       (if (> (count (:text latest-response)) 100)
         [:span (str (subs (:text latest-response) 0 100) "...")]
         [:span (:text latest-response)])])
-   (if (= (:org_id user) (:org_id issue-org))
-     [:div.panel-footer
-      (if (auth/user-has-role? user :site-admin)
-        [:form {:method "post" :action "/deleteissue"}
-         (hidden-field "org-id" (:org_id issue-org))
-         (hidden-field "issue-id" (:issue_id issue))
-         (submit-button {:class "btn btn-xs btn-primary"
-                         :id "delete-issue"}
-                        "Delete Issue")])
+   (cond 
+     (auth/user-has-role? user :site-admin)
+     [:div.panel-footer {:style "height:55px;"}
+      [:form {:method "post" :action "/archiveissue" :style "float:right;"}
+       (hidden-field "org-id" (:org_id issue-org))
+       (hidden-field "issue-id" (:issue_id issue))
+       (submit-button {:class "btn btn-sm btn-primary"
+                       :id "archive-issue"}
+                      "Archive Issue")]
       " "
+      [:span.label.label-default
+       (str (get-number-reports-by-issue issue) " Reports")]]
+
+     (= (:org_id user) (:org_id issue-org))
+     [:div.panel-footer 
       [:span.label.label-default
        (str (get-number-reports-by-issue issue) " Reports")]
       " "
@@ -114,17 +119,4 @@
         [:a.btn.btn-sm.btn-primary.start-petition
           {:data-issueid (:issue_id issue)
            :data-orgid (:org_id issue-org)}
-          "Petition removal of this issue"])
-      ;; [:br]
-      ;; [:form {:method "post" :action "/petitionissue"}
-      ;;  (hidden-field "org-id" (:org_id issue-org))
-      ;;  (hidden-field "issue-id" (:issue_id issue))
-      ;;  [:div.form-group
-      ;;   (text-area {:class "form-control petition-input-box"
-      ;;               :placeholder "Why should this be removed?"}
-      ;;              "body")]
-      ;;  [:div.form-group
-      ;;   (submit-button {:class "btn btn-xs btn-primary"
-      ;;                   :id "petition-issue"}
-      ;;                  "Petition issue with Sigil")]]
-      ])])
+          "Petition removal of this issue"])])])
