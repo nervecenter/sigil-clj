@@ -2,7 +2,7 @@
   (:require [sigil.views.partials.footer :as footer]
             [hiccup.core :refer [html]]
             [hiccup.page :refer [html5 include-css include-js]]
-            [hiccup.form :refer [form-to]]
+            [hiccup.form :refer [form-to text-field]]
             [sigil.db.issues :refer [get-twelve-org-issue-boxes]]
             [sigil.views.partials.issue :refer [issue-partial]]))
 
@@ -91,12 +91,16 @@
       [:h3 {:style "margin-top:0 auto 0;font-size: 19px;"} "A focal point for feedback."]]]
     [:div.row
      [:div.col-lg-12.col-centered.email-div
-      (form-to {:role "search" :style "width:100%;"} [:put "/search"]
-               [:div.form-group {:style "width:100%;"}
-                [:input#site-search-box.form-control
-                 {:type "text" :autocomplete "off"
-                  :placeholder "Search for an organization or person"
-                  :style "width:100%;"}]])]]
+      (form-to
+       {:role "search" :style "width:100%;"}
+       [:get "/search"]
+       [:div.form-group {:style "width:100%;"}
+        (text-field {:id "site-search-box"
+                     :name "q"
+                     :data-provide "typeahead"
+                     :class "form-control typeahead"
+                     :placeholder "Search for an organization"}
+                    "search")])]]
     [:div.row.small-links
      [:a {:href "features"} "See how Sigil can revamp feedback for your public office"]
      " | "

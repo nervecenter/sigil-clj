@@ -13,6 +13,9 @@
 ;;-----------------------------------------------------------------
 ; Querys
 
+(defn get-all-issues []
+  (sql/query db/spec ["SELECT * FROM issues;"]))
+
 (defn get-issue-by-id
   [id]
   (first (sql/query db/spec ["SELECT * FROM issues WHERE issue_id = ?;"  id])))
