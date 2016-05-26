@@ -107,6 +107,10 @@
                 :tag_name "Education & Schools"
                 :org_id 3
                 :icon_30 (rand-nth db/default_icon_30)}
+               {:tag_id 10
+                :tag_name "Water & Maritime"
+                :org_id 3
+                :icon_30 (rand-nth db/default_icon_30)}
                ;; Tampa
                {:tag_id 6
                 :tag_name "Transportation & Roads"
@@ -166,7 +170,13 @@
                   :user_id 2
                   :tag_id 4
                   :total_votes 2802
-                  :title "Schools should be incentivized to help children learn, rather than meet arbitrary grade requirements that take time away from legitimate learning."
+                  :title "Schools should be incentivized according to what children learn, rather than arbitrary grade requirements."
+                  :text ipsum}
+                 {:org_id 3
+                  :user_id 3
+                  :tag_id 10
+                  :total_votes 1490
+                  :title "Will motors be allowed in the new fishing area on the Hillsborough River?"
                   :text ipsum}
                  ;; Tampa
                  {:org_id 4
@@ -272,6 +282,12 @@
                  :username "Visitor"
                  :pass_hash (buddy.hashers/encrypt "visitor")
                  :icon_100 (str (rand-nth db/default_icon_100))}
+                {:email "pr@hillsboroughcounty.org"
+                 :username "Hillsborough-PR"
+                 :pass_hash (buddy.hashers/encrypt "hillsborough")
+                 :icon_100 "/db_imgs/org/hillsborough_100.png"
+                 :roles [1]
+                 :org_id 3}
                 ])
 
 (def topic_seed [{:topic_url "testtopic"
