@@ -6,21 +6,21 @@
           :resource-paths #{"resources"}
           :dependencies '[[org.clojure/clojure "1.8.0"]
                           [org.clojure/tools.namespace "0.2.11"]
-                          [ring/ring-core "1.4.0"]
-                          [javax.servlet/servlet-api "2.5"]
-                          ;;[ring.middleware.logger "0.5.0"]
-                          [http-kit "2.1.19"]
-                          [buddy/buddy-auth "0.9.0"]
-                          [buddy/buddy-hashers "0.11.0"]
-                          [compojure "1.5.0"]
-                          [hiccup "1.0.5"]
-                          [cheshire "5.5.0"]
-                          ;;[korma "0.4.2"]
-                          [org.clojure/java.jdbc "0.4.2"]
-                          [org.postgresql/postgresql "9.4.1208"]
-                          [clj-time "0.11.0"]
+                          [ring/ring-core "1.4.0"] ;; for server wraping
+                          [javax.servlet/servlet-api "2.5"] ;; for server
+                          [http-kit "2.1.19"] ;; server
+                          [buddy/buddy-auth "0.9.0"] ;;for auth
+                          [buddy/buddy-hashers "0.11.0"] ;;for cookies and auth
+                          [compojure "1.5.0"] ;; for routing 
+                          [hiccup "1.0.5"] ;;for html
+                          [cheshire "5.5.0"] ;; for json
+                          [org.clojure/java.jdbc "0.4.2"] ;; for db
+                          [org.postgresql/postgresql "9.4.1208"] ;;for db
+                          [clj-time "0.11.0"] ;; for working and converting time
                           [speclj "3.3.1"]
-                          [fresh "1.0.1"]])
+                          [fresh "1.0.1"]
+                          [com.draines/postal "1.11.3"] ;; for email
+                          ])
 
 (task-options! pom {:project (get-env :project)
                     :version (get-env :version)}
