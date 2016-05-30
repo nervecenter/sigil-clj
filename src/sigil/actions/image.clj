@@ -2,13 +2,13 @@
   (:require [sigil.db.core :as db]
             [sigil.db.users :as users]
             [sigil.db.orgs :as orgs]
+            [sigil.db.tags :as tags]
             [clojure.java.io :as io]
-            [sigil.auth :as auth])
+            [sigil.auth :as auth]
+            [sigil.views.internal-error :refer [internal-error-handler]]
+            [sigil.views.not-found :refer [not-found-handler]])
   (:import [javax.imageio.ImageIO]
            [java.awt.image.BufferedImage]))
-
-
-
 
 (defn convert-image
   "Takes in the original temp image from the form with the final width and height and save path"
@@ -18,7 +18,8 @@
         tmp (.createGraphics new-img)]
     (.drawImage tmp (javax.imageio.ImageIO/read (io/file org-img)) 0 0 w h nil)
     (.dispose tmp)
-    (javax.imageio.ImageIO/write new-img "png" (io/file (format new-img-str)))))
+    (javax.imageio.ImageIO/write new-img "png" (io/file (format new-img-str)))
+    true))
 
 
 (defn update-user-icon
@@ -40,7 +41,7 @@
   (let [upload-params (:params req)
         org-icon-file (upload-params :icon-30-upload)
         org (auth/user-org-or-nil (auth/user-or-nil req))
-        new-file-name (str (:org_name org) "_30.png")
+        new-file-name (str (:org_url org) "_30.png")
         db-path (str "/db_imgs/org/" new-file-name)
         save-path (str "resources/public/" db-path)]
     (if (not (nil? org))
@@ -55,7 +56,7 @@
   (let [upload-params (:params req)
         org-icon-file (upload-params :icon-100-upload)
         org (auth/user-org-or-nil (auth/user-or-nil req))
-        new-file-name (str (:org_name org) "_100.png")
+        new-file-name (str (:org_url org) "_100.png")
         db-path (str "/db_imgs/org/" new-file-name)
         save-path (str "resources/public/" db-path)]
     (do
@@ -64,12 +65,31 @@
       {:status 302
        :headers {"Location" "/orgsettings"}})))
 
+(defn update-tag-icon-30
+  [req]
+  (let [user (auth/user-or-nil req)
+        upload-params (:params req)
+        tag-icon-file (upload-params :icon-30-upload)
+        tag (tags/get-tag-by-id (read-string (upload-params :tagid)))
+        org (orgs/get-org-by-id (read-string (upload-params :orgid)))
+        new-file-name (str (:org_url org) "_" (:tag_id tag) "_30.png")
+        db-path (str "/db_imgs/tag/" new-file-name)
+        save-path (str "resources/public/" db-path)]
+    (if (and (some? user)
+             (= (:org_id user) (:org_id org)))
+      (do
+        (convert-image (tag-icon-file :tempfile) 30 30 save-path)
+        (db/db-trans [tags/update-tag tag {:icon_30 db-path}])
+        {:status 302
+         :headers {"Location" "/orgsettings"}})
+      (not-found-handler req "Unauthorized attempt to change tag icon."))))
+
 (defn update-org-banner
   [req]
   (let [upload-params (:params req)
         org-icon-file (upload-params :banner-upload)
         org (auth/user-org-or-nil (auth/user-or-nil req))
-        new-file-name (str (:org_name org) "_banner.png")
+        new-file-name (str (:org_url org) "_banner.png")
         db-path (str "/db_imgs/org/" new-file-name)
         save-path (str "resources/public/" db-path)]
     (do

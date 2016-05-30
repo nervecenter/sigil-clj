@@ -94,7 +94,7 @@ function SubmitPetition(event) {
 	    .addClass("disabled")
             .html("Petition submitted.")
             .off("click");
-    }); 
+    });
 }
 
 $(".start-petition").each(function() {

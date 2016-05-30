@@ -52,26 +52,47 @@
        [:div.container.settings-container
         [:div.row
          [:div.col-lg-6
+          [:h3 "Tags"]
+          (for [tag tags]
+            [:div.panel {:style "text-align:center;"}
+             [:div.panel-body
+              [:img.pull-left {:src (:icon_30 tag)
+                               :style "height:40px;"}]
+              [:div.btn-group.pull-right
+               [:a.btn.btn-sm.btn-default.change-tag-icon
+                {:data-tagid (:tag_id tag)
+                 :data-orgid (:org_id tag)}
+                "Change icon"]
+               [:a.btn.btn-sm.btn-danger "Delete"]]
+              [:h4 (:tag_name tag)]]
+             ])
+          [:div.panel {:style "text-align:center;"}
+           [:div.panel-body
+            [:h4 "Add a new tag"]
+            (form-to
+             [:post "/orgaddtag"]
+             [:div.row {:style "margin-top:30px;"}
+              [:div.col-lg-12
+               [:div.form-group
+                (text-field {:class "form-control"
+                             :id "tag-name"
+                             :placeholder "Tag name"} "tag-name")]
+               [:div.form-group
+                (submit-button {:class "form-control btn btn-primary disabled"
+                                :id "new-tag-submit"} "Submit new tag")]]])]]
           [:div.panel {:style "text-align:center;"}
            [:div.panel-body
             [:div.row
              [:div.col-lg-6 [:h4 "Tag name:"]]
-             [:div.col-lg-6 [:h4 "Tag URL:"]]]
+             [:div.col-lg-6 [:h4 "Change tag icon:"]]]
             [:hr]
-            (for [tag tags
-                  :let [tag_url (:tag_url tag)]]
-           
+            (for [tag tags]
               [:div.row {:style "margin-bottom:10px;"}
-               [:div.col-lg-6 (:tag_name tag)]
                [:div.col-lg-6
-                (:tag_url tag)
-                [:a {:href (str "/"
-                                org_url;(:org_url org)
-                                "/"
-                                (:tag_url tag) "/")}
-                 (str "www.sigil.tech/"
-                      org_url "/"
-                      (:tag_url tag) "/")]
+                [:img {:src (:icon_30 tag)}]
+                (:tag_name tag)]
+               [:div.col-lg-6
+                "Placeholder"
                 [:a {:href (str "/"
                                 org_url "/";(:org_url org) "/"
                                 (:tag_url tag) "/"
@@ -79,21 +100,7 @@
                  [:span.glyphicon.glyphicon-wrench]]
                 [:a {:href (str "/" org_url "/" (:tag_url tag) "/delete")}
                  [:span.glyphicon.glyphicon-remove-sign]]]])
-            (form-to
-             [:post "/orgaddtag"]
-             [:div.row {:style "margin-top:30px;"}
-              [:div.col-lg-6
-               [:div.form-group
-                (text-field {:class "form-control"
-                             :id "tag-name"
-                             :placeholder "Tag name"} "tag-name")]]
-              [:div.col-lg-6
-               [:div.form-group
-                (text-field {:class "form-control"
-                             :id "tag-url"
-                             :placeholder "Tag URL"} "tag-url")]
-               [:div.form-group
-                (submit-button {:class "btn btn-default disabled form-control"} "Create New Tag")]]])]]]
+            ]]]
          [:div.col-lg-6
           [:div.panel
            [:div.panel-body

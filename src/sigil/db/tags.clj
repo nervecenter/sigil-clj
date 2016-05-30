@@ -38,6 +38,10 @@
      (sql/delete! db/spec :tags ["tag_id = ?" (:tag_id tag)])
      (sql/update! db/spec :tags {:tag_is_active false} ["tag_id = ?" (:tag_id tag)]))))
 
+(defn update-tag
+  [db-conn [tag updated-rows]]
+  (sql/update! db-conn :tags updated-rows ["tag_id = ?" (:tag_id tag)]))
+
 (defn tags_model
   "Defines the tag model in the db"
   []
@@ -47,11 +51,8 @@
    ;;[:tag_url :text "NOT NULL" "UNIQUE"]
    [:tag_name :text "NOT NULL" "UNIQUE"]
    [:created_at :timestamp "NOT NULL" "DEFAULT CURRENT_TIMESTAMP"]
-   [:icon_30 :text]
+   [:icon_30 :text "NOT NULL"]
    ;;[:times_viewed :int "NOT NULL" "DEFAULT 0"]
    [:org_id :bigint "NOT NULL"]
    ;;[:tag_is_active :boolean "NOT NULL" "DEFAULT TRUE"]
    ))
-
-
-
