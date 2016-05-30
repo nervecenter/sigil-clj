@@ -5,22 +5,23 @@
           :source-paths #{"src"}
           :resource-paths #{"resources"}
           :dependencies '[[org.clojure/clojure "1.8.0"]
-                          [org.clojure/tools.namespace "0.2.11"]
-                          [ring/ring-core "1.4.0"]
-                          [javax.servlet/servlet-api "2.5"]
+                          [org.clojure/tools.namespace "0.2.11"] ;; For REPL reloading and such; MAY END UP TAKING OUT
+                          [ring/ring-core "1.4.0"]               ;; Web server
+                          [javax.servlet/servlet-api "2.5"]      ;; Either used in Ring or http-kit
                           ;;[ring.middleware.logger "0.5.0"]
-                          [http-kit "2.1.19"]
-                          [buddy/buddy-auth "0.9.0"]
+                          [http-kit "2.1.19"]                    ;; Replaces jetty as the HTTP endpoint of the server
+                          [buddy/buddy-auth "0.9.0"]             ;; Allows us to encrypt and authorize requests
                           [buddy/buddy-hashers "0.11.0"]
-                          [compojure "1.5.0"]
-                          [hiccup "1.0.5"]
-                          [cheshire "5.5.0"]
-                          ;;[korma "0.4.2"]
-                          [org.clojure/java.jdbc "0.4.2"]
-                          [org.postgresql/postgresql "9.4.1208"]
-                          [clj-time "0.11.0"]
-                          [speclj "3.3.1"]
-                          [fresh "1.0.1"]])
+                          [compojure "1.5.0"]                    ;; Routing
+                          [hiccup "1.0.5"]                       ;; Templating
+                          [cheshire "5.5.0"]                     ;; JSON encoding
+                          ;;[korma "0.4.2"]                      ;; A schema and SQL library, possibly use later
+                          [org.clojure/java.jdbc "0.4.2"]        ;; SQL querying and transactions
+                          [org.postgresql/postgresql "9.4.1208"] ;; Postgres driver
+                          [clj-time "0.11.0"]                    ;; Simple date and time calculations
+                          ;;[speclj "3.3.1"]                     ;; Test and behavior suite, may use later
+                          ;;[fresh "1.0.1"]                      ;; Live reloads src files on save, may use later
+                          ])
 
 (task-options! pom {:project (get-env :project)
                     :version (get-env :version)}
