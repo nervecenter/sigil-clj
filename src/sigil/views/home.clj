@@ -12,40 +12,30 @@
   ;; Home page expects user
   (let [user (user-or-nil req)
         user-org (user-org-or-nil user)
-        user-issues (issues/get-issues-by-user user)
         issue-boxes (issues/get-twelve-org-issue-boxes)]
     (layout/render req
                    user
                    user-org
                    "Sigil"
-                   (home-body (:uri req) user user-issues issue-boxes))))
+                   (home-body (:uri req) user issue-boxes))))
 
-(defn home-body [uri user user-issues issue-boxes]
+(defn home-body [uri user issue-boxes]
   (html
    [:div.col-md-9.col-lg-9
     [:div.panel.panel-default
-     [:div.panel-body
-      [:h3 "Welcome, " (:username user) "!"]
-      [:br]
-      [:p.empty-home-text "Here's the latest feedback on Sigil."]
-      [:br]
-      [:p.empty-home-text "Want to find public offices? Use the " [:b "search bar"] " up top, or just " [:b [:a {:href "/companies"} "browse all gov't offices on Sigil"]] "."]]]
-    [:div.panel.panel-info
-     [:div.panel-body
-      [:h4 {:style "margin-top:10px;"} "Issues you've posted:"]]]
-    (if (empty? user-issues)
-      [:p {:style "margin-bottom:50px;"}
-       "You haven't posted any feedback yet. Search for an office and help change things!"]
-      (for [i user-issues]
-        (issue-partial uri i user)))
+     [:div.panel-body {:style "text-align:center;"}
+      [:h3 {:style "margin-top:10px;"} "Welcome, " (:username user) "! " 
+       [:img.img-rounded {:src (:icon_100 user)
+                          :style "height:40px;"}]]
+      [:p.empty-home-text "Here's some of the latest feedback on Sigil."] 
+      [:p.empty-home-text "You can use the " [:b "search bar"] " up top, or just " [:b [:a {:href "/companies"} "check out all organizations on Sigil"]] "."]]]
     (for [box issue-boxes]
       (html
-       [:div.panel.panel-default
-        [:div.panel-heading
-         [:a {:href (str "/" (:org_url (:org box)))}
+         [:h4 [:a {:href (str "/" (:org_url (:org box)))}
           [:img {:src (:icon_30 (:org box))
                  :style "margin-right:5px;"}]
-          (:org_name (:org box))]]]
+          (:org_name (:org box))]]
        (for [issue (:issues box)]
-         (issue-partial "/" issue user))))]
+         (issue-partial "/" issue user))
+        [:br]))]
    (sidebar-partial nil user)))

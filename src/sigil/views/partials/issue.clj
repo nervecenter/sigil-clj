@@ -50,9 +50,9 @@
     [:div.media-object.pull-left.votebutton-box
      (if authenticated?
        (if user-voted?
-         [:img.unvoteup {:data-issueid (:issue_id issue)
-                         :src "/images/voted.png"}]
-         [:img.voteup {:data-issueid (:issue_id issue)
+         [:img.vote-button.unvoteup {:data-issueid (:issue_id issue)
+                                     :src "/images/voted.png"}]
+         [:img.vote-button.voteup {:data-issueid (:issue_id issue)
                        :src "/images/notvoted.png"}])
        [:a {:href (str "login?return=" uri)}
         [:img.votelogin {:src "/images/notvoted.png"}]])
@@ -74,13 +74,14 @@
       (str "Posted at " (clj-time.coerce/to-local-date (:created_at issue)) " by ")
       [:img {:src (:icon_30 issue-user)}]
       (:username issue-user)
-      " "
-      [(if (and (some? user)
-                (user-reported-issue? user issue))
-         :span.glyphicon.glyphicon-flag.reported
-         :span.glyphicon.glyphicon-flag.unreported)
-       {:data-issueid (:issue_id issue)
-        :aria-hidden "true"}]
+      (when (some? user)
+        (html 
+          " "
+          [(if (user-reported-issue? user issue)
+           :span.glyphicon.glyphicon-flag.report-flag.reported
+           :span.glyphicon.glyphicon-flag.report-flag.unreported)
+           {:data-issueid (:issue_id issue)
+            :aria-hidden "true"}]))
       ;; (if (auth/user-has-role? user :site-admin)
       ;;   [:form {:method "post" :action "/archiveissue"}
       ;;    (hidden-field "org-id" (:org_id issue-org))

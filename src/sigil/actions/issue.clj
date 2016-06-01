@@ -79,14 +79,18 @@
   [req]
   (let [issue (issues/get-issue-by-id (read-string (:issue_id (:params req))))
         user (auth/user-or-nil req)]
-    (if (not (reports/user-reported-issue? user issue))
-      (do
-        (db/db-trans [reports/create-report {:user_id (:user_id user)
-                                           :issue_id (:issue_id issue)}])
-        {:status 200})
+    (if (some? user)
+      (if (not (reports/user-reported-issue? user issue))
+        (do
+          (db/db-trans [reports/create-report {:user_id (:user_id user)
+                                               :issue_id (:issue_id issue)}])
+          {:status 200})
       {:status 500
        :headers {"Content-Type" "text/plain"}
-       :body "User tried to report issue; report already found."})))
+       :body "User tried to report issue; report already found."})
+      {:status 500
+       :headers {"Content-Type" "text/plain"}
+       :body "No user logged in, can't report."})))
 
 (defn unreport-issue
   [req]

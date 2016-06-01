@@ -64,13 +64,19 @@
      [:div.panel.panel-default
       [:div.panel-body
        (if (not-empty orgs)
-         (for [o orgs]
-           (html [:div.media
+         (html 
+           [:div.media
+            [:div.media-left
+             [:img.media-object {:src (:icon_100 (first orgs))}]]
+            [:div.media-body
+             [:h3 [:a {:href (:org_url (first orgs))} (:org_name (first orgs))]]]]
+           (for [o (rest orgs)]
+             [:hr]
+             [:div.media
               [:div.media-left
                [:img.media-object {:src (:icon_100 o)}]]
               [:div.media-body
-               [:h3 [:a {:href (:org_url o)} (:org_name o)]]]]
-            [:hr]))
+               [:h3 [:a {:href (:org_url o)} (:org_name o)]]]]))
          [:p "No organizations, companies or people matching your search."])]]]
     [:div.col-lg-6
      [:h3 "Issues"]

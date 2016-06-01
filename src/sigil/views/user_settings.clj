@@ -1,6 +1,8 @@
 (ns sigil.views.user-settings
   (:require [sigil.auth :refer [user-or-nil user-org-or-nil]]
-            [sigil.views.layout :as layout])
+            [sigil.views.layout :as layout]
+            [sigil.db.issues :as issues]
+            [sigil.views.partials.issue :refer [issue-partial]])
   (:use [hiccup.form]))
 
 (declare user-settings-handler user-settings-page)
@@ -8,6 +10,7 @@
 (defn user-settings-handler [req]
   (let [user (user-or-nil req)
         user-org (user-org-or-nil user)
+        user-issues (issues/get-issues-by-user user)
         icon-invalid? (if (= "l" ((:query-params req) "invalid"))
                         true
                         false)
@@ -18,11 +21,11 @@
                      user
                      user-org
                      "Sigil - Settings"
-                     (user-settings-page user icon-invalid? pass-invalid? successful?))
+                     (user-settings-page user user-issues icon-invalid? pass-invalid? successful?))
       {:status 302
        :headers {"Location" "/"}})))
 
-(defn user-settings-page [user icon-invalid? pass-invalid? successful?]
+(defn user-settings-page [user user-issues icon-invalid? pass-invalid? successful?]
   [:div.container.settings-container
    [:h2.settings-page-header "Account settings for " (:username user)]
    [:h3 {:style "color:green;"}
@@ -31,6 +34,32 @@
       (= successful? "i") "Icon Updated")]
    [:div.row
     [:div.col-lg-6
+     [:h3 "Issues you've posted:"]
+     (for [i user-issues]
+       (issue-partial "/settings" i user))]
+    [:div.col-lg-6
+     [:div.panel.panel-default
+      [:div.panel-body
+       (if icon-invalid?
+         [:p.text-success "User icon must be .jpg or .png at most 100 x 100 pixels."])
+       [:img.img-rounded.img-responsive.img-relief
+        {:src (:icon_100 user)}]
+       [:h4 "User icon: 100 x 100 pixels, .jpg or .png"]
+       [:form {:action "/usericon100"
+               :method "post"
+               :enctype "multipart/form-data"}
+        ;[:post "/usericon100"]
+        [:div.form-group
+         [:div.input-group
+          [:div.input-group-btn
+           [:span.btn.btn-default.btn-file
+            "Browse"
+            (file-upload {:id "usericon100"} "usericon100")]]
+          (text-field {:class "form-control"  :readonly ""} "txt-field-icon")
+          ]]
+        [:div.form-group
+         (submit-button {:class "btn btn-default disabled form-control"}
+                        "Upload new icon")]]]]
      [:div.panel.panel-default
       [:div.panel-body
        [:h3 {:style "color:red;"} (cond
@@ -56,27 +85,4 @@
                           :class "form-control"} "confirm-new-password")]
         [:div.btn-group.btn-group-justified
          [:div.btn-group
-          (submit-button {:class "btn btn-primary disabled"} "Change Password")]]]]]]
-    [:div.col-lg-6
-     [:div.panel.panel-default
-      [:div.panel-body
-       (if icon-invalid?
-         [:p.text-success "User icon must be .jpg or .png at most 100 x 100 pixels."])
-       [:img.img-rounded.img-responsive.img-relief
-        {:src (:icon_100 user)}]
-       [:h4 "User icon: 100 x 100 pixels, .jpg or .png"]
-       [:form {:action "/usericon100"
-               :method "post"
-               :enctype "multipart/form-data"}
-        ;[:post "/usericon100"]
-        [:div.form-group
-         [:div.input-group
-          [:div.input-group-btn
-           [:span.btn.btn-default.btn-file
-            "Browse"
-            (file-upload {:id "usericon100"} "usericon100")]]
-          (text-field {:class "form-control"  :readonly ""} "txt-field-icon")
-          ]]
-        [:div.form-group
-         (submit-button {:class "btn btn-default disabled form-control"}
-                        "Upload new icon")]]]]]]])
+          (submit-button {:class "btn btn-primary disabled"} "Change Password")]]]]]]]])

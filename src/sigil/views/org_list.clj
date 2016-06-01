@@ -23,11 +23,17 @@
     [:h2 "List of all organizations and agencies"]
     [:div.panel.panel-default
      [:div.panel-body
-      (for [o orgs]
-        [:div.media
-         [:div.media-left
-          [:img.media-object {:src (:icon_100 o)}]]
-         [:div.media-body
-          [:h3 [:a {:href (:org_url o)} (:org_name o)]]]
-         [:hr]])]]]
+      [:div.media
+       [:div.media-left
+        [:img.media-object {:src (:icon_100 (first orgs))}]]
+       [:div.media-body
+        [:h3 [:a {:href (:org_url (first orgs))} (:org_name (first orgs))]]]]
+      (for [o (rest orgs)]
+        (html
+          [:hr]
+          [:div.media
+           [:div.media-left
+            [:img.media-object {:src (:icon_100 o)}]]
+           [:div.media-body
+            [:h3 [:a {:href (:org_url o)} (:org_name o)]]]]))]]]
    (sidebar-partial nil user)))
