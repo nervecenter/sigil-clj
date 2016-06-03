@@ -31,16 +31,24 @@
                :tags
                new-tag))
 
-(defn delete-tag
-  ([tag] (delete-tag tag false))
-  ([tag perm]
-   (if perm
-     (sql/delete! db/spec :tags ["tag_id = ?" (:tag_id tag)])
-     (sql/update! db/spec :tags {:tag_is_active false} ["tag_id = ?" (:tag_id tag)]))))
+;;(defn delete-tag
+;;  ([tag] (delete-tag tag false))
+;;  ([tag perm]
+;;   (if perm
+;;     (sql/delete! db/spec :tags ["tag_id = ?" (:tag_id tag)])
+;;     (sql/update! db/spec :tags {:tag_is_active false} ["tag_id = ?" (:tag_id tag)]))))
+
+(defn delete-tag [tag]
+  (sql/delete! db/spec :tags ["tag_id = ?" (:tag_id tag)]))
 
 (defn update-tag
   [db-conn [tag updated-rows]]
   (sql/update! db-conn :tags updated-rows ["tag_id = ?" (:tag_id tag)]))
+
+;; TODO: Make this a sql/update! so it can be done in transactions atomically.
+(defn move-issues-from-tag-to-tag
+  [from-tag to-tag]
+  (sql/query db/spec ["UPDATE issues SET tag_id = ? WHERE tag_id = ?" (:tag_id to-tag) (:tag_id from-tag)]))
 
 (defn tags_model
   "Defines the tag model in the db"

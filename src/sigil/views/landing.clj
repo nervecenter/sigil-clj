@@ -34,7 +34,6 @@
                 "js/jquery-ui-1.9.2.custom.min.js"
                 "js/bootstrap.js"
                 "js/voting.js"
-                "js/subscriptions.js"
                 "js/search.js")]))
 
 (defn issue-section [cols]

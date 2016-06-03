@@ -11,6 +11,7 @@
             [sigil.views.home :refer [home-handler]]
             [sigil.views.legal :refer [legal-handler]]
             [sigil.views.landing :refer [landing-handler]]
+            [sigil.views.features :refer [features-handler]]
             [sigil.views.login :refer [login-get login-post]]
             [sigil.views.usertest :refer [usertest-handler]]
             [sigil.views.org-page :refer [org-page-handler]]
@@ -59,6 +60,7 @@
   (GET "/login" req (login-get req))
   (POST "/login" req (login-post req))
   (GET "/logout" req (logout-handler req))
+  (GET "/features" req (features-handler req))
   (GET "/companies" req (org-list-handler req))
   ;;need to lock down the next five routes so that only org-admins can access and call.
   (GET "/default_graph" req (data-actions/default-org-chart req))
@@ -93,6 +95,7 @@
   (POST "/postissue" req (issue-actions/add-issue-post req))
   (POST "/archiveissue" req (issue-actions/archive-issue-post req))
   (POST "/deletecomment" req (comment-actions/delete-comment-post req))
+  (POST "/deletetag" req (tag-actions/delete-org-tag req))
   (GET "/numnotes" req (note-actions/number-notes-handler req))
   (GET "/checknotes" req (note-actions/check-notes-handler req))
   (POST "/deletenote" req (note-actions/delete-notification-handler req))
