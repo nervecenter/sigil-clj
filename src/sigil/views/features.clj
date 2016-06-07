@@ -63,14 +63,14 @@
      [:div.container
       [:div.row {:style "margin-bottom:30px;"}
        [:div.col-md-4.col-md-offset-8.col-centered {:style "max-width:350px;"}
-        [:h3 "Unified opinions, easy parsing."]
-        [:p "The internet isn't paper, so why sift through stacks of suggestions? Our vote system makes opinions clear to parse and analyze, with data tools to delve into greater detail."]
+        [:h3 "Diverse opinions + Easy parsing = Consensus"]
+        [:p "The internet isn't paper, so why sift through stacks of suggestions? Our vote system makes opinions clear to parse and analyze, with data tools to delve into greater detail. Then, respond to everyone with just one post."]
         ]]]]
     [:div.features-splash.features-splash-4
      [:div.container
       [:div.row {:style "margin-bottom:30px;"}
        [:div.col-md-4.col-md-offset-8.col-centered {:style "max-width:350px;"}
-        [:h3 "So easy, anyone can do it."]
+        [:h3 "Powerful tools, simple to use."]
         [:p "A new solution shouldn't require new employees to manage. Anyone can check up on the discussion in the first 15 minutes of their day."]
         ]]]]
     [:div.features-splash.features-splash-5
@@ -78,11 +78,15 @@
       [:div.row {:style "margin-bottom:30px;"}
        [:div.col-md-4.col-md-offset-8.col-centered {:style "max-width:350px;"}
         [:h3 "Zero integration, zero hassle."]
-        [:p "A Sigil page takes minutes to set up. And that's it. No hooks or APIs or feature creep."]
+        [:p "A Sigil page takes minutes to set up. And that's it. No hooks or APIs or feature creep. Just a focused place for the conversation to happen."]
         ]]]]
-    [:div.container
-      [:div.row {:style "margin-bottom:30px;"}
-       [:div.col-md-4.col-md-offset-8.col-centered {:style "max-width:350px;"}
-        [:h3 "Zero integration, zero hassle."]
-        [:p "A Sigil page takes minutes to set up. And that's it. No hooks or APIs or feature creep."]
+    [:div.container {:style "max-width: 600px;margin:20vh auto 20vh;"}
+      [:div.row {:style "margin-bottom:30px;text-align:center;"}
+       [:div.col-lg-12.col-centered
+        [:h4 {:style "font-size:25px;"} "Let Sigil help you transform the conversation for your constituents."]
+        [:br]
+        [:a.btn.btn-lg.btn-success
+         {:style "width:100%;"
+          :href "mailto:contact@sigil.tech"}
+         "Contact Sigil to get started"]
         ]]]))

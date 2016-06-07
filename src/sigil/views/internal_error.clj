@@ -32,3 +32,8 @@
      "Don't worry, we've logged it and are looking into it. Maybe you'd like to head back "
      [:a {:href "/"} "home"]
      "?"]]))
+
+(defn plain-text-error [message]
+  {:status 500
+   :headers {"Content-Type" "text/plain"}
+   :body message})

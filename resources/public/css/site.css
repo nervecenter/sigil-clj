@@ -197,7 +197,7 @@ textarea.org-feedback-input-box {
 .splash {
     padding: 80px 0 40px;
     background-color: rgba(70, 72, 82, 0.7);
-    /*background-image: url("/images/splash.jpg");*/
+    background-image: url("/images/splash.jpg");
     background-size: cover;
     background-attachment: fixed;
     color: #FFF;
@@ -441,7 +441,7 @@ textarea.org-feedback-input-box {
 
 .landing-container {
     max-width: 1200px;
-    margin-top: 30px;
+    margin-top: 15px;
     margin-bottom: 20px;
     min-height: 70vh;
 }

@@ -71,7 +71,8 @@
         [:div.panel-body
          [:h4 "Add a new tag"]
          (form-to
-           [:post "/orgaddtag"]
+           [:post "/addtag"]
+           (hidden-field {:value (:org_id org)} "orgid")
            [:div.row {:style "margin-top:30px;"}
             [:div.col-lg-12
                [:div.form-group

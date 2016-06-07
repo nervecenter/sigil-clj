@@ -1,25 +1,30 @@
 (ns sigil.actions.tag
   (:require [sigil.db.tags :as tags]
             [sigil.db.core :as db]
-            [sigil.auth :as auth]
+            [sigil.db.orgs :refer [get-org-by-id]]
+            [sigil.auth :refer [user-or-nil user-org-or-nil]]
             [sigil.views.internal-error :refer [internal-error-handler]]))
 
-(defn add-org-tag
+(defn add-tag
   [req]
-  (let [org (auth/user-org-or-nil (auth/user-or-nil req))
-        new-tag-form (:form-params req)
-        new-tag {:tag_name (new-tag-form "tag-name")
+  (let [user (user-or-nil req)
+        new-tag-form (:params req)
+        org (get-org-by-id (read-string (:orgid new-tag-form)))
+        new-tag {:tag_name (:tag-name new-tag-form)
                  :icon_30 (rand-nth db/default_icon_30)
                  :org_id (:org_id org)}]
-    (do
-      (db/db-trans [tags/create-tag new-tag])
-      {:status 302
-       :headers {"Location" "/orgsettings"}})))
+    (println "Org:" (:org_id org) "User:" (:org_id user))
+    (if (= (:org_id org) (:org_id user))
+      (if (= :success (db/db-trans [tags/create-tag new-tag]))
+        {:status 302
+         :headers {"Location" "/orgsettings"}}
+        (internal-error-handler req "Couldn't upload new tag."))
+      (internal-error-handler req "Couldn't add tag, org did not match."))))
 
 ;; TODO: Get this working using transactions.
 (defn delete-org-tag
   [req]
-  (let [org (auth/user-org-or-nil (auth/user-or-nil req))
+  (let [org (user-org-or-nil (user-or-nil req))
         deleted-tag-params (:params req)
         deleted-tag (tags/get-tag-by-id (read-string (:tagid deleted-tag-params)))
         move-to-tag (tags/get-tag-by-id (read-string (:moveto deleted-tag-params)))]
