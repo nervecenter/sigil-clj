@@ -81,51 +81,51 @@
 (def role_seed [{:role_name "org-admin"}
                 {:role_name "site-admin"}])
 
-(def tag_seed [{:tag_id 0
+(def tag_seed [{;:tag_id 0
                 :tag_name "DEFAULT TAG"
                 :org_id 1
                 :icon_30 (rand-nth db/default_icon_30)}
                ;; USF
-               {:tag_id 1
+               {;:tag_id 1
                 :tag_name "Groundskeeping"
                 :org_id 2
                 :icon_30 (rand-nth db/default_icon_30)}
-               {:tag_id 2
+               {;:tag_id 2
                 :tag_name "College of Engineering"
                 :org_id 2
                 :icon_30 (rand-nth db/default_icon_30)}
-               {:tag_id 5
+               {;:tag_id 5
                 :tag_name "Library"
                 :org_id 2
                 :icon_30 (rand-nth db/default_icon_30)}
                ;; Hillsborough
-               {:tag_id 3
+               {;:tag_id 3
                 :tag_name "Transportation & Roads"
                 :org_id 3
                 :icon_30 (rand-nth db/default_icon_30)}
-               {:tag_id 4
+               {;:tag_id 4
                 :tag_name "Education & Schools"
                 :org_id 3
                 :icon_30 (rand-nth db/default_icon_30)}
-               {:tag_id 10
+               {;:tag_id 10
                 :tag_name "Water & Maritime"
                 :org_id 3
                 :icon_30 (rand-nth db/default_icon_30)}
                ;; Tampa
-               {:tag_id 6
+               {;:tag_id 6
                 :tag_name "Transportation & Roads"
                 :org_id 4
                 :icon_30 (rand-nth db/default_icon_30)}
-               {:tag_id 7
+               {;:tag_id 7
                 :tag_name "Utilities"
                 :org_id 4
                 :icon_30 (rand-nth db/default_icon_30)}
                ;; Gus Bilirakis
-               {:tag_id 8
+               {;:tag_id 8
                 :tag_name "House Bills & Votes"
                 :org_id 5
                 :icon_30 (rand-nth db/default_icon_30)}
-               {:tag_id 9
+               {;:tag_id 9
                 :tag_name "Federal Programs"
                 :org_id 5
                 :icon_30 (rand-nth db/default_icon_30)}
