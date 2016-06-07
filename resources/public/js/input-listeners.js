@@ -131,5 +131,5 @@ $(".delete-tag").each(function() {
         $("#to-" + tagid).prop('disabled', true);
         $(".to-tag:enabled").first().prop("selected", true);
         $("#tagid-field").val(tagid);
-        $("#delete-tag-modal").modal('toggle');    
+        $("#delete-tag-modal").modal('toggle');
 })});
