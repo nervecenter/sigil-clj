@@ -68,7 +68,9 @@
   (GET "/customtopissues" req (data-actions/custom-top-issues req))
   (GET "/customunrespondedissues" req (data-actions/custom-unresponded-issues req))
   (GET "/customunderdogissues" req (data-actions/custom-underdog-issues req))
-  (GET "/orgsettings" req (org-settings-handler req))
+  (GET "/orgsettings" req (if (authenticated? req)
+                            (org-settings-handler req)
+                            {:status 403}))
 
   (POST "/orgbanner" req (if (authenticated? req)
                             (image-actions/update-org-banner req)
