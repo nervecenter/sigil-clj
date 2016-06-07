@@ -101,8 +101,12 @@
                      :placeholder "Search for an organization"}
                     "search")])]]
     [:div.row.small-links
-     [:a {:href "features"} "See how Sigil can revamp feedback for your public office"]
+     ;[:a {:href "features"} "See how Sigil can revamp feedback for your public office"]
+     [:a {:href "features"} "features"]
      " | "
-     [:a {:href "register"} "Start giving your own feedback"]
+     ;[:a {:href "register"} "Start giving your own feedback"]
+     [:a {:href "companies"} "organizations"]
      " | "
-     [:a {:href "companies"} "See all the offices and agencies on Sigil"]]]])
+     ;[:a {:href "companies"} "See all the offices and agencies on Sigil"]
+     [:a {:href "register"} "register"]
+     ]]])
