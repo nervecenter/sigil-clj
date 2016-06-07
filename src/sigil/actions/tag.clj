@@ -30,8 +30,10 @@
         move-to-tag (tags/get-tag-by-id (read-string (:moveto deleted-tag-params)))]
     (if (= deleted-tag move-to-tag)
       (internal-error-handler req "Can't delete your last tag!")
-      (do
-        (tags/delete-tag deleted-tag)
-        (tags/move-issues-from-tag-to-tag deleted-tag move-to-tag)
+      
+      (if (= :success (db/db-trans [tags/delete-tag deleted-tag]
+                         [tags/move-issues-from-tag-to-tag deleted-tag move-to-tag]))
+       
         {:status 302
-         :headers {"Location" "/orgsettings"}}))))
+         :headers {"Location" "/orgsettings"}}
+        (internal-error-handler req "There was a problem deleteing the tag you selected.")))))

@@ -38,7 +38,7 @@
 ;;     (sql/delete! db/spec :tags ["tag_id = ?" (:tag_id tag)])
 ;;     (sql/update! db/spec :tags {:tag_is_active false} ["tag_id = ?" (:tag_id tag)]))))
 
-(defn delete-tag [tag]
+(defn delete-tag [db-conn [tag]]
   (sql/delete! db/spec :tags ["tag_id = ?" (:tag_id tag)]))
 
 (defn update-tag
@@ -47,8 +47,8 @@
 
 ;; TODO: Make this a sql/update! so it can be done in transactions atomically.
 (defn move-issues-from-tag-to-tag
-  [from-tag to-tag]
-  (sql/query db/spec ["UPDATE issues SET tag_id = ? WHERE tag_id = ?" (:tag_id to-tag) (:tag_id from-tag)]))
+  [db-conn [from-tag to-tag]]
+  (sql/execute! db-conn ["UPDATE issues SET tag_id = ? WHERE tag_id = ?" (:tag_id to-tag) (:tag_id from-tag)]))
 
 (defn tags_model
   "Defines the tag model in the db"
