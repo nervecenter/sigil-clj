@@ -1,3 +1,8 @@
+.disabled-option {
+    text-decoration:line-through;
+    color:maroon;
+}
+
 .petition-form {
     margin-top: 20px;
 }
@@ -174,10 +179,13 @@ textarea.org-feedback-input-box {
     width: 25%;
 }
 
-.issue-panel-icon {
+.issue-panel-icon, .tag-icon {
     width:15px;
     height:15px;
     margin-right: 4px;
+}
+
+.issue-panel-icon {
     vertical-align: -3px;
 }
 
@@ -220,35 +228,35 @@ textarea.org-feedback-input-box {
 }
 
 .features-splash-1 {
-    background-color: rgba(33, 33, 82, 0.7);
+    /*background-color: rgba(33, 33, 82, 0.7);*/
     background-image: url("/images/fsplash1.jpg");
     height: 100vh;
     padding-top: 38vh;
 }
 
 .features-splash-2 {
-    background-color: rgba(78, 66, 25, 0.7);
+    /*background-color: rgba(78, 66, 25, 0.7);*/
     background-image: url("/images/fsplash2.jpg");
     height: 100vh;
     padding-top: 35vh;
 }
 
 .features-splash-3 {
-    background-color: rgba(10, 88, 50, 0.7);
+    /*background-color: rgba(10, 88, 50, 0.7);*/
     background-image: url("/images/fsplash3.jpg");
     height: 100vh;
     padding-top: 35vh;
 }
 
 .features-splash-4 {
-    background-color: rgba(78, 70, 76, 0.7);
+    /*background-color: rgba(78, 70, 76, 0.7);*/
     background-image: url("/images/fsplash4.jpg");
     height: 100vh;
     padding-top: 35vh;
 }
 
 .features-splash-5 {
-    background-color: rgba(15, 20, 25, 0.7);
+    /*background-color: rgba(15, 20, 25, 0.7);*/
     background-image: url("/images/fsplash5.jpg");
     height: 100vh;
     padding-top: 35vh;

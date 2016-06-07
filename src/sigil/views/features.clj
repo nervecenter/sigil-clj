@@ -83,7 +83,7 @@
     [:div.container {:style "max-width: 600px;margin:20vh auto 20vh;"}
       [:div.row {:style "margin-bottom:30px;text-align:center;"}
        [:div.col-lg-12.col-centered
-        [:h4 {:style "font-size:25px;"} "Let Sigil help you transform the conversation for your constituents."]
+        [:h4 {:style "font-size:25px;"} "Let Sigil help you transform the conversation for you and your constituents."]
         [:br]
         [:a.btn.btn-lg.btn-success
          {:style "width:100%;"

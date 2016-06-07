@@ -41,11 +41,11 @@
 (defn org-box [org org-tags]
   [:div.panel.panel-default
    [:div.panel-body
-    [:h3 {:style "margin: 10px auto 18px;"}
+    [:h3 {:style "margin: 10px auto 18px;font-size:22px;"}
      [:a {:href (:org_url org)}
       [:img {:src (:icon_30 org)
-             :style "width:25px;height:25px;"}]
-      (:org_name org)]]
+             :style "width:25px;height:25px;margin-bottom:5px;"}]
+      " " (:org_name org)]]
     [:a {:href (str "http://" (:website org))
          :target "_blank"}
      [:img.sub-org-icon {:src "/images/website.png"}]
@@ -76,9 +76,10 @@
   (html
    [:div.panel.panel-default
     [:div.panel-body
-     [:a {:href "/companies"} "Browse orgs on Sigil"]
+     [:a {:href "/features"} [:b "Features"]]
      [:hr.sidebar-divider]
-     [:a {:href "/features"} [:b "Sigil for your org"]]]]))
+     [:a {:href "/orgs"} "Browse organizations"]
+     ]]))
 
 ;;(defn favorites-box [user-favorites]
 ;;  [:div.panel.panel-default
@@ -95,9 +96,10 @@
                                      :style "margin-bottom:21px;"}]])
 
 (defn ad-box []
-  (condp = (rand-int 2)
-    0 (ad "mailto:contact@sigil.tech" "/images/advertise.png" false)
-    1 (ad "/sigil" "/images/feedback-ad.png" true)))
+  ;(condp = (rand-int 2)
+    ;0 (ad "mailto:contact@sigil.tech" "/images/advertise.png" false)
+    ;1 (ad "/sigil" "/images/feedback-ad.png" true))
+  (ad "/sigil" "/images/feedback-ad.png" true))
 
 (def sidebar-footer
   (html

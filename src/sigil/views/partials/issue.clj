@@ -68,7 +68,7 @@
       [:img.issue-panel-icon {:src (:icon_30 issue-org)}]
       [:a {:href (str "/" (:org_url issue-org))} (str (:org_name issue-org) " ")]
       [:span.label.label-pill.label-default
-       ;;[:img.issue-panel-icon {:src (:icon_30 issue-tag)}]
+       [:img.tag-icon {:src (:icon_30 issue-tag)}]
        (:tag_name issue-tag)]]
      [:p.pull-right
       (str "Posted at " (clj-time.coerce/to-local-date (:created_at issue)) " by ")

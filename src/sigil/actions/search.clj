@@ -22,13 +22,11 @@
                                               :score (second (:result %)))
                                    (filter #(first (:result %))
                                                     ;(> (second (:result %)) 0)
-                                                    
-                                           (pmap #(hash-map :result 
+                                           (pmap #(hash-map :result
                                                             (search/fuzzy-wuzzy term (:org_name %))
                                                             :original %)
                                                  all-orgs))))))]
-    (do (println matched)
-      (json/generate-string matched))))
+    (json/generate-string matched)))
 
 
 ;;-------------------------------------------------
@@ -53,8 +51,7 @@
 ]
         (if (= 0 (count matched-issues))
           "<h3>No issues found that match your search.</h3>"
-          (do (println matched-issues)
             (reduce str (map #(html (issue-partial (str "/" (:org_url org))
                                                    (:original %)
                                                    user))
-                             matched-issues))))))))
+                             matched-issues)))))))
