@@ -21,7 +21,6 @@
         (internal-error-handler req "Couldn't upload new tag."))
       (internal-error-handler req "Couldn't add tag, org did not match."))))
 
-;; TODO: Get this working using transactions.
 (defn delete-org-tag
   [req]
   (let [org (user-org-or-nil (user-or-nil req))

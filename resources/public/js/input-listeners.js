@@ -132,4 +132,5 @@ $(".delete-tag").each(function() {
         $(".to-tag:enabled").first().prop("selected", true);
         $("#tagid-field").val(tagid);
         $("#delete-tag-modal").modal('toggle');
+      
 })});
