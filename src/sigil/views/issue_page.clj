@@ -150,4 +150,4 @@
           (hidden-field "issue-id" (:issue_id issue))]
          (submit-button {:class "btn btn-primary" :id "submit-comment"} "Submit comment"))
         nil)]]]
-   (sidebar-partial org user)))
+   (sidebar-partial org)))

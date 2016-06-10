@@ -68,5 +68,5 @@
      [:div#issues
       (for [i issues]
         (issue-partial (:uri req) i org user))]]
-   (sidebar-partial org user)))
+   (sidebar-partial org)))
 

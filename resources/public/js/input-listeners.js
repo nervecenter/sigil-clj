@@ -127,8 +127,13 @@ $(".change-tag-icon").each(function () {
 $(".delete-tag").each(function() {
     $(this).click(function() {
         var tagid = $(this).data("tagid");
-        $(".to-tag:disabled").each(function () { $(this).prop('disabled', false); });
-        $("#to-" + tagid).prop('disabled', true);
+        $(".to-tag:disabled").each(function () { 
+            $(this).prop('disabled', false);
+            //$(this).removeClass("disabled-option");
+        });
+        $("#to-" + tagid)
+            .prop('disabled', true)
+            //.addClass("disabled-option");
         $(".to-tag:enabled").first().prop("selected", true);
         $("#tagid-field").val(tagid);
         $("#delete-tag-modal").modal('toggle');

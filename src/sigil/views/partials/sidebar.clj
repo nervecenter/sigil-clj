@@ -1,40 +1,21 @@
 (ns sigil.views.partials.sidebar
   (:require [sigil.db.tags :refer [get-tags-by-org]]
-            [sigil.db.users :refer [get-user-favorites]]
             [hiccup.core :refer [html]]))
 
 (declare sidebar-partial sidebar org-box link-box ad ad-box sidebar-footer)
 
-(defn sidebar-partial [org user]
-  (cond
-    (and (some? org) (some? user))
-    (let [org-tags (get-tags-by-org org)
-;;        user-favorites (get-favorites-by-user-id (:user_id user))
-          ]
-      (sidebar org
-               org-tags
-               ;;user-favorites
-               nil))
-    (and (some? org) (nil? user))
-    (let [org-tags (get-tags-by-org org)]
-      (sidebar org org-tags nil))
-    (and (nil? org) (some? user))
-;;    (let [user-favorites (get-favorites-by-user-id (:user_id user))]
+(defn sidebar-partial [org]
+  (if (some? org)
+    (sidebar org
+             (get-tags-by-org org))
     (sidebar nil
-             nil
-             ;;user-favorites
-             nil)
-;;      )
-    :else
-    (sidebar nil nil nil)))
+             nil)))
 
-(defn sidebar [org org-tags user-favorites]
+(defn sidebar [org org-tags]
   [:div.col-md-3.col-lg-3.col-sm-12.col-xs-12
    (if (some? org)
      (org-box org org-tags))
    link-box
-;;   (if (not-empty user-favorites)
-;;     (favorites-box user-favorites))
    (ad-box)
    sidebar-footer])
 
@@ -60,7 +41,14 @@
     [:span
      [:img.sub-org-icon {:src "/images/telephone.png"}]
      (:phone org)]
-    ;; [:br]
+    [:hr.tiny-hr]
+    [:h4 "Tags"]
+    [:div.form-group
+     [:select#tag-select.form-control
+      [:option#tag-option-all "All"]
+      (for [tag org-tags]
+        [:option.tag-option {:data-tagid (:tag_id tag)
+                             :data-orgid (:org_id tag)} (:tag_name tag)])]]
     ;; [:hr.sidebar-divider]
     ;; [:span "Data button might go here."]
     ;; [:hr.sidebar-divider]
