@@ -27,7 +27,7 @@
       [:h3 {:style "margin-top:10px;"} "Welcome, " (:username user) "! "
        [:img.img-rounded {:src (:icon_100 user)
                           :style "height:40px;"}]]
-      [:p.empty-home-text "Here's some of the latest feedback on Sigil."]
+      [:p.empty-home-text "You can find some of the latest feedback across Sigil below."]
       [:p.empty-home-text "You can use the " [:b "search bar"] " up top, or just " [:b [:a {:href "/companies"} "check out all organizations on Sigil"]] "."]]]
     (for [box issue-boxes]
       (html

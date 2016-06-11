@@ -1,19 +1,16 @@
-﻿// $("input[type=file]").each(function () {
-// });
-
-function EnableTagSubmit() {
+﻿function EnableTagSubmit() {
     var $button = $("#new-tag-submit");
     if ($("#tag-name").val() != "") {
-        $button.removeClass("disabled").removeClass("btn-default").addClass("btn-success");
+        $button.removeClass("disabled").prop("disabled", false).removeClass("btn-default").addClass("btn-success");
     } else if (!$button.hasClass("disabled")) {
-        $button.removeClass("btn-success").addClass("disabled").addClass("btn-default");
+        $button.removeClass("btn-success").addClass("disabled").prop("disabled", true).addClass("btn-default");
     }
 }
 
 $("#tag-name").keyup(EnableTagSubmit);
 
 function EnableFileSubmit ($fileinput) {
-    $fileinput.parent().parent().parent().parent().parent().children().last().children().first().removeClass("disabled").removeClass("btn-default").addClass("btn-success");
+    $fileinput.parent().parent().parent().parent().parent().children().last().children().first().removeClass("disabled").prop("disabled", false).removeClass("btn-default").addClass("btn-success");
     $fileinput.off("change");
 }
 
@@ -32,9 +29,9 @@ $(".btn-file :file").each(function () {
 $("#policy-accept").change(function () {
   var checked = $(this).prop("checked");
   if (checked) {
-    $("#sign-up-button").removeClass("disabled");
+    $("#sign-up-button").removeClass("disabled").prop("disabled", false);
   } else {
-    $("#sign-up-button").addClass("disabled");
+    $("#sign-up-button").addClass("disabled").prop("disabled", true);
   }
 });
 
@@ -87,7 +84,8 @@ function AddChangeTagForm (event) {
         .append($("<input>")
                 .attr("type", "submit")
                 .attr("value", "Upload new 30x30 tag icon")
-                .attr("class", "btn btn-default form-control disabled"));
+                .attr("class", "btn btn-default form-control disabled")
+                .prop("disabled", true));
 
     var form = $("<form>").prop("method", "post")
         .prop("action", "/tagicon30")
@@ -138,3 +136,9 @@ $(".delete-tag").each(function() {
         $("#tagid-field").val(tagid);
         $("#delete-tag-modal").modal('toggle');
 })});
+
+/*$('input[type="submit"]').each(function () {
+    $(this).click(function () {
+        $(this).prop("disabled", true);
+    });
+});*/

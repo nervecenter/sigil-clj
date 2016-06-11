@@ -35,8 +35,10 @@
    [:div.row
     [:div.col-lg-6
      [:h3 "Issues you've posted:"]
-     (for [i user-issues]
-       (issue-partial "/settings" i user))]
+     (if (empty user-issues)
+       [:h4 "You haven't posted anything yet. Find an organization and start giving feedback!"]
+       (for [i user-issues]
+         (issue-partial "/settings" i user)))]
     [:div.col-lg-6
      [:div.panel.panel-default
       [:div.panel-body
@@ -58,7 +60,8 @@
           (text-field {:class "form-control"  :readonly ""} "txt-field-icon")
           ]]
         [:div.form-group
-         (submit-button {:class "btn btn-default disabled form-control"}
+         (submit-button {:class "btn btn-default disabled form-control"
+                         :disabled "disabled"}
                         "Upload new icon")]]]]
      [:div.panel.panel-default
       [:div.panel-body
@@ -83,6 +86,19 @@
          (password-field {:id "confirm-new-password"
                           :placeholder "Confirm New Password"
                           :class "form-control"} "confirm-new-password")]
-        [:div.btn-group.btn-group-justified
-         [:div.btn-group
-          (submit-button {:class "btn btn-primary disabled"} "Change Password")]]]]]]]])
+        [:div.form-group
+          (submit-button {:class "btn btn-default disabled form-control"
+                          :disabled "disabled"} "Change Password")]]]]
+     [:div.panel.panel-default
+      [:div.panel-body
+       [:h4 "You may change your zip code once every three months."]
+       [:form {:action "/userzip"
+               :method "post"}
+        [:div.form-group
+         (label "zip" "Zip Code")
+         (text-field {:id "zip"
+                      :placeholder "Zip Code"
+                      :class "form-control"} "zip")]
+        [:div.form-group
+         (submit-button {:class "btn btn-default disabled form-control"
+                         :disabled "disabled"} "Change your zip code")]]]]]]])

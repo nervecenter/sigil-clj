@@ -5,6 +5,7 @@
             [sigil.db.issues :as issues]
             [sigil.db.orgs :refer [get-org-by-id ;get-five-orgs-by-term
                                    get-all-orgs]]
+            [sigil.db.tags :refer [get-tag-by-id get-tags-by-org]]
             [sigil.views.partials.issue :refer [issue-partial]]
             [sigil.actions.fuzzy :as search]
             [cheshire.core :as json]
@@ -35,8 +36,10 @@
 (defn search-org-issues-handler
   [req]
   (let [user (user-or-nil req)
-        org (get-org-by-id (read-string (:id (:params req))))
+        org (get-org-by-id (read-string (:orgid (:params req))))
+        tagid (read-string (:tagid (:params req)))
         term (:term (:params req))]
+    (println (:tag_name (get-tag-by-id tagid)))
     (if (= term "")
       (let [all-issues (issues/get-issues-by-org org)]
           (reduce str (map #(html (issue-partial (str "/" (:org_url org))

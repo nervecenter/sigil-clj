@@ -47,7 +47,8 @@
               (file-upload {:id "banner-upload"} "banner-upload")]]
             (text-field {:class "form-control image-input" :readonly ""} "txt-field-banner")]]
           [:div.form-group
-           (submit-button {:class "btn btn-default disabled form-control"} "Upload new banner")]]]]]]]
+           (submit-button {:class "btn btn-default disabled form-control"
+                           :disabled "disabled"} "Upload new banner")]]]]]]]
     [:div.container.settings-container
      [:div.row
       [:div.col-lg-6
@@ -62,8 +63,8 @@
              {:data-tagid (:tag_id tag)
               :data-orgid (:org_id tag)}
              "Change icon"]
-            [:a.btn.btn-sm.btn-danger.delete-tag 
-             {:data-tagid (:tag_id tag)} 
+            [:a.btn.btn-sm.btn-danger.delete-tag
+             {:data-tagid (:tag_id tag)}
              "Delete"]]
            [:h4 (:tag_name tag)]]
           ])
@@ -81,7 +82,8 @@
                              :placeholder "Tag name"} "tag-name")]
                [:div.form-group
                 (submit-button {:class "form-control btn btn-primary disabled"
-                                :id "new-tag-submit"} "Submit new tag")]]])]]]
+                                :id "new-tag-submit"
+                                :disabled "disabled"} "Submit new tag")]]])]]]
          [:div.col-lg-6
           [:div.panel
            [:div.panel-body
@@ -96,7 +98,8 @@
                  (file-upload {:id "icon-100-upload"} "icon-100-upload")]]
                (text-field {:class "form-control image-input" :readonly ""} "txt-field-icon100")]]
              [:div.form-group
-              (submit-button {:class "btn btn-default disabled form-control"} "Upload new 100px icon")]]]]
+              (submit-button {:class "btn btn-default disabled form-control"
+                              :disabled "disabled"} "Upload new 100px icon")]]]]
           [:div.panel
            [:div.panel-body
             [:img.img-rounded.img-responsive.img-relief
@@ -110,15 +113,16 @@
                  (file-upload {:id "icon-30-upload"} "icon-30-upload")]]
                (text-field {:class "form-control image-input" :readonly ""} "txt-field-icon30")]]
              [:div.form-group
-              (submit-button {:class "btn btn-default disabled form-control"} "Upload new 30px icon")]]]]]]]
-      [:div#delete-tag-modal.modal.fade {:tabindex "-1" 
-                                   :role "dialog" 
+              (submit-button {:class "btn btn-default disabled form-control"
+                              :disabled "disabled"} "Upload new 30px icon")]]]]]]]
+      [:div#delete-tag-modal.modal.fade {:tabindex "-1"
+                                         :role "dialog"
                                    :aria-labelledby "delete-tag-modal-label"}
     [:div.modal-dialog.modal-sm {:role "document"}
      [:div.modal-content
       [:div.modal-header
-        [:button.close {:type "button" 
-                        :data-dismiss "modal" 
+        [:button.close {:type "button"
+                        :data-dismiss "modal"
                         :aria-label "Close"}
           [:span {:aria-hidden "true"} "x"]]
         [:h4#delete-tag-modal-label.modal-title "Delete tag"]]
@@ -130,7 +134,7 @@
          [:div.form-group
           [:select.form-control {:name "moveto"}
            (for [tag tags]
-             [:option.to-tag {:id (str "to-" (:tag_id tag)) 
+             [:option.to-tag {:id (str "to-" (:tag_id tag))
                               :value (:tag_id tag)} (:tag_name tag)])]]]]
       [:div.modal-footer
         [:button.btn.btn-default {:type "button" :data-dismiss "modal"} "Cancel"]

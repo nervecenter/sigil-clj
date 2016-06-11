@@ -7,6 +7,7 @@
             [sigil.db.votes :refer [user-voted-on-issue?]]
             [sigil.db.orgs :refer [get-org-by-url]]
             [sigil.db.tags :refer [get-tag-by-issue]]
+            [sigil.db.reports :refer [user-reported-issue? get-number-reports-by-issue]]
             [sigil.views.partials.sidebar :refer [sidebar-partial]]
             )
   (:use [hiccup.form]
@@ -46,8 +47,14 @@
                         (get-comments-with-commenters-by-issue issue)
                         )))))
 
-(defn issue-page-body
-  [user issue tag org authenticated? user-voted? responses comments]
+(defn issue-page-body [user
+                       issue
+                       tag
+                       org
+                       authenticated?
+                       user-voted?
+                       responses
+                       comments]
   (html
    [:div.col-md-9.col-lg-9
     [:img.img-rounded.img-responsive.org-banner-small
@@ -65,11 +72,12 @@
        [:div.media-object.pull-left.votebutton-box
         (if authenticated?
           (if user-voted?
-            [:img.unvoteup {:src "/images/voted.png"
-                            :data-issueid (:issue_id issue)}]
-            [:img.voteup {:src "/images/notvoted.png"
-                          :data-issueid (:issue_id issue)}])
-          [:img.votelogin {:src "/images/notvoted.png"}])
+            [:img.vote-button.unvoteup {:src "/images/voted.png"
+                                        :data-issueid (:issue_id issue)}]
+            [:img.vote-button.voteup {:src "/images/notvoted.png"
+                                      :data-issueid (:issue_id issue)}])
+       [:a {:href (str "login?return=" (:org_url org) "/" (:issue_id issue))}
+          [:img.votelogin {:src "/images/notvoted.png"}]])
         [:br]
         [:span.voteamount
          {:id (str "count-" (:issue_id issue))} (:total_votes issue)]]
@@ -79,13 +87,20 @@
          [:img.issue-panel-icon {:src (:icon_30 org)}]
          [:a {:href (str "/" (:org_url org))} (str (:org_name org) " ")]
          [:span.label.label-pill.label-default
-          ;;[:img.issue-panel-icon {:src (:icon_30 tag)}]
+          [:img.tag-icon {:src (:icon_30 tag)}]
           (:tag_name tag)]]
         [:p.pull-right
-         "Posted by "
-         (:username (:poster issue))
-         " on "
-         (clj-time.coerce/to-local-date (:created_at issue))]]]]
+         (str "Posted at " (clj-time.coerce/to-local-date (:created_at issue)) " by ")
+         [:img {:src (:icon_30 user)}]
+         (:username user)
+         (when (some? user)
+           (html
+             " "
+             [(if (user-reported-issue? user issue)
+                :span.glyphicon.glyphicon-flag.report-flag.reported
+                :span.glyphicon.glyphicon-flag.report-flag.unreported)
+              {:data-issueid (:issue_id issue)
+               :aria-hidden "true"}]))]]]]
      [:div.panel-body (:text issue)]]
     (for [r responses]
       [:div.panel.panel-primary

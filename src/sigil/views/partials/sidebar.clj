@@ -45,10 +45,9 @@
     [:h4 "Tags"]
     [:div.form-group
      [:select#tag-select.form-control
-      [:option#tag-option-all "All"]
+      [:option.tag-option-all {:value 0} "All"]
       (for [tag org-tags]
-        [:option.tag-option {:data-tagid (:tag_id tag)
-                             :data-orgid (:org_id tag)} (:tag_name tag)])]]
+        [:option.tag-option {:value (:tag_id tag)} (:tag_name tag)])]]
     ;; [:hr.sidebar-divider]
     ;; [:span "Data button might go here."]
     ;; [:hr.sidebar-divider]

@@ -29,9 +29,15 @@ $('#issues-by-org-search').keydown(function () {
     }
 });
 
+$("#tag-select").change(function () {
+    alert($(this).val());
+});
+
 function SearchIssuesByOrg() {
     var $searchBox = $('#issues-by-org-search');
-    var searchQuery = { id: $searchBox.data('orgid'),
+    var selectedtagid = $("#tag-select").val();
+    var searchQuery = { orgid: $searchBox.data('orgid'),
+                        tagid: selectedtagid,
                         term: $searchBox.val() };
 
     $.get("/searchorgissues", searchQuery, function (data) {
