@@ -6,7 +6,8 @@
             [clojure.java.io :as io]
             [sigil.auth :as auth]
             [sigil.views.internal-error :refer [internal-error-handler]]
-            [sigil.views.not-found :refer [not-found-handler]])
+            [sigil.views.not-found :refer [not-found-handler]]
+            [ez-image.core :as ezimg])
   (:import [javax.imageio.ImageIO]
            [java.awt.image.BufferedImage]))
 
@@ -25,16 +26,19 @@
 (defn update-user-icon
   [req]
   (let [upload-params (:params req)
-        user-icon-file (upload-params :usericon100)
+        user-icon-file (:usericon100 upload-params)
+        converted-image (ezimg/convert (:tempfile user-icon-file) [:constrain 100])
         user (auth/user-or-nil req)
         new-file-name (str (:username user) "_100.png")
         db-path (str "/db_imgs/user/" new-file-name)
         save-path (str "resources/public/" db-path)]
-    (do
-      (convert-image (user-icon-file :tempfile) 100 100 save-path)
-      (db/db-trans [users/update-user user {:icon_100 db-path}])
-      {:status 302
-       :headers {"Location" "/settings?success=i"}})))
+    (println converted-image)
+    (ezimg/save! converted-image
+                 save-path)
+    ;;(convert-image (user-icon-file :tempfile) 100 100 save-path)
+    (db/db-trans [users/update-user user {:icon_100 db-path}])
+    {:status 302
+     :headers {"Location" "/settings?success=i"}}))
 
 (defn update-org-icon-30
   [req]

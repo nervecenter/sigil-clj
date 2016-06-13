@@ -21,6 +21,7 @@
                           [clj-time "0.11.0"]                    ;; Simple date and time calculations
                           ;;[speclj "3.3.1"]                     ;; Test and behavior suite, may use later
                           ;;[fresh "1.0.1"]                      ;; Live reloads src files on save, may use later
+                          [ez-image "1.0.4"]                     ;; Image conversion and saving
                           ])
 
 (task-options! pom {:project (get-env :project)
