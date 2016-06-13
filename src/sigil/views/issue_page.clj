@@ -7,8 +7,7 @@
             [sigil.db.votes :refer [user-voted-on-issue?]]
             [sigil.db.orgs :refer [get-org-by-url]]
             [sigil.db.tags :refer [get-tag-by-issue]]
-            [sigil.views.partials.sidebar :refer [sidebar-partial]]
-            )
+            [sigil.views.partials.sidebar :refer [sidebar-partial]])
   (:use [hiccup.form]
         [hiccup.core]))
 

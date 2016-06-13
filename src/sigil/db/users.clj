@@ -65,6 +65,8 @@
    [:pass_hash :text "NOT NULL"]
    [:created_at :timestamp "NOT NULL" "DEFAULT CURRENT_TIMESTAMP"]
    [:icon_100 :text]
+   [:zip_code ::text]
+   [:zip_code_last_set :timestamp "NOT NULL" "DEFAULT CURRENT_TIMESTAMP"]
    [:roles :int "ARRAY" "NOT NULL" "DEFAULT ARRAY[]::int[]"]
    [:last_login :timestamp]
    [:times_visited :int "NOT NULL" "DEFAULT 0"]

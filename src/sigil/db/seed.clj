@@ -23,7 +23,7 @@
                 :address "10707 Ayrshire Dr"
                 :city "Tampa"
                 :state "FL"
-                :zip_code "33626"
+                :zip_code ["33626"]
                 :phone "813-334-3699"
                 :icon_30 "/db_imgs/org/sigil_30.png"
                 :icon_100 "/db_imgs/org/sigil_100.png"
@@ -35,7 +35,7 @@
                 :address "4202 E Fowler Ave"
                 :city "Tampa"
                 :state "FL"
-                :zip_code "33620"
+                :zip_code ["33620"]
                 :phone "813-974-2011"
                 :icon_30 "/db_imgs/org/usf_30.png"
                 :icon_100 "/db_imgs/org/usf_100.png"
@@ -47,7 +47,7 @@
                 :address "601 E. Kennedy Blvd."
                 :city "Tampa"
                 :state "FL"
-                :zip_code "33602"
+                :zip_code ["33602"]
                 :phone "813-272-5900"
                 :icon_30 "/db_imgs/org/hillsborough_30.png"
                 :icon_100 "/db_imgs/org/hillsborough_100.png"
@@ -59,7 +59,7 @@
                 :address "306 E. Jackson St."
                 :city "Tampa"
                 :state "FL"
-                :zip_code "33602"
+                :zip_code ["33602"]
                 :phone "813-274-8211"
                 :icon_30 "/db_imgs/org/tampa_30.png"
                 :icon_100 "/db_imgs/org/tampa_100.png"
@@ -71,7 +71,7 @@
                 :address "600 Klosterman Rd. Room BB-038"
                 :city "Tarpon Springs"
                 :state "FL"
-                :zip_code "34689"
+                :zip_code ["34689"]
                 :phone "727-940-5860"
                 :icon_30 "/db_imgs/org/gusbilirakis_30.png"
                 :icon_100 "/db_imgs/org/gusbilirakis_100.png"
