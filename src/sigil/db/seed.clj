@@ -16,62 +16,62 @@
 
 (def ipsum "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer tristique sagittis purus a mollis. Vestibulum non consectetur arcu. Aliquam ultricies, ex at cursus dictum, ex quam aliquam metus, eget mollis leo quam vel est. Nulla ac pharetra est. Aliquam sit amet gravida turpis. Donec vulputate pellentesque lectus sit amet cursus. Aenean pulvinar ex nec placerat varius. Aliquam erat volutpat. Nulla a tempor neque. Vestibulum a mattis nibh.")
 
-(def org_seed [{:org_id 1
+(def org_seed [{;:org_id 1
                 :org_url "sigil"
                 :org_name "Sigil"
                 :website "sigil.tech"
                 :address "10707 Ayrshire Dr"
                 :city "Tampa"
                 :state "FL"
-                :zip_code ["33626"]
+                :zip_codes [33626]
                 :phone "813-334-3699"
                 :icon_30 "/db_imgs/org/sigil_30.png"
                 :icon_100 "/db_imgs/org/sigil_100.png"
                 :banner "/db_imgs/org/sigil_banner.png"}
-               {:org_id 2
+               {;:org_id 2
                 :org_url "usf"
                 :org_name "University of South Florida"
                 :website "www.usf.edu"
                 :address "4202 E Fowler Ave"
                 :city "Tampa"
                 :state "FL"
-                :zip_code ["33620"]
+                :zip_codes [33620]
                 :phone "813-974-2011"
                 :icon_30 "/db_imgs/org/usf_30.png"
                 :icon_100 "/db_imgs/org/usf_100.png"
                 :banner "/db_imgs/org/usf_banner.jpg"}
-               {:org_id 3
+               {;:org_id 3
                 :org_url "hillsborough"
                 :org_name "Hillsborough County"
                 :website "www.hillsboroughcounty.org"
                 :address "601 E. Kennedy Blvd."
                 :city "Tampa"
                 :state "FL"
-                :zip_code ["33602"]
+                :zip_codes [33602]
                 :phone "813-272-5900"
                 :icon_30 "/db_imgs/org/hillsborough_30.png"
                 :icon_100 "/db_imgs/org/hillsborough_100.png"
                 :banner "/db_imgs/org/hillsborough_banner.png"}
-               {:org_id 4
+               {;:org_id 4
                 :org_url "tampa"
                 :org_name "City of Tampa"
                 :website "www.tampagov.net"
                 :address "306 E. Jackson St."
                 :city "Tampa"
                 :state "FL"
-                :zip_code ["33602"]
+                :zip_codes [33602]
                 :phone "813-274-8211"
                 :icon_30 "/db_imgs/org/tampa_30.png"
                 :icon_100 "/db_imgs/org/tampa_100.png"
                 :banner "/db_imgs/org/tampa_banner.jpg"}
-               {:org_id 5
+               {;:org_id 5
                 :org_url "gusbilirakis"
                 :org_name "Congressman Gus Bilirakis, Florida's 12th Congressional District"
                 :website "bilirakis.house.gov"
                 :address "600 Klosterman Rd. Room BB-038"
                 :city "Tarpon Springs"
                 :state "FL"
-                :zip_code ["34689"]
+                :zip_codes [34689]
                 :phone "727-940-5860"
                 :icon_30 "/db_imgs/org/gusbilirakis_30.png"
                 :icon_100 "/db_imgs/org/gusbilirakis_100.png"
@@ -254,10 +254,28 @@
                  :org_id 2}
                 {:user_id 1
                  :issue_id 5
-                 :org_id 3}
+                 :org_id 2}
                 {:user_id 2
                  :issue_id 6
                  :org_id 3}
+                {:user_id 1
+                 :issue_id 7
+                 :org_id 3}
+                {:user_id 2
+                 :issue_id 8
+                 :org_id 3}
+                {:user_id 1
+                 :issue_id 9
+                 :org_id 4}
+                {:user_id 2
+                 :issue_id 10
+                 :org_id 4}
+                {:user_id 1
+                 :issue_id 11
+                 :org_id 5}
+                {:user_id 2
+                 :issue_id 12
+                 :org_id 5}
                  ])
 
 (def user_seed [{:email "cjcollazo@sigil.tech"
@@ -293,6 +311,9 @@
 (def topic_seed [{:topic_url "testtopic"
                   :topic_name "TestTopic"
                   :banner (str (rand-nth db/default_banner))}])
+
+
+(assert (= (count issue_seed) (count vote_seed)) "EACH ISSUE NEEDS A VOTE YOU DUMMY")
 
 (defn seed-orgs
   []

@@ -13,6 +13,12 @@
 
 (declare issue-page-handler issue-page-body)
 
+(defn constituency?
+  [org poster]
+  (if (nil? (:zip_code poster))
+    false
+    (some #(= (:zip_code poster) %) (:zip_code org))))
+
 (defn issue-page-handler [req]
   ;; Issue page needs following data:
   ;; User for navbar, vote check
@@ -26,8 +32,10 @@
   (let [user (user-or-nil req)
         issue (get-issue-with-poster-by-id (read-string (:issue_id (:route-params req))))
         tag (get-tag-by-issue issue)
-        org (get-org-by-url (:org_url (:route-params req)))]
+        org (get-org-by-url (:org_url (:route-params req)))
+        apply-badge? (constituency? org (:poster issue))]
     (do (sigil.db.core/db-trans [sigil.db.issues/issue-view-inc (:issue_id issue)])
+        (.println System/out (str "Constituency? " apply-badge?))
       (layout/render
        req
        user
@@ -38,6 +46,7 @@
                         tag
                         org
                         (some? user)
+                        apply-badge?
                         (if (some? user)
                           (user-voted-on-issue? user issue)
                           false)
@@ -46,7 +55,7 @@
                         )))))
 
 (defn issue-page-body
-  [user issue tag org authenticated? user-voted? responses comments]
+  [user issue tag org authenticated? apply-badge? user-voted? responses comments]
   (html
    [:div.col-md-9.col-lg-9
     [:img.img-rounded.img-responsive.org-banner-small

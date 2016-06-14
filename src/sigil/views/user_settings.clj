@@ -31,7 +31,8 @@
    [:h3 {:style "color:green;"}
     (cond
       (= successful? "p") "Password Updated"
-      (= successful? "i") "Icon Updated")]
+      (= successful? "i") "Icon Updated"
+      (= successful? "z") "Zip Code Updated")]
    [:div.row
     [:div.col-lg-6
      [:h3 "Issues you've posted:"]
@@ -85,4 +86,17 @@
                           :class "form-control"} "confirm-new-password")]
         [:div.btn-group.btn-group-justified
          [:div.btn-group
-          (submit-button {:class "btn btn-primary disabled"} "Change Password")]]]]]]]])
+          (submit-button {:class "btn btn-primary disabled"} "Change Password")]]]]]
+     [:div.panel.panel-default
+      [:div.panel-body
+       [:h3 {:style "color:red;"} (cond
+                                    (= "z" pass-invalid?) "Zip code changed too soon. Please wait before changing.")]
+       [:form {:method "post" :action "/userzipchange"}
+        [:div.form-group
+         (label "zip-code" (str "Zip Code - Current: " (:zip_code user)))
+         (text-field {:id "zip-code"
+                          :placeholder "New Zip Code"
+                          :class "form-control"} "zip-code")]
+        [:div.btn-group.btn-group-justified
+         [:div.btn-group
+          (submit-button {:class "btn btn-primary disabled"} "Change Zip Code")]]]]]]]])

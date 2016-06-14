@@ -41,6 +41,7 @@
             [sigil.actions.officialresponse :as official-actions]
             [sigil.actions.petitions :as petitions-actions]
             [sigil.actions.data :as data-actions]
+            [sigil.actions.org :as org-actions]
             [sigil.db.core :as db]
 
             [ring.middleware.resource :refer [wrap-resource]]
@@ -87,6 +88,12 @@
   (POST "/addtag" req (if (authenticated? req)
                             (tag-actions/add-tag req)
                             {:status 403}))
+  (POST "/deleteorgzip" req (if (authenticated? req)
+                              (org-actions/delete-org-zip-code req)
+                              {:status 403}))
+  (POST "/addorgzipcode" req (if (authenticated? req)
+                               (org-actions/add-org-zip-code req)
+                               {:status 403}))
   (GET "/settings" req (user-settings-handler req))
   (POST "/usericon100" req (if (authenticated? req)
                              (image-actions/update-user-icon req)
@@ -94,6 +101,7 @@
   (GET "/siteadmin" req (site-admin-handler req))
   (GET "/register" req (user-register-get req))
   (POST "/userpasschange" req (user-actions/change-user-password req))
+  (POST "/userzipchange" req (user-actions/change-user-zip-code req))
   (POST "/postissue" req (issue-actions/add-issue-post req))
   (POST "/archiveissue" req (issue-actions/archive-issue-post req))
   

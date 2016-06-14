@@ -16,10 +16,15 @@
 ;;   (catch Exception e (str "Successfully added fuzzystrmatch: "
 ;;                           (.getMessage e))))
 
+
+;;--------------------------- Site Settings ----------------------------------------
 (def default_icon_30 ["/db_imgs/default/default_30.png"])
 (def default_icon_100 ["/db_imgs/default/default100_1.png" "/db_imgs/default/default100_2.png" "/db_imgs/default/default100_3.png" "/db_imgs/default/default100_4.png" "/db_imgs/default/default100_5.png"])
 (def default_banner ["/db_imgs/default/defaultbanner.png"])
 
+(def min-time-zip-change 72) ;;72 hrs
+
+;;;------------------------------------------------------------------
 (declare errors create-error)
 
 ;;Postgres arrays to clojure vecs
@@ -27,11 +32,6 @@
   org.postgresql.jdbc.PgArray
   (result-set-read-column [pgobj metadata i]
     (vec (.getArray pgobj))))
-
-
-;;Clojure veccs to postgres arrays
-;; (defn vec->arr [array-vector]
-;;   (.createArrayOf (sql/get-connection spec) "long" (into-array Long array-vector)))
 
 ;;Allows us to convert clojure vectors of type T to postgres arrays of a compatible type.
 (extend-protocol clojure.java.jdbc/ISQLParameter

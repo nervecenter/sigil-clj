@@ -110,7 +110,39 @@
                  (file-upload {:id "icon-30-upload"} "icon-30-upload")]]
                (text-field {:class "form-control image-input" :readonly ""} "txt-field-icon30")]]
              [:div.form-group
-              (submit-button {:class "btn btn-default disabled form-control"} "Upload new 30px icon")]]]]]]]
+              (submit-button {:class "btn btn-default disabled form-control"} "Upload new 30px icon")]]]]]
+      [:div.col-lg-6
+       [:h3 "Constituency"]
+       (for [zcode (:zip_codes org)]
+         [:div.panel {:style "text-align:center;"}
+          [:div.panel-body
+           ;; [:img.pull-left {:src (:icon_30 tag)
+           ;;                  :style "height:40px;"}]
+           [:div.btn-group.pull-right
+            ;; [:a.btn.btn-sm.btn-default.change-tag-icon
+            ;;  {:data-tagid (:tag_id tag)
+            ;;   :data-orgid (:org_id tag)}
+            ;;  "Change icon"]
+            [:a.btn.btn-sm.btn-danger.delete-tag 
+             {:data-zipcode zcode} 
+             "Delete"]]
+           [:h4 zcode]]
+          ])
+       [:div.panel {:style "text-align:center;"}
+        [:div.panel-body
+         [:h4 "Add a new zip code"]
+         (form-to
+           [:post "/addorgzipcode"]
+           (hidden-field {:value (:org_id org)} "orgid")
+           [:div.row {:style "margin-top:30px;"}
+            [:div.col-lg-12
+               [:div.form-group
+                (text-field {:class "form-control"
+                             :id "tag-name"
+                             :placeholder "New Zip Code"} "zip-code")]
+               [:div.form-group
+                (submit-button {:class "form-control btn btn-primary disabled"
+                                :id "new-tag-submit"} "Submit new Zip Code")]]])]]]]]
       [:div#delete-tag-modal.modal.fade {:tabindex "-1" 
                                    :role "dialog" 
                                    :aria-labelledby "delete-tag-modal-label"}

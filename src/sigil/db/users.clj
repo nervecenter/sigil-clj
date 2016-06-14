@@ -37,8 +37,8 @@
   (sql/execute! db-conn ["UPDATE users SET last_login = LOCALTIMESTAMP, times_visited = times_visited + 1 WHERE user_id = ?" user_id]))
 
 (defn update-user
-  [db-conn [user-and-updated-rows]]
-  (sql/update! db-conn :users (second user-and-updated-rows) ["user_id = ?" (:user_id (first user-and-updated-rows))]))
+  [db-conn [user updated-rows]]
+  (sql/update! db-conn :users updated-rows ["user_id = ?" (:user_id user)]))
 
 (defn create-user
   [db-conn [new-user]]
@@ -65,8 +65,8 @@
    [:pass_hash :text "NOT NULL"]
    [:created_at :timestamp "NOT NULL" "DEFAULT CURRENT_TIMESTAMP"]
    [:icon_100 :text]
-   [:zip_code ::text]
-   [:zip_code_last_set :timestamp "NOT NULL" "DEFAULT CURRENT_TIMESTAMP"]
+   [:zip_code ::int]
+   [:zip_code_last_set :timestamp]
    [:roles :int "ARRAY" "NOT NULL" "DEFAULT ARRAY[]::int[]"]
    [:last_login :timestamp]
    [:times_visited :int "NOT NULL" "DEFAULT 0"]

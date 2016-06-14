@@ -57,7 +57,7 @@
    :tags
    [:tag_id :bigserial "PRIMARY KEY"]
    ;;[:tag_url :text "NOT NULL" "UNIQUE"]
-   [:tag_name :text "NOT NULL" "UNIQUE"]
+   [:tag_name :text "NOT NULL"]
    [:created_at :timestamp "NOT NULL" "DEFAULT CURRENT_TIMESTAMP"]
    [:icon_30 :text "NOT NULL"]
    ;;[:times_viewed :int "NOT NULL" "DEFAULT 0"]

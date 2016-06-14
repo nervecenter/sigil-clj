@@ -84,8 +84,8 @@
    [:address :text]
    [:city :text]
    [:state :text]
-   [:zip_codes :int "NOT NULL" "DEFAULT ARRAY[]::text[]"]
-   [:phone :text]
+   [:zip_codes :int "ARRAY" "NOT NULL" "DEFAULT ARRAY[]::int[]"]
+   [:phone :text] 
    [:org_is_active :boolean "NOT NULL" "DEFAULT TRUE"]
    [:org_approved :boolean "NOT NULL" "DEFAULT FALSE"]))
 
