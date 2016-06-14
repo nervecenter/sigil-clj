@@ -16,7 +16,7 @@
 
 (def ipsum "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer tristique sagittis purus a mollis. Vestibulum non consectetur arcu. Aliquam ultricies, ex at cursus dictum, ex quam aliquam metus, eget mollis leo quam vel est. Nulla ac pharetra est. Aliquam sit amet gravida turpis. Donec vulputate pellentesque lectus sit amet cursus. Aenean pulvinar ex nec placerat varius. Aliquam erat volutpat. Nulla a tempor neque. Vestibulum a mattis nibh.")
 
-(def org_seed [{:org_id 1
+(def org-seed [{:org_id 1
                 :org_url "sigil"
                 :org_name "Sigil"
                 :website "sigil.tech"
@@ -78,10 +78,10 @@
                 :banner "/db_imgs/org/gusbilirakis_banner.png"}
                ])
 
-(def role_seed [{:role_name "org-admin"}
+(def role-seed [{:role_name "org-admin"}
                 {:role_name "site-admin"}])
 
-(def tag_seed [{;:tag_id 0
+(def tag-seed [{;:tag_id 0
                 :tag_name "DEFAULT TAG"
                 :org_id 1
                 :icon_30 (rand-nth db/default_icon_30)}
@@ -131,7 +131,7 @@
                 :icon_30 (rand-nth db/default_icon_30)}
                ])
 
-(def issue_seed [;; Sigil
+(def issue-seed [;; Sigil
                  {:org_id 1
                   :user_id 1
                   :title "I need a button that gives me bacon."
@@ -206,7 +206,7 @@
                   :text ipsum}
                  ])
 
-(def comment_seed
+(def comment-seed
   [{:issue_id 1
     :user_id 1
     :text "Yea a bacon button would increase my quality of life"}
@@ -240,7 +240,7 @@
    ])
 
 ;;There needs be a matching vote seed for every issue seed
-(def vote_seed [{:user_id 1
+(def vote-seed [{:user_id 1
                  :issue_id 1
                  :org_id 1}
                 {:user_id 2
@@ -260,7 +260,7 @@
                  :org_id 3}
                  ])
 
-(def user_seed [{:email "cjcollazo@sigil.tech"
+(def user-seed [{:email "cjcollazo@sigil.tech"
                  :username "Nerve"
                  :pass_hash (buddy.hashers/encrypt "Sigiltech1027!")
                  :icon_100 (str (rand-nth db/default_icon_100))
@@ -290,25 +290,25 @@
                  :org_id 3}
                 ])
 
-(def topic_seed [{:topic_url "testtopic"
+(def topic-seed [{:topic_url "testtopic"
                   :topic_name "TestTopic"
                   :banner (str (rand-nth db/default_banner))}])
 
 (defn seed-orgs
   []
-  (apply #(db/db-trans [create-org %]) org_seed))
+  (apply #(db/db-trans [create-org %]) org-seed))
 
 (defn seed-db
   []
   (do
-    (doall (map #(db/db-trans [create-org %]) org_seed))
-    (doall (map #(db/db-trans [create-role %]) role_seed))
-    (doall (map #(db/db-trans [create-user %]) user_seed))
-    (doall (map #(db/db-trans [create-tag %]) tag_seed))
-    (doall (map #(db/db-trans [create-issue %]) issue_seed))
-    (doall (map #(db/db-trans [create-comment %]) comment_seed))
-    (doall (map #(db/db-trans [create-topic %]) topic_seed))
-    (doall (map #(db/db-trans [create-vote %]) vote_seed))))
+    (doall (map #(db/db-trans [create-org %]) org-seed))
+    (doall (map #(db/db-trans [create-role %]) role-seed))
+    (doall (map #(db/db-trans [create-user %]) user-seed))
+    (doall (map #(db/db-trans [create-tag %]) tag-seed))
+    (doall (map #(db/db-trans [create-issue %]) issue-seed))
+    (doall (map #(db/db-trans [create-comment %]) comment-seed))
+    (doall (map #(db/db-trans [create-topic %]) topic-seed))
+    (doall (map #(db/db-trans [create-vote %]) vote-seed))))
 
 (defn drop-create-seed
   []

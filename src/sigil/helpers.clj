@@ -18,6 +18,10 @@
     ((:query-params req) "return")
     "/"))
 
+(defn redirect [location]
+  {:status 302
+   :headers {"Location" location}})
+
 (defn search-orgs-tags-topics
   [term]
   (let [matched-orgs (filter #(str/starts-with? (:org_name %) term) (orgs/get-all-orgs))

@@ -26,6 +26,32 @@ $(".btn-file :file").each(function () {
     });
 });
 
+$(".pass-field").each(function () {
+    $(this).keyup(function () {
+        var oldpass = $("#old-password").val();
+        var newpass = $("#new-password").val();
+        var confpass = $("#confirm-new-password").val();
+        var $submit = $("#submit-new-password");
+
+        if (oldpass != "" && newpass != "" && confpass != "" && $submit.hasClass("disabled")) {
+            $submit.removeClass("disabled").prop("disabled", false).addClass("btn-success");
+        } else if (((oldpass == "") || (newpass == "") || (confpass == "")) && !$submit.hasClass("disabled")) {
+            $submit.removeClass("btn-success").addClass("disabled").prop("disabled", true);
+        }
+    });
+});
+
+$("#zip").keyup(function () {
+    var zip = $(this).val();
+    var $submit = $("#zip-submit");
+
+    if (zip != "" && $submit.hasClass("disabled")) {
+        $submit.removeClass("disabled").prop("disabled", false).addClass("btn-success");
+    } else if (zip == "" && !$submit.hasClass("disabled")) {
+        $submit.removeClass("btn-success").addClass("disabled").prop("disabled", true);
+    }
+});
+
 $("#policy-accept").change(function () {
   var checked = $(this).prop("checked");
   if (checked) {
@@ -125,7 +151,7 @@ $(".change-tag-icon").each(function () {
 $(".delete-tag").each(function() {
     $(this).click(function() {
         var tagid = $(this).data("tagid");
-        $(".to-tag:disabled").each(function () { 
+        $(".to-tag:disabled").each(function () {
             $(this).prop('disabled', false);
             //$(this).removeClass("disabled-option");
         });

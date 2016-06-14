@@ -5,6 +5,7 @@
             [sigil.db.tags :as tags]
             [clojure.java.io :as io]
             [sigil.auth :as auth]
+            [sigil.helpers :refer [redirect]]
             [sigil.views.internal-error :refer [internal-error-handler]]
             [sigil.views.not-found :refer [not-found-handler]]
             [ez-image.core :as ezimg])
@@ -27,23 +28,23 @@
   [req]
   (let [upload-params (:params req)
         user-icon-file (:usericon100 upload-params)
-        converted-image (ezimg/convert (:tempfile user-icon-file) [:constrain 100])
         user (auth/user-or-nil req)
         new-file-name (str (:username user) "_100.png")
         db-path (str "/db_imgs/user/" new-file-name)
         save-path (str "resources/public/" db-path)]
-    (println converted-image)
-    (ezimg/save! converted-image
-                 save-path)
-    ;;(convert-image (user-icon-file :tempfile) 100 100 save-path)
-    (db/db-trans [users/update-user user {:icon_100 db-path}])
-    {:status 302
-     :headers {"Location" "/settings?success=i"}}))
+    (if (= :success (db/db-trans [users/update-user user {:icon_100 db-path}]))
+      (try
+        (ezimg/save! (ezimg/convert (:tempfile user-icon-file) [:constrain 100])
+                     save-path)
+        (catch Exception e (do (println "Couldn't save user icon:" (.getMessage e))
+                               (redirect "/settings?v=l")))
+        (finally (redirect "/settings?v=i")))
+      (redirect "/settings?v=d"))))
 
 (defn update-org-icon-30
   [req]
   (let [upload-params (:params req)
-        org-icon-file (upload-params :icon-30-upload)
+        org-icon-file (:icon-30-upload upload-params)
         org (auth/user-org-or-nil (auth/user-or-nil req))
         new-file-name (str (:org_url org) "_30.png")
         db-path (str "/db_imgs/org/" new-file-name)
@@ -52,8 +53,7 @@
       (do
         (convert-image (org-icon-file :tempfile) 30 30 save-path)
         (db/db-trans [orgs/update-org org {:icon_30 db-path}])
-        {:status 302
-         :headers {"Location" "/orgsettings"}}))))
+        (redirect "/orgsettings")))))
 
 (defn update-org-icon-100
   [req]
