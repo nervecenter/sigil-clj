@@ -41,22 +41,13 @@
     [:span
      [:img.sub-org-icon {:src "/images/telephone.png"}]
      (:phone org)]
-    [:hr.tiny-hr]
-    [:h4 "Tags"]
-    [:div.form-group
-     [:select#tag-select.form-control
-      [:option.tag-option-all {:value 0} "All"]
-      (for [tag org-tags]
-        [:option.tag-option {:value (:tag_id tag)} (:tag_name tag)])]]
-    ;; [:hr.sidebar-divider]
-    ;; [:span "Data button might go here."]
-    ;; [:hr.sidebar-divider]
-    ;; [:h4 {:style "margin-bottom:10px"} "Tags:"]
-    ;; (for [t org-tags]
-    ;;   (html
-    ;;    [:img.sub-org-icon {:src (str "/" (:icon_20 t))}]
-    ;;    (:tag_name t)
-    ;;    [:br]))
+    ;[:hr.tiny-hr]
+    ;[:h4 "Tags"]
+    ;[:div.form-group
+    ; [:select#tag-select.form-control
+    ;  [:option.tag-option-all {:value 0} "All"]
+    ;  (for [tag org-tags]
+    ;    [:option.tag-option {:value (:tag_id tag)} (:tag_name tag)])]]
     ]])
 
 (def link-box

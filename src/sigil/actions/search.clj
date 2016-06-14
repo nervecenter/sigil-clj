@@ -1,5 +1,5 @@
 (ns sigil.actions.search
-  (:require [sigil.helpers :refer [search-orgs-tags-topics]]
+  (:require ;[sigil.helpers :refer [search-orgs-tags-topics]]
             [clojure.string :as str]
             [sigil.auth :refer [user-or-nil]]
             [sigil.db.issues :as issues]

@@ -101,25 +101,21 @@
   (GET "/siteadmin" req (site-admin-handler req))
   (GET "/register" req (user-register-get req))
   (POST "/userpasschange" req (user-actions/change-user-password req))
-  (POST "/userzipchange" req (user-actions/change-user-zip-code req))
+  (POST "/userzip" req (user-actions/change-user-zip-code req))
   (POST "/postissue" req (issue-actions/add-issue-post req))
   (POST "/archiveissue" req (issue-actions/archive-issue-post req))
-  
   (POST "/deletecomment" req (comment-actions/delete-comment-post req))
   (POST "/deletetag" req (tag-actions/delete-org-tag req))
-  
   (GET "/numnotes" req (note-actions/number-notes-handler req))
   (GET "/checknotes" req (note-actions/check-notes-handler req))
   (POST "/deletenote" req (note-actions/delete-notification-handler req))
-  
   (POST "/register" req (user-register-post req))
   (GET "/orgregister" req (org-register-get req))
   (POST "/orgregister" req (org-register-post req))
-  
   (POST "/postofficial" req (official-actions/post-official-response req))
   (POST "/submitcomment" req (comment-actions/post-comment req))
   (POST "/postpetition" req (petitions-actions/post-petition req))
-  
+
   (GET "/printrequest" req (html [:p {} req]))
   (GET "/printrequest/:x" req (html [:p {} req]))
   (GET "/404" req (not-found-handler req))

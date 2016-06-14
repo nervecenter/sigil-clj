@@ -35,41 +35,49 @@
      [:div.row
       (condp = validation
         ;; banner upload failed
-        "u" [:h3 {:style "color:red"} "Banner upload failed; we'll look into it."]
+        "u" [:h3.validation {:style "color:red"} "Banner upload failed; we'll look into it."]
         ;; banner image incorrect
-        "k" [:h3 {:style "color:red"} "Banner should be a 1000 x 200 pixel jpg or png."]
+        "k" [:h3.validation {:style "color:red"} "Banner should be a 1000 x 200 pixel jpg or png."]
         ;; banner successfully changed
-        "b" [:h3 {:style "color:green"} "Successfully changed banner."]
+        "b" [:h3.validation {:style "color:green"} "Successfully changed banner."]
         ;; icon100 upload failed
-        "y" [:h3 {:style "color:red"} "Icon upload failed; we'll look into it."]
+        "y" [:h3.validation {:style "color:red"} "Icon upload failed; we'll look into it."]
         ;; icon100 image incorrect
-        "u" [:h3 {:style "color:red"} "Icon should be a 100 x 100 pixel jpg or png."]
+        "u" [:h3.validation {:style "color:red"} "Icon should be a 100 x 100 pixel jpg or png."]
         ;; icon100 successfully changed
-        "i" [:h3 {:style "color:green"} "Successfully changed icon."]
+        "i" [:h3.validation {:style "color:green"} "Successfully changed icon."]
         ;; icon30 upload failed
-        "e" [:h3 {:style "color:red"} "Icon upload failed; we'll look into it."]
+        "e" [:h3.validation {:style "color:red"} "Icon upload failed; we'll look into it."]
         ;; icon30 image incorrect
-        "a" [:h3 {:style "color:red"} "Icon should be a 30 x 30 pixel jpg or png."]
+        "a" [:h3.validation {:style "color:red"} "Icon should be a 30 x 30 pixel jpg or png."]
         ;; icon30 successfully changed
-        "t" [:h3 {:style "color:green"} "Successfully changed icon."]
+        "t" [:h3.validation {:style "color:green"} "Successfully changed icon."]
         ;; tagicon upload failed
-        "m" [:h3 {:style "color:red"} "Tag icon upload failed; we'll look into it."]
+        "m" [:h3.validation {:style "color:red"} "Tag icon upload failed; we'll look into it."]
         ;; tagicon image incorrect
-        "r" [:h3 {:style "color:red"} "Tag icon should be a 30 x 30 pixel jpg or png."]
+        "r" [:h3.validation {:style "color:red"} "Tag icon should be a 30 x 30 pixel jpg or png."]
         ;; tagicon successfully changed
-        "g" [:h3 {:style "color:green"} "Successfully changed tag icon."]
+        "g" [:h3.validation {:style "color:green"} "Successfully changed tag icon."]
         ;; tag successfully added
-        "s" [:h3 {:style "color:green"} "Successfully added tag."]
+        "s" [:h3.validation {:style "color:green"} "Successfully added tag."]
         ;; tag add failed
-        "q" [:h3 {:style "color:red"} "Adding new tag failed; we'll look into it."]
+        "q" [:h3.validation {:style "color:red"} "Adding new tag failed; we'll look into it."]
         ;; tag name incorrect
-        "c" [:h3 {:style "color:red"} "Incorrect tag name."]
+        "c" [:h3.validation {:style "color:red"} "Incorrect tag name."]
         ;; tag successfully deleted
-        "d" [:h3 {:style "color:green"} "Successfully deleted tag."]
+        "d" [:h3.validation {:style "color:green"} "Successfully deleted tag."]
         ;; tag delete failed
-        "p" [:h3 {:style "color:red"} "Deleting tag failed; we'll look into it."]
+        "p" [:h3.validation {:style "color:red"} "Deleting tag failed; we'll look into it."]
         ;; Can't delete last tag
-        "l" [:h3 {:style "color:red"} "Can't delete your last tag!"]
+        "l" [:h3.validation {:style "color:red"} "Can't delete your last tag!"]
+        ;; zip successfully added
+        "z" [:h3.validation {:style "color:green"} "Successfully added zip code."]
+        ;; zip add failed
+        "o" [:h3.validation {:style "color:red"} "Deleting zip failed; we'll look into it."]
+        ;; zip successfully deleted
+        "w" [:h3.validation {:style "color:green"} "Successfully deleted zip code"]
+        ;; zip delete failed
+        "n" [:h3.validation {:style "color:red"} "Deleting zip failed; we'll look into it."]
         nil)
       [:div.col-lg-12
        [:div.panel

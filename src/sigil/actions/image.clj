@@ -36,12 +36,12 @@
       (try
         (ezimg/save! (ezimg/convert (:tempfile user-icon-file) [:distort 100])
                      save-path)
+        (redirect "/settings?v=i")
         (catch Exception e
           (error-redirect "Couldn't save user icon."
                           (.getMessage e)
                           user
-                          "/settings?v=l"))
-        (finally (redirect "/settings?v=i")))
+                          "/settings?v=l")))
       (redirect "/settings?v=d"))))
 
 (defn update-org-icon-30
@@ -58,12 +58,12 @@
         (try
           (ezimg/save! (ezimg/convert (:tempfile org-icon-file) [:distort 30])
                        save-path)
+          (redirect "/orgsettings?v=t")
           (catch Exception e
             (error-redirect "Couldn't save org icon30; image incorrect?"
                             (.getMessage e)
                             user
-                            "/orgsettings?v=a"))
-          (finally (redirect "/orgsettings?v=t")))
+                            "/orgsettings?v=a")))
         (error-redirect "DB couldn't change org icon30."
                         db-path
                         user
@@ -87,12 +87,12 @@
         (try
           (ezimg/save! (ezimg/convert (:tempfile org-icon-file) [:distort 100])
                        save-path)
+          (redirect "/orgsettings?v=i")
           (catch Exception e
             (error-redirect "Couldn't save org icon100; image incorrect?"
                             (.getMessage e)
                             user
-                            "/orgsettings?v=u"))
-          (finally (redirect "/orgsettings?v=i")))
+                            "/orgsettings?v=u")))
         (error-redirect "DB couldn't change org icon100."
                         db-path
                         user
@@ -117,12 +117,12 @@
         (try
           (ezimg/save! (ezimg/convert (:tempfile tag-icon-file) [:distort 30])
                        save-path)
+          (redirect "/orgsettings?v=g")
           (catch Exception e
             (error-redirect "Couldn't save tag icon30; image incorrect?"
-                            (.getMessage e)
+                            (.toString e)
                             user
-                            "/orgsettings?v=r"))
-          (finally (redirect "/orgsettings?v=g")))
+                            "/orgsettings?v=r")))
         (error-redirect "DB couldn't change tag icon30."
                         db-path
                         user
@@ -146,12 +146,12 @@
         (try
           (ezimg/save! (ezimg/convert (:tempfile org-banner-file) [:distort 1000 200])
                        save-path)
+          (redirect "/orgsettings?v=b")
           (catch Exception e
             (error-redirect "Couldn't save org banner; image incorrect?"
                             (.getMessage e)
                             user
-                            "/orgsettings?v=k"))
-          (finally (redirect "/orgsettings?v=b")))
+                            "/orgsettings?v=k")))
         (error-redirect "DB couldn't change org banner."
                         db-path
                         user

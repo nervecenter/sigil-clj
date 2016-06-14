@@ -1,5 +1,6 @@
 (ns sigil.db.core
-  (:require [clojure.java.jdbc :as sql])
+  (:require [clojure.java.jdbc :as sql]
+            [clj-time.core :as t])
   (import java.sql.SQLException))
 
 ;; (def postgres-debug-db {:subprotocol "postgresql"
@@ -30,7 +31,7 @@
 (def default_icon_100 ["/db_imgs/default/default100_1.png" "/db_imgs/default/default100_2.png" "/db_imgs/default/default100_3.png" "/db_imgs/default/default100_4.png" "/db_imgs/default/default100_5.png"])
 (def default_banner ["/db_imgs/default/defaultbanner.png"])
 
-(def min-time-zip-change 72) ;;72 hrs
+(def min-time-zip-change (t/months 1)) ;;72 hrs
 
 ;;;------------------------------------------------------------------
 (declare errors create-error)

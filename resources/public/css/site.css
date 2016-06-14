@@ -1,8 +1,10 @@
+.validation {
+    text-align: center;
+}
+
 @media (min-width: 768px) {
     #settings-anchor {
-        padding-top: 17px;
-        padding-bottom: 10px;
-        padding-left: 0px;
+        padding: 17px 0 10px;
     }
 }
 

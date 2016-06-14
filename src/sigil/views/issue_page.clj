@@ -19,7 +19,7 @@
   [org poster]
   (if (nil? (:zip_code poster))
     false
-    (some #(= (:zip_code poster) %) (:zip_code org))))
+    (contains? (:zip_codes org) (:zip_code poster))))
 
 (defn issue-page-handler [req]
   ;; Issue page needs following data:
@@ -35,7 +35,7 @@
         issue (get-issue-with-poster-by-id (read-string (:issue_id (:route-params req))))
         tag (get-tag-by-issue issue)
         org (get-org-by-url (:org_url (:route-params req)))
-        apply-badge? (constituency? org (:poster issue))]
+        in-constituency? (constituency? org (:poster issue))]
     (do (sigil.db.core/db-trans [sigil.db.issues/issue-view-inc (:issue_id issue)])
       (layout/render
        req
@@ -47,7 +47,7 @@
                         tag
                         org
                         (some? user)
-                        apply-badge?
+                        in-constituency?
                         (if (some? user)
                           (user-voted-on-issue? user issue)
                           false)
@@ -56,7 +56,7 @@
                         )))))
 
 (defn issue-page-body
-  [user issue tag org authenticated? apply-badge? user-voted? responses comments]
+  [user issue tag org authenticated? in-constituency? user-voted? responses comments]
   (html
    [:div.col-md-9.col-lg-9
     [:img.img-rounded.img-responsive.org-banner-small

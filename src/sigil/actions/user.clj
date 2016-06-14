@@ -3,6 +3,7 @@
             [sigil.db.orgs :as orgs]
             [sigil.db.core :as db]
             [sigil.auth :as auth]
+            [sigil.helpers :refer [redirect]]
             [clj-time.jdbc]
             [clj-time.core :as time]
             [clj-time.local :as local-time]
@@ -47,18 +48,17 @@
   [req]
   (let [user (auth/user-or-nil req)
         form-params (:form-params req)
-        new-zip-code (read-string (form-params "zip-code"))]
-    (do (.println System/out (str new-zip-code " " (type new-zip-code)))
+        new-zip-code (read-string (form-params "zip"))]
+    (do
+      (.println System/out (str new-zip-code " " (type new-zip-code)))
       (if (nil? (:zip_code_last_set user))
         (do (.println System/out "Zip is null")
             (db/db-trans [users/update-user user {:zip_code new-zip-code
                                                 :zip_code_last_set (local-time/local-now)}])
-            {:status 302
-             :headers {"Location" "/settings?success=z"}})
-        (if (time/after? (time/plus (local-time/local-now) (db/min-time-zip-change)) (:zip_code_last_set user))
+            (redirect "/settings?v=z"))
+        (if (time/after? (local-time/local-now)
+                         (time/plus (:zip_code_last_set user) db/min-time-zip-change))
           (do (db/db-trans [users/update-user user {:zip_code  new-zip-code
                                                     :zip_code_last_set (local-time/local-now)}])
-              {:status 302
-               :headers {"Location" "/settings?success=z"}})
-          {:status 302
-           :headers {"Location" "/settings?invalid=z"}})))))
+              (redirect "/settings?v=z"))
+          (redirect "/settings?v=k"))))))

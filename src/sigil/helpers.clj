@@ -25,7 +25,7 @@
 (defn error
   ([message] (db/create-error {:error_message message}))
   ([message info user] (db/create-error {:error_message message
-                                         :additional_info info
+                                         :additional_info (str info)
                                          :user_assoc (:user_id user)})))
 
 (defn error-redirect
@@ -38,14 +38,14 @@
      (error message info user)
      (redirect location))))
 
-(defn search-orgs-tags-topics
-  [term]
-  (let [matched-orgs (filter #(str/starts-with? (:org_name %) term) (orgs/get-all-orgs))
-        matched-topics (filter #(str/starts-with? (:topic_name %) term) (topics/get-all-topics))
-        matched-tags (filter #(str/starts-with? (:tag_name %) term) (tags/get-all-tags))]
-    {:orgs matched-orgs
-     :topics matched-topics
-     :tags matched-tags}))
+;(defn search-orgs-tags-topics
+  ;[term]
+  ;(let [matched-orgs (filter #(str/starts-with? (:org_name %) term) (orgs/get-all-orgs))
+        ;matched-topics (filter #(str/starts-with? (:topic_name %) term) (topics/get-all-topics))
+        ;matched-tags (filter #(str/starts-with? (:tag_name %) term) (tags/get-all-tags))]
+    ;{:orgs matched-orgs
+     ;:topics matched-topics
+     ;:tags matched-tags}))
 
 (defn user-favorites-or-nil
   [user]

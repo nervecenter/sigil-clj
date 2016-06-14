@@ -25,13 +25,15 @@
   [:div.container.settings-container
    [:h2.settings-page-header "Account settings for " (:username user)]
    (condp = validation
-     "p" [:h3 {:style "color:green;"} "Password updated."]
-     "i" [:h3 {:style "color:green;"} "Icon Updated"]
-     "l" [:h3 {:style "color:red;"} "User icon must be .jpg or .png at most 100 x 100 pixels."]
-     "d" [:h3 {:style "color:red;"} "The server had a problem updating your icon. We'll look into it."]
-     "m" [:h3 {:style "color:red;"} "New password fields did not match."]
-     "b" [:h3 {:style "color:red;"} "Old password incorrect."]
-     "c" [:h3 {:style "color:red;"} "Passwords need to be at least 6 characters."]
+     "p" [:h3.validation {:style "color:green;"} "Password updated."]
+     "i" [:h3.validation {:style "color:green;"} "Icon Updated"]
+     "l" [:h3.validation {:style "color:red;"} "User icon must be .jpg or .png at most 100 x 100 pixels."]
+     "d" [:h3.validation {:style "color:red;"} "The server had a problem updating your icon. We'll look into it."]
+     "m" [:h3.validation {:style "color:red;"} "New password fields did not match."]
+     "b" [:h3.validation {:style "color:red;"} "Old password incorrect."]
+     "c" [:h3.validation {:style "color:red;"} "Passwords need to be at least 6 characters."]
+     "z" [:h3.validation {:style "color:green;"} "Zip code updated."]
+     "k" [:h3.validation {:style "color:red;"} "You must wait 1 month before updating your zip code."]
      nil)
    [:div.row
     [:div.col-lg-6
@@ -43,8 +45,6 @@
     [:div.col-lg-6
      [:div.panel.panel-default
       [:div.panel-body
-       (if icon-invalid?
-         [:p.text-success "User icon must be .jpg or .png at most 100 x 100 pixels."])
        [:img.img-rounded.img-responsive.img-relief
         {:src (:icon_100 user)}]
        [:h4 "User icon: 100 x 100 pixels, .jpg or .png"]
@@ -66,10 +66,6 @@
                         "Upload new icon")]]]]
      [:div.panel.panel-default
       [:div.panel-body
-       [:h3 {:style "color:red;"} (cond
-                                    (= "m" pass-invalid?)  "New Password Fields did not match."
-                                    (= "b" pass-invalid?)  "Old Password Incorrect"
-                                    (= "c" pass-invalid?)  "Passwords need to be atleast 6 characters")]
        [:form {:method "post" :action "/userpasschange"}
         [:div.form-group
          (label "password" "Old Password")
@@ -100,7 +96,7 @@
          (label "zip" "Zip Code")
          (text-field {:id "zip"
                       :placeholder "Zip Code"
-                      :class "form-control"} "zip")]
+                      :class "form-control"} "zip" (:zip_code user))]
         [:div.form-group
          (submit-button {:id "zip-submit"
                          :class "btn btn-default disabled form-control"
