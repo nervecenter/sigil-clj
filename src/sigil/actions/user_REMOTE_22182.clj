@@ -3,9 +3,7 @@
             [sigil.db.orgs :as orgs]
             [sigil.db.core :as db]
             [sigil.auth :as auth]
-            [clj-time.jdbc]
-            [clj-time.core :as time]
-            [clj-time.local :as local-time]
+            [sigil.helpers :refer [redirect]]
             [buddy.hashers :refer [check]]))
 
 ;;----------------------------------
@@ -17,7 +15,6 @@
   (db/db-trans
    [users/create-user
     (assoc user :icon_100 (rand-nth db/default_icon_100))]))
-
 
 (defn change-user-password
   [req]
@@ -42,23 +39,3 @@
         (db/db-trans [users/update-user user {:pass_hash (buddy.hashers/encrypt new-password)}])
         ;; Then redirect back to user_settings
         (redirect "/settings?v=p")))))
-
-(defn change-user-zip-code
-  [req]
-  (let [user (auth/user-or-nil req)
-        form-params (:form-params req)
-        new-zip-code (read-string (form-params "zip-code"))]
-    (do (.println System/out (str new-zip-code " " (type new-zip-code)))
-      (if (nil? (:zip_code_last_set user))
-        (do (.println System/out "Zip is null")
-            (db/db-trans [users/update-user user {:zip_code new-zip-code
-                                                :zip_code_last_set (local-time/local-now)}])
-            {:status 302
-             :headers {"Location" "/settings?success=z"}})
-        (if (time/after? (time/plus (local-time/local-now) (db/min-time-zip-change)) (:zip_code_last_set user))
-          (do (db/db-trans [users/update-user user {:zip_code  new-zip-code
-                                                    :zip_code_last_set (local-time/local-now)}])
-              {:status 302
-               :headers {"Location" "/settings?success=z"}})
-          {:status 302
-           :headers {"Location" "/settings?invalid=z"}})))))

@@ -31,16 +31,16 @@
                  (:responded issue)
                  (get-latest-official-response-by-issue issue))))
 
-(defn issue-panel [uri 
-                   user 
-                   issue 
-                   issue-org 
-                   issue-tag 
-                   issue-user 
-                   authenticated? 
-                   user-voted? 
-                   petitioned? 
-                   responded? 
+(defn issue-panel [uri
+                   user
+                   issue
+                   issue-org
+                   issue-tag
+                   issue-user
+                   authenticated?
+                   user-voted?
+                   petitioned?
+                   responded?
                    latest-response]
   [(if responded?
      :div.panel.panel-info.issue-panel-partial
@@ -68,14 +68,14 @@
       [:img.issue-panel-icon {:src (:icon_30 issue-org)}]
       [:a {:href (str "/" (:org_url issue-org))} (str (:org_name issue-org) " ")]
       [:span.label.label-pill.label-default
-       ;;[:img.issue-panel-icon {:src (:icon_30 issue-tag)}]
+       [:img.tag-icon {:src (:icon_30 issue-tag)}]
        (:tag_name issue-tag)]]
      [:p.pull-right
       (str "Posted at " (clj-time.coerce/to-local-date (:created_at issue)) " by ")
       [:img {:src (:icon_30 issue-user)}]
       (:username issue-user)
       (when (some? user)
-        (html 
+        (html
           " "
           [(if (user-reported-issue? user issue)
            :span.glyphicon.glyphicon-flag.report-flag.reported
@@ -96,7 +96,7 @@
       (if (> (count (:text latest-response)) 100)
         [:span (str (subs (:text latest-response) 0 100) "...")]
         [:span (:text latest-response)])])
-   (cond 
+   (cond
      (auth/user-has-role? user :site-admin)
      [:div.panel-footer {:style "height:55px;"}
       [:form {:method "post" :action "/archiveissue" :style "float:right;"}
@@ -110,7 +110,7 @@
        (str (get-number-reports-by-issue issue) " Reports")]]
 
      (= (:org_id user) (:org_id issue-org))
-     [:div.panel-footer 
+     [:div.panel-footer
       [:span.label.label-default
        (str (get-number-reports-by-issue issue) " Reports")]
       " "

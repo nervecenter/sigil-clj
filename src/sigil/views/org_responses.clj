@@ -37,4 +37,4 @@
        (for [i issues]
          (sigil.views.partials.issue/issue-partial uri i org user))
        [:h4 (:org_name org) " hasn't responded to any issues yet. They'll get to it soon!"])]]
-   (sigil.views.partials.sidebar/sidebar-partial org user)))
+   (sigil.views.partials.sidebar/sidebar-partial org)))

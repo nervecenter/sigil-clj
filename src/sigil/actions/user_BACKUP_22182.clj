@@ -3,13 +3,19 @@
             [sigil.db.orgs :as orgs]
             [sigil.db.core :as db]
             [sigil.auth :as auth]
+<<<<<<< HEAD
             [clj-time.jdbc]
             [clj-time.core :as time]
             [clj-time.local :as local-time]
+=======
+            [sigil.helpers :refer [redirect]]
+>>>>>>> d6056a1bca598bd1439e4a4009f2ff327fbcd71d
             [buddy.hashers :refer [check]]))
 
 ;;----------------------------------
 ;; user_register_post
+
+
 
 (def not-nil? (complement nil?))
 
@@ -17,7 +23,6 @@
   (db/db-trans
    [users/create-user
     (assoc user :icon_100 (rand-nth db/default_icon_100))]))
-
 
 (defn change-user-password
   [req]
@@ -41,7 +46,9 @@
         ;; Update user password
         (db/db-trans [users/update-user user {:pass_hash (buddy.hashers/encrypt new-password)}])
         ;; Then redirect back to user_settings
-        (redirect "/settings?v=p")))))
+<<<<<<< HEAD
+        {:status 302
+         :headers {"Location" "/settings?success=p"}}))))
 
 (defn change-user-zip-code
   [req]
@@ -62,3 +69,6 @@
                :headers {"Location" "/settings?success=z"}})
           {:status 302
            :headers {"Location" "/settings?invalid=z"}})))))
+=======
+        (redirect "/settings?v=p")))))
+>>>>>>> d6056a1bca598bd1439e4a4009f2ff327fbcd71d

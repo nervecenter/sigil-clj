@@ -36,4 +36,4 @@
             [:img.media-object {:src (:icon_100 o)}]]
            [:div.media-body
             [:h3 [:a {:href (:org_url o)} (:org_name o)]]]]))]]]
-   (sidebar-partial nil user)))
+   (sidebar-partial nil)))

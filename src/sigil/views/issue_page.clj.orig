@@ -7,9 +7,13 @@
             [sigil.db.votes :refer [user-voted-on-issue?]]
             [sigil.db.orgs :refer [get-org-by-url]]
             [sigil.db.tags :refer [get-tag-by-issue]]
+<<<<<<< HEAD
+            [sigil.views.partials.sidebar :refer [sidebar-partial]])
+=======
             [sigil.db.reports :refer [user-reported-issue? get-number-reports-by-issue]]
             [sigil.views.partials.sidebar :refer [sidebar-partial]]
             )
+>>>>>>> d6056a1bca598bd1439e4a4009f2ff327fbcd71d
   (:use [hiccup.form]
         [hiccup.core]))
 
@@ -37,6 +41,7 @@
         org (get-org-by-url (:org_url (:route-params req)))
         apply-badge? (constituency? org (:poster issue))]
     (do (sigil.db.core/db-trans [sigil.db.issues/issue-view-inc (:issue_id issue)])
+        (.println System/out (str "Constituency? " apply-badge?))
       (layout/render
        req
        user
@@ -55,8 +60,19 @@
                         (get-comments-with-commenters-by-issue issue)
                         )))))
 
+<<<<<<< HEAD
 (defn issue-page-body
   [user issue tag org authenticated? apply-badge? user-voted? responses comments]
+=======
+(defn issue-page-body [user
+                       issue
+                       tag
+                       org
+                       authenticated?
+                       user-voted?
+                       responses
+                       comments]
+>>>>>>> d6056a1bca598bd1439e4a4009f2ff327fbcd71d
   (html
    [:div.col-md-9.col-lg-9
     [:img.img-rounded.img-responsive.org-banner-small

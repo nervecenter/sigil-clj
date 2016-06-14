@@ -15,12 +15,14 @@
                           [compojure "1.5.0"]                    ;; Routing
                           [hiccup "1.0.5"]                       ;; Templating
                           [cheshire "5.5.0"]                     ;; JSON encoding
-                          ;;[korma "0.4.2"]                      ;; A schema and SQL library, possibly use later
+;                          [korma "0.4.2"]                        ;; A schema and SQL library, possibly use later
                           [org.clojure/java.jdbc "0.4.2"]        ;; SQL querying and transactions
+;                          [org.clojure/java.jdbc "0.3.7"]        ;; Korma depends on 0.3.7
                           [org.postgresql/postgresql "9.4.1208"] ;; Postgres driver
                           [clj-time "0.11.0"]                    ;; Simple date and time calculations
                           ;;[speclj "3.3.1"]                     ;; Test and behavior suite, may use later
                           ;;[fresh "1.0.1"]                      ;; Live reloads src files on save, may use later
+                          [ez-image "1.0.4"]                     ;; Image conversion and saving
                           ])
 
 (task-options! pom {:project (get-env :project)

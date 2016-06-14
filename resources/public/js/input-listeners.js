@@ -1,19 +1,16 @@
-﻿// $("input[type=file]").each(function () {
-// });
-
-function EnableTagSubmit() {
+﻿function EnableTagSubmit() {
     var $button = $("#new-tag-submit");
     if ($("#tag-name").val() != "") {
-        $button.removeClass("disabled").removeClass("btn-default").addClass("btn-success");
+        $button.removeClass("disabled").prop("disabled", false).removeClass("btn-default").addClass("btn-success");
     } else if (!$button.hasClass("disabled")) {
-        $button.removeClass("btn-success").addClass("disabled").addClass("btn-default");
+        $button.removeClass("btn-success").addClass("disabled").prop("disabled", true).addClass("btn-default");
     }
 }
 
 $("#tag-name").keyup(EnableTagSubmit);
 
 function EnableFileSubmit ($fileinput) {
-    $fileinput.parent().parent().parent().parent().parent().children().last().children().first().removeClass("disabled").removeClass("btn-default").addClass("btn-success");
+    $fileinput.parent().parent().parent().parent().parent().children().last().children().first().removeClass("disabled").prop("disabled", false).removeClass("btn-default").addClass("btn-success");
     $fileinput.off("change");
 }
 
@@ -29,12 +26,38 @@ $(".btn-file :file").each(function () {
     });
 });
 
+$(".pass-field").each(function () {
+    $(this).keyup(function () {
+        var oldpass = $("#old-password").val();
+        var newpass = $("#new-password").val();
+        var confpass = $("#confirm-new-password").val();
+        var $submit = $("#submit-new-password");
+
+        if (oldpass != "" && newpass != "" && confpass != "" && $submit.hasClass("disabled")) {
+            $submit.removeClass("disabled").prop("disabled", false).addClass("btn-success");
+        } else if (((oldpass == "") || (newpass == "") || (confpass == "")) && !$submit.hasClass("disabled")) {
+            $submit.removeClass("btn-success").addClass("disabled").prop("disabled", true);
+        }
+    });
+});
+
+$("#zip").keyup(function () {
+    var zip = $(this).val();
+    var $submit = $("#zip-submit");
+
+    if (zip != "" && $submit.hasClass("disabled")) {
+        $submit.removeClass("disabled").prop("disabled", false).addClass("btn-success");
+    } else if (zip == "" && !$submit.hasClass("disabled")) {
+        $submit.removeClass("btn-success").addClass("disabled").prop("disabled", true);
+    }
+});
+
 $("#policy-accept").change(function () {
   var checked = $(this).prop("checked");
   if (checked) {
-    $("#sign-up-button").removeClass("disabled");
+    $("#sign-up-button").removeClass("disabled").prop("disabled", false);
   } else {
-    $("#sign-up-button").addClass("disabled");
+    $("#sign-up-button").addClass("disabled").prop("disabled", true);
   }
 });
 
@@ -87,7 +110,8 @@ function AddChangeTagForm (event) {
         .append($("<input>")
                 .attr("type", "submit")
                 .attr("value", "Upload new 30x30 tag icon")
-                .attr("class", "btn btn-default form-control disabled"));
+                .attr("class", "btn btn-default form-control disabled")
+                .prop("disabled", true));
 
     var form = $("<form>").prop("method", "post")
         .prop("action", "/tagicon30")
@@ -127,10 +151,21 @@ $(".change-tag-icon").each(function () {
 $(".delete-tag").each(function() {
     $(this).click(function() {
         var tagid = $(this).data("tagid");
-        $(".to-tag:disabled").each(function () { $(this).prop('disabled', false); });
-        $("#to-" + tagid).prop('disabled', true);
+        $(".to-tag:disabled").each(function () {
+            $(this).prop('disabled', false);
+            //$(this).removeClass("disabled-option");
+        });
+        $("#to-" + tagid)
+            .prop('disabled', true)
+            //.addClass("disabled-option");
         $(".to-tag:enabled").first().prop("selected", true);
         $("#tagid-field").val(tagid);
         $("#delete-tag-modal").modal('toggle');
       
 })});
+
+/*$('input[type="submit"]').each(function () {
+    $(this).click(function () {
+        $(this).prop("disabled", true);
+    });
+});*/

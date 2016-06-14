@@ -62,7 +62,7 @@
   (POST "/login" req (login-post req))
   (GET "/logout" req (logout-handler req))
   (GET "/features" req (features-handler req))
-  (GET "/companies" req (org-list-handler req))
+  (GET "/orgs" req (org-list-handler req))
   ;;need to lock down the next five routes so that only org-admins can access and call.
   (GET "/default_graph" req (data-actions/default-org-chart req))
   (GET "/custom_graph" req (data-actions/custom-org-chart req))

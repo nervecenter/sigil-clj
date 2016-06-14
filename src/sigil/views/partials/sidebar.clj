@@ -1,51 +1,32 @@
 (ns sigil.views.partials.sidebar
   (:require [sigil.db.tags :refer [get-tags-by-org]]
-            [sigil.db.users :refer [get-user-favorites]]
             [hiccup.core :refer [html]]))
 
 (declare sidebar-partial sidebar org-box link-box ad ad-box sidebar-footer)
 
-(defn sidebar-partial [org user]
-  (cond
-    (and (some? org) (some? user))
-    (let [org-tags (get-tags-by-org org)
-;;        user-favorites (get-favorites-by-user-id (:user_id user))
-          ]
-      (sidebar org
-               org-tags
-               ;;user-favorites
-               nil))
-    (and (some? org) (nil? user))
-    (let [org-tags (get-tags-by-org org)]
-      (sidebar org org-tags nil))
-    (and (nil? org) (some? user))
-;;    (let [user-favorites (get-favorites-by-user-id (:user_id user))]
+(defn sidebar-partial [org]
+  (if (some? org)
+    (sidebar org
+             (get-tags-by-org org))
     (sidebar nil
-             nil
-             ;;user-favorites
-             nil)
-;;      )
-    :else
-    (sidebar nil nil nil)))
+             nil)))
 
-(defn sidebar [org org-tags user-favorites]
+(defn sidebar [org org-tags]
   [:div.col-md-3.col-lg-3.col-sm-12.col-xs-12
    (if (some? org)
      (org-box org org-tags))
    link-box
-;;   (if (not-empty user-favorites)
-;;     (favorites-box user-favorites))
    (ad-box)
    sidebar-footer])
 
 (defn org-box [org org-tags]
   [:div.panel.panel-default
    [:div.panel-body
-    [:h3 {:style "margin: 10px auto 18px;"}
+    [:h3 {:style "margin: 10px auto 18px;font-size:22px;"}
      [:a {:href (:org_url org)}
       [:img {:src (:icon_30 org)
-             :style "width:25px;height:25px;"}]
-      (:org_name org)]]
+             :style "width:25px;height:25px;margin-bottom:5px;"}]
+      " " (:org_name org)]]
     [:a {:href (str "http://" (:website org))
          :target "_blank"}
      [:img.sub-org-icon {:src "/images/website.png"}]
@@ -60,7 +41,13 @@
     [:span
      [:img.sub-org-icon {:src "/images/telephone.png"}]
      (:phone org)]
-    ;; [:br]
+    [:hr.tiny-hr]
+    [:h4 "Tags"]
+    [:div.form-group
+     [:select#tag-select.form-control
+      [:option.tag-option-all {:value 0} "All"]
+      (for [tag org-tags]
+        [:option.tag-option {:value (:tag_id tag)} (:tag_name tag)])]]
     ;; [:hr.sidebar-divider]
     ;; [:span "Data button might go here."]
     ;; [:hr.sidebar-divider]
@@ -76,9 +63,10 @@
   (html
    [:div.panel.panel-default
     [:div.panel-body
-     [:a {:href "/companies"} "Browse orgs on Sigil"]
+     [:a {:href "/features"} [:b "Features"]]
      [:hr.sidebar-divider]
-     [:a {:href "/features"} [:b "Sigil for your org"]]]]))
+     [:a {:href "/orgs"} "Browse organizations"]
+     ]]))
 
 ;;(defn favorites-box [user-favorites]
 ;;  [:div.panel.panel-default
@@ -95,9 +83,10 @@
                                      :style "margin-bottom:21px;"}]])
 
 (defn ad-box []
-  (condp = (rand-int 2)
-    0 (ad "mailto:contact@sigil.tech" "/images/advertise.png" false)
-    1 (ad "/sigil" "/images/feedback-ad.png" true)))
+  ;(condp = (rand-int 2)
+    ;0 (ad "mailto:contact@sigil.tech" "/images/advertise.png" false)
+    ;1 (ad "/sigil" "/images/feedback-ad.png" true))
+  (ad "/sigil" "/images/feedback-ad.png" true))
 
 (def sidebar-footer
   (html

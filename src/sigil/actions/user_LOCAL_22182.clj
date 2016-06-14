@@ -11,6 +11,8 @@
 ;;----------------------------------
 ;; user_register_post
 
+
+
 (def not-nil? (complement nil?))
 
 (defn register-user [user]
@@ -28,20 +30,21 @@
         confirm-password (form-params "confirm-new-password")]
     (cond
       (not= new-password confirm-password)
-      (redirect "settings?v=m")
-
+      {:status 302
+       :headers {"Location" (str "settings?invalid=m")}}
       (not (check old-password (:pass_hash user)))
-      (redirect "settings?v=b")
-
+      {:status 302
+       :headers {"Location" (str "settings?invalid=b")}}
       (< (count new-password) 6)
-      (redirect "settings?v=c")
-
+      {:status 302
+       :headers {"Location" (str "settings?invalid=c")}}
       :else
       (do
         ;; Update user password
         (db/db-trans [users/update-user user {:pass_hash (buddy.hashers/encrypt new-password)}])
         ;; Then redirect back to user_settings
-        (redirect "/settings?v=p")))))
+        {:status 302
+         :headers {"Location" "/settings?success=p"}}))))
 
 (defn change-user-zip-code
   [req]

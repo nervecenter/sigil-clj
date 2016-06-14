@@ -24,6 +24,13 @@
 (defn user-settings-page [user user-issues validation]
   [:div.container.settings-container
    [:h2.settings-page-header "Account settings for " (:username user)]
+<<<<<<< HEAD
+   [:h3 {:style "color:green;"}
+    (cond
+      (= successful? "p") "Password Updated"
+      (= successful? "i") "Icon Updated"
+      (= successful? "z") "Zip Code Updated")]
+=======
    (condp = validation
      "p" [:h3 {:style "color:green;"} "Password updated."]
      "i" [:h3 {:style "color:green;"} "Icon Updated"]
@@ -33,6 +40,7 @@
      "b" [:h3 {:style "color:red;"} "Old password incorrect."]
      "c" [:h3 {:style "color:red;"} "Passwords need to be at least 6 characters."]
      nil)
+>>>>>>> d6056a1bca598bd1439e4a4009f2ff327fbcd71d
    [:div.row
     [:div.col-lg-6
      [:h3 "Issues you've posted:"]
@@ -43,8 +51,6 @@
     [:div.col-lg-6
      [:div.panel.panel-default
       [:div.panel-body
-       (if icon-invalid?
-         [:p.text-success "User icon must be .jpg or .png at most 100 x 100 pixels."])
        [:img.img-rounded.img-responsive.img-relief
         {:src (:icon_100 user)}]
        [:h4 "User icon: 100 x 100 pixels, .jpg or .png"]
@@ -66,10 +72,6 @@
                         "Upload new icon")]]]]
      [:div.panel.panel-default
       [:div.panel-body
-       [:h3 {:style "color:red;"} (cond
-                                    (= "m" pass-invalid?)  "New Password Fields did not match."
-                                    (= "b" pass-invalid?)  "Old Password Incorrect"
-                                    (= "c" pass-invalid?)  "Passwords need to be atleast 6 characters")]
        [:form {:method "post" :action "/userpasschange"}
         [:div.form-group
          (label "password" "Old Password")
@@ -86,6 +88,25 @@
          (label "confirm-new-password" "Confirm New password")
          (password-field {:id "confirm-new-password"
                           :placeholder "Confirm New Password"
+<<<<<<< HEAD
+                          :class "form-control"} "confirm-new-password")]
+        [:div.btn-group.btn-group-justified
+         [:div.btn-group
+          (submit-button {:class "btn btn-primary disabled"} "Change Password")]]]]]
+     [:div.panel.panel-default
+      [:div.panel-body
+       [:h3 {:style "color:red;"} (cond
+                                    (= "z" pass-invalid?) "Zip code changed too soon. Please wait before changing.")]
+       [:form {:method "post" :action "/userzipchange"}
+        [:div.form-group
+         (label "zip-code" (str "Zip Code - Current: " (:zip_code user)))
+         (text-field {:id "zip-code"
+                          :placeholder "New Zip Code"
+                          :class "form-control"} "zip-code")]
+        [:div.btn-group.btn-group-justified
+         [:div.btn-group
+          (submit-button {:class "btn btn-primary disabled"} "Change Zip Code")]]]]]]]])
+=======
                           :class "form-control pass-field"} "confirm-new-password")]
         [:div.form-group
           (submit-button {:id "submit-new-password"
@@ -105,3 +126,4 @@
          (submit-button {:id "zip-submit"
                          :class "btn btn-default disabled form-control"
                          :disabled "disabled"} "Change your zip code")]]]]]]])
+>>>>>>> d6056a1bca598bd1439e4a4009f2ff327fbcd71d

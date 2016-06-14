@@ -11,6 +11,14 @@
 ;; I wanted to alias this ns in the other model files but I didn't want it to be db/db everywhere
 (def spec "postgresql://localhost:5432/sigildb")
 
+;(defdb spec (postgres {:db "sigildb"
+                       ;:user "sigilserver"
+                       ;:password "ServeThePeople1027"
+                       ;;; optional keys
+                       ;:host "localhost"
+                       ;:port "4567"
+                       ;:delimiters ""}))
+
 ;; (try
 ;;   (sql/query spec ["CREATE EXTENSION fuzzystrmatch"])
 ;;   (catch Exception e (str "Successfully added fuzzystrmatch: "
