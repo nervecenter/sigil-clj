@@ -45,6 +45,10 @@
            [:a {:href (str "/logout?return=" uri)} "Log Out"]]]
          [:ul.nav.navbar-nav.navbar-right
           [:li
+           [:a#settings-anchor {:href "/settings"} 
+            [:span#user-settings-cog.glyphicon.glyphicon-cog {:aria-hidden "true"}]]]]
+         [:ul.nav.navbar-nav.navbar-right
+          [:li
            [:a {:href "/settings"} (:username user)]]]
          [:ul.nav.navbar-nav.navbar-right.hidden-xs
           [:li {:style "position:relative;"}

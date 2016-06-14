@@ -14,16 +14,16 @@
     (if (user-is-org-admin? user)
       (let [org (get-org-by-id (:org_id user))
             tags (get-tags-by-org org)
-            ]
+            validation ((:query-params req) "v")]
         (layout/render
          req
          user
          org
          (str "Sigil - " (:org_name org) " Settings")
-         (org-settings-body org tags)))
+         (org-settings-body org tags validation)))
       (not-found-handler req "Non-org-admin user attempted to access org settings."))))
 
-(defn org-settings-body [org tags]
+(defn org-settings-body [org tags validation]
   (html
     [:div.container.settings-container
      [:div.row
@@ -33,6 +33,44 @@
         [:a.btn.btn-primary {:href (str (:org_url org) "/data")} (:org_name org) " Data"]]]]]
     [:div.container.settings-container
      [:div.row
+      (condp = validation
+        ;; banner upload failed
+        "u" [:h3 {:style "color:red"} "Banner upload failed; we'll look into it."]
+        ;; banner image incorrect
+        "k" [:h3 {:style "color:red"} "Banner should be a 1000 x 200 pixel jpg or png."]
+        ;; banner successfully changed
+        "b" [:h3 {:style "color:green"} "Successfully changed banner."]
+        ;; icon100 upload failed
+        "y" [:h3 {:style "color:red"} "Icon upload failed; we'll look into it."]
+        ;; icon100 image incorrect
+        "u" [:h3 {:style "color:red"} "Icon should be a 100 x 100 pixel jpg or png."]
+        ;; icon100 successfully changed
+        "i" [:h3 {:style "color:green"} "Successfully changed icon."]
+        ;; icon30 upload failed
+        "e" [:h3 {:style "color:red"} "Icon upload failed; we'll look into it."]
+        ;; icon30 image incorrect
+        "a" [:h3 {:style "color:red"} "Icon should be a 30 x 30 pixel jpg or png."]
+        ;; icon30 successfully changed
+        "t" [:h3 {:style "color:green"} "Successfully changed icon."]
+        ;; tagicon upload failed
+        "m" [:h3 {:style "color:red"} "Tag icon upload failed; we'll look into it."]
+        ;; tagicon image incorrect
+        "r" [:h3 {:style "color:red"} "Tag icon should be a 30 x 30 pixel jpg or png."]
+        ;; tagicon successfully changed
+        "g" [:h3 {:style "color:green"} "Successfully changed tag icon."]
+        ;; tag successfully added
+        "s" [:h3 {:style "color:green"} "Successfully added tag."]
+        ;; tag add failed
+        "q" [:h3 {:style "color:red"} "Adding new tag failed; we'll look into it."]
+        ;; tag name incorrect
+        "c" [:h3 {:style "color:red"} "Incorrect tag name."]
+        ;; tag successfully deleted
+        "d" [:h3 {:style "color:green"} "Successfully deleted tag."]
+        ;; tag delete failed
+        "p" [:h3 {:style "color:red"} "Deleting tag failed; we'll look into it."]
+        ;; Can't delete last tag
+        "l" [:h3 {:style "color:red"} "Can't delete your last tag!"]
+        nil)
       [:div.col-lg-12
        [:div.panel
         [:div.panel-body

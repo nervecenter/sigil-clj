@@ -22,6 +22,22 @@
   {:status 302
    :headers {"Location" location}})
 
+(defn error
+  ([message] (db/create-error {:error_message message}))
+  ([message info user] (db/create-error {:error_message message
+                                         :additional_info info
+                                         :user_assoc (:user_id user)})))
+
+(defn error-redirect
+  ([message location]
+   (do
+     (error message)
+     (redirect location)))
+  ([message info user location]
+   (do
+     (error message info user)
+     (redirect location))))
+
 (defn search-orgs-tags-topics
   [term]
   (let [matched-orgs (filter #(str/starts-with? (:org_name %) term) (orgs/get-all-orgs))

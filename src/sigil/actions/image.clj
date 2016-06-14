@@ -5,7 +5,7 @@
             [sigil.db.tags :as tags]
             [clojure.java.io :as io]
             [sigil.auth :as auth]
-            [sigil.helpers :refer [redirect]]
+            [sigil.helpers :refer [redirect error-redirect]]
             [sigil.views.internal-error :refer [internal-error-handler]]
             [sigil.views.not-found :refer [not-found-handler]]
             [ez-image.core :as ezimg])
@@ -34,40 +34,73 @@
         save-path (str "resources/public/" db-path)]
     (if (= :success (db/db-trans [users/update-user user {:icon_100 db-path}]))
       (try
-        (ezimg/save! (ezimg/convert (:tempfile user-icon-file) [:constrain 100])
+        (ezimg/save! (ezimg/convert (:tempfile user-icon-file) [:distort 100])
                      save-path)
-        (catch Exception e (do (println "Couldn't save user icon:" (.getMessage e))
-                               (redirect "/settings?v=l")))
+        (catch Exception e
+          (error-redirect "Couldn't save user icon."
+                          (.getMessage e)
+                          user
+                          "/settings?v=l"))
         (finally (redirect "/settings?v=i")))
       (redirect "/settings?v=d"))))
 
 (defn update-org-icon-30
   [req]
   (let [upload-params (:params req)
+        user (auth/user-or-nil req)
         org-icon-file (:icon-30-upload upload-params)
-        org (auth/user-org-or-nil (auth/user-or-nil req))
+        org (auth/user-org-or-nil user)
         new-file-name (str (:org_url org) "_30.png")
         db-path (str "/db_imgs/org/" new-file-name)
         save-path (str "resources/public/" db-path)]
-    (if (not (nil? org))
-      (do
-        (convert-image (org-icon-file :tempfile) 30 30 save-path)
-        (db/db-trans [orgs/update-org org {:icon_30 db-path}])
-        (redirect "/orgsettings")))))
+    (if (some? org)
+      (if (= :success (db/db-trans [orgs/update-org org {:icon_30 db-path}]))
+        (try
+          (ezimg/save! (ezimg/convert (:tempfile org-icon-file) [:distort 30])
+                       save-path)
+          (catch Exception e
+            (error-redirect "Couldn't save org icon30; image incorrect?"
+                            (.getMessage e)
+                            user
+                            "/orgsettings?v=a"))
+          (finally (redirect "/orgsettings?v=t")))
+        (error-redirect "DB couldn't change org icon30."
+                        db-path
+                        user
+                        "/orgsettings?v=e"))
+      (error-redirect "User not authorized to change org icon30."
+                      org
+                      user
+                      "/orgsettings?v=e"))))
 
 (defn update-org-icon-100
   [req]
   (let [upload-params (:params req)
+        user (auth/user-or-nil req)
         org-icon-file (upload-params :icon-100-upload)
-        org (auth/user-org-or-nil (auth/user-or-nil req))
+        org (auth/user-org-or-nil user)
         new-file-name (str (:org_url org) "_100.png")
         db-path (str "/db_imgs/org/" new-file-name)
         save-path (str "resources/public/" db-path)]
-    (do
-      (convert-image (org-icon-file :tempfile) 100 100 save-path)
-      (db/db-trans [orgs/update-org org {:icon_100 db-path}])
-      {:status 302
-       :headers {"Location" "/orgsettings"}})))
+    (if (some? org)
+      (if (= :success (db/db-trans [orgs/update-org org {:icon_100 db-path}]))
+        (try
+          (ezimg/save! (ezimg/convert (:tempfile org-icon-file) [:distort 100])
+                       save-path)
+          (catch Exception e
+            (error-redirect "Couldn't save org icon100; image incorrect?"
+                            (.getMessage e)
+                            user
+                            "/orgsettings?v=u"))
+          (finally (redirect "/orgsettings?v=i")))
+        (error-redirect "DB couldn't change org icon100."
+                        db-path
+                        user
+                        "/orgsettings?v=y"))
+      (error-redirect "User not authorized to change org icon100."
+                      org
+                      user
+                      "/orgsettings?v=y"))))
 
 (defn update-tag-icon-30
   [req]
@@ -79,25 +112,51 @@
         new-file-name (str (:org_url org) "_" (:tag_id tag) "_30.png")
         db-path (str "/db_imgs/tag/" new-file-name)
         save-path (str "resources/public/" db-path)]
-    (if (and (some? user)
-             (= (:org_id user) (:org_id org)))
-      (do
-        (convert-image (tag-icon-file :tempfile) 30 30 save-path)
-        (db/db-trans [tags/update-tag tag {:icon_30 db-path}])
-        {:status 302
-         :headers {"Location" "/orgsettings"}})
-      (not-found-handler req "Unauthorized attempt to change tag icon."))))
+    (if (some? org)
+      (if (= :success (db/db-trans [tags/update-tag tag {:icon_30 db-path}]))
+        (try
+          (ezimg/save! (ezimg/convert (:tempfile tag-icon-file) [:distort 30])
+                       save-path)
+          (catch Exception e
+            (error-redirect "Couldn't save tag icon30; image incorrect?"
+                            (.getMessage e)
+                            user
+                            "/orgsettings?v=r"))
+          (finally (redirect "/orgsettings?v=g")))
+        (error-redirect "DB couldn't change tag icon30."
+                        db-path
+                        user
+                        "/orgsettings?v=m"))
+      (error-redirect "User not authorized to change tag icon30."
+                      {:tag tag :org org}
+                      user
+                      "/orgsettings?v=m"))))
 
 (defn update-org-banner
   [req]
   (let [upload-params (:params req)
-        org-icon-file (upload-params :banner-upload)
-        org (auth/user-org-or-nil (auth/user-or-nil req))
+        user (auth/user-or-nil req)
+        org-banner-file (upload-params :banner-upload)
+        org (auth/user-org-or-nil user)
         new-file-name (str (:org_url org) "_banner.png")
         db-path (str "/db_imgs/org/" new-file-name)
         save-path (str "resources/public/" db-path)]
-    (do
-      (convert-image (org-icon-file :tempfile) 1000 200 save-path)
-      (db/db-trans [orgs/update-org org {:banner db-path}])
-      {:status 302
-       :headers {"Location" "/orgsettings"}})))
+    (if (some? org)
+      (if (= :success (db/db-trans [orgs/update-org org {:banner db-path}]))
+        (try
+          (ezimg/save! (ezimg/convert (:tempfile org-banner-file) [:distort 1000 200])
+                       save-path)
+          (catch Exception e
+            (error-redirect "Couldn't save org banner; image incorrect?"
+                            (.getMessage e)
+                            user
+                            "/orgsettings?v=k"))
+          (finally (redirect "/orgsettings?v=b")))
+        (error-redirect "DB couldn't change org banner."
+                        db-path
+                        user
+                        "/orgsettings?v=u"))
+      (error-redirect "User not authorized to change org banner."
+                      org
+                      user
+                      "/orgsettings?v=u"))))
