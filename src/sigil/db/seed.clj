@@ -366,6 +366,7 @@
                       :org_id 1}])
 
 (defn live-seed-db
+  "Seeds db with live site settings."
   []
   (do
     (doall (map #(db/db-trans [create-org %]) live_org_seed))
@@ -373,13 +374,20 @@
     (doall (map #(db/db-trans [create-user %]) live_user_seed))
     (doall (map #(db/db-trans [create-tag %]) live_tag_seed))))
 
-(defn drop-create-seed
+(defn live-create-and-seed
+  "Creates db tables in db and seeds with live data"
+  []
+  (do
+    (migrate/create-db-tables)
+    (live-seed-db)))
+
+(defn live-drop-create-seed
+  "Drops live database, creates new database, creates tables and then seeds with live data. "
   []
   (do
     (migrate/drop-create-db)
-    ;(migrate/drop-db-tables)
     (migrate/create-db-tables)
-    (seed-db)))
+    (live-seed-db)))
 
 (defn create-and-seed
   []

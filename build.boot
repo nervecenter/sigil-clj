@@ -61,6 +61,15 @@
   "Builds and seeds database tables"
   (sigil.db.seed/drop-create-seed))
 
+
+(defn live-create-and-seed
+  []
+  (sigil.db.seed/live-create-and-seed))
+
+(defn live-seed-db
+  []
+  (sigil.db.seed/live-seed-db))
+
 (def default-sigil-map
   {:sigil-root "src/sigil"})
 
