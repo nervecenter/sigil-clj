@@ -56,10 +56,10 @@
 ;;   []
 ;;   (sigil.db.seed/drop-create-seed))
 
-(defn build-and-seed
-  []
-  "Builds and seeds database tables"
-  (sigil.db.seed/drop-create-seed))
+;; (defn build-and-seed
+;;   []
+;;   "Builds and seeds database tables"
+;;   (sigil.db.seed/drop-create-seed))
 
 
 (defn live-create-and-seed
