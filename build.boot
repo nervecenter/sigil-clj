@@ -10,8 +10,8 @@
                           [javax.servlet/servlet-api "2.5"]      ;; Either used in Ring or http-kit
                           ;;[ring.middleware.logger "0.5.0"]
                           [http-kit "2.1.19"]                    ;; Replaces jetty as the HTTP endpoint of the server
-                          [buddy/buddy-auth "0.9.0"]             ;; Allows us to encrypt and authorize requests
-                          [buddy/buddy-hashers "0.11.0"]
+                          [buddy/buddy-auth "1.1.0"]             ;; Allows us to encrypt and authorize requests
+                          [buddy/buddy-hashers "0.14.0"]
                           [compojure "1.5.0"]                    ;; Routing
                           [hiccup "1.0.5"]                       ;; Templating
                           [cheshire "5.5.0"]                     ;; JSON encoding

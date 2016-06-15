@@ -89,7 +89,7 @@
                           :disabled "disabled"} "Change Password")]]]]
      [:div.panel.panel-default
       [:div.panel-body
-       [:h4 "You may change your zip code once every three months."]
+       [:h4 "You may change your zip code once every month."]
        [:form {:action "/userzip"
                :method "post"}
         [:div.form-group
