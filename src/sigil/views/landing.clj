@@ -34,7 +34,8 @@
                 "js/jquery-ui-1.9.2.custom.min.js"
                 "js/bootstrap.js"
                 "js/voting.js"
-                "js/search.js")]))
+                "js/search.js"
+                "js/ganalytics.js")]))
 
 (defn issue-section [cols]
   "Takes 3 lists of issues for display on the landing page."
