@@ -25,9 +25,9 @@
      [:br.clear]
      footer
 
-     (include-js "js/jquery-1.11.3.js"
-                 "js/jquery-ui-1.9.2.custom.min.js"
-                 "js/bootstrap.js"
+     (include-js "https://code.jquery.com/jquery-1.11.3.min.js"
+                 "https://code.jquery.com/ui/1.9.2/jquery-ui.min.js"
+                 "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
                  "js/notifications.js"
                  "js/search.js")]))
 
@@ -35,9 +35,11 @@
   [:head
    [:meta {:charset "utf-8"}]
    [:meta {:name "viewport" :content "width=device-width, initial-scale=1.0"}]
-   (include-css "css/jquery-ui-1.9.2.custom.css"
-                "css/bootstrap-flatly.css"
+
+   (include-css "https://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css"
+                "https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/flatly/bootstrap.min.css"
                 "css/site.css")
+
    [:link {:rel "shortcut icon" :href "images/favicon.png"}]
 
    [:style ".twitter-typeahead {width: 100%;}
