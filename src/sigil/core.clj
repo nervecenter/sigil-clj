@@ -149,7 +149,7 @@
       (wrap-params)
       (wrap-multipart-params)))
 
-(def server-options {:port 8080})
+(def server-options {:port 80})
 
 (defonce server (atom nil))
 
