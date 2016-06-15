@@ -12,23 +12,21 @@
 ;; I wanted to alias this ns in the other model files but I didn't want it to be db/db everywhere
 (def spec "postgresql://localhost:5432/sigildb")
 
-;(defdb spec (postgres {:db "sigildb"
-                       ;:user "sigilserver"
-                       ;:password "ServeThePeople1027"
-                       ;;; optional keys
-                       ;:host "localhost"
-                       ;:port "4567"
-                       ;:delimiters ""}))
+(def spec-live {})
 
-;; (try
-;;   (sql/query spec ["CREATE EXTENSION fuzzystrmatch"])
-;;   (catch Exception e (str "Successfully added fuzzystrmatch: "
-;;                           (.getMessage e))))
+;; (def spec     {:subprotocol "postgresql"
+;;                :subname "//localhost:5432/template1"
+;;                :user "power_user"
+;;                :password "Sigiltech1027!"})
 
 
 ;;--------------------------- Site Settings ----------------------------------------
 (def default_icon_30 ["/db_imgs/default/default_30.png"])
-(def default_icon_100 ["/db_imgs/default/default100_1.png" "/db_imgs/default/default100_2.png" "/db_imgs/default/default100_3.png" "/db_imgs/default/default100_4.png" "/db_imgs/default/default100_5.png"])
+(def default_icon_100 ["/db_imgs/default/default100_1.png"
+                       "/db_imgs/default/default100_2.png"
+                       "/db_imgs/default/default100_3.png"
+                       "/db_imgs/default/default100_4.png"
+                       "/db_imgs/default/default100_5.png"])
 (def default_banner ["/db_imgs/default/defaultbanner.png"])
 
 (def min-time-zip-change (t/months 1)) ;;72 hrs
@@ -93,10 +91,7 @@
   ([{:as new-error}]
    (sql/insert! spec
                 :errors
-                new-error
-                ;[:error_message :user_assoc :org_assoc :issue_assoc]
-                ;[msg (get error_assocs 0) (get error_assocs 1) (get error_assocs 2)]
-                )))
+                new-error)))
 
 (defn error_model
   "Defines the error model in the db"

@@ -78,36 +78,7 @@
                 :banner "/db_imgs/org/gusbilirakis_banner.png"}
                ])
 
-(def live_org_seed [{;:org_id 1
-                :org_url "sigil"
-                :org_name "Sigil"
-                :website "sigil.tech"
-                :address "10707 Ayrshire Dr"
-                :city "Tampa"
-                :state "FL"
-                :zip_codes [33626]
-                :phone "813-334-3699"
-                :icon_30 "/db_imgs/org/sigil_30.png"
-                :icon_100 "/db_imgs/org/sigil_100.png"
-                :banner "/db_imgs/org/sigil_banner.png"}
-               ])
 
-(def live_tag_seed [{:tag_name "Bugs"
-                     :org_id 1
-                     :icon_30 (rand-nth db/default_icon_30)}])
-
-(def live_user_seed [{:email "cjcollazo@sigil.tech"
-                      :username "Nerve"
-                      :pass_hash (buddy.hashers/encrypt "Sigiltech1027!")
-                      :icon_100 (str (rand-nth db/default_icon_100))
-                      :roles [1 2]
-                      :org_id 1}
-                     {:email "dominiccox@sigil.tech"
-                      :username "Dominic"
-                      :pass_hash (buddy.hashers/encrypt "323232")
-                      :icon_100 (str (rand-nth db/default_icon_100))
-                      :roles [1 2]
-                      :org_id 1}])
 
 (def role_seed [{:role_name "org-admin"}
                 {:role_name "site-admin"}])
@@ -362,6 +333,37 @@
     (doall (map #(db/db-trans [create-topic %]) topic_seed))
     (doall (map #(db/db-trans [create-vote %]) vote_seed))))
 
+
+(def live_org_seed [{;:org_id 1
+                :org_url "sigil"
+                :org_name "Sigil"
+                :website "sigil.tech"
+                :address "10707 Ayrshire Dr"
+                :city "Tampa"
+                :state "FL"
+                :zip_codes [33626]
+                :phone "813-334-3699"
+                :icon_30 "/db_imgs/org/sigil_30.png"
+                :icon_100 "/db_imgs/org/sigil_100.png"
+                :banner "/db_imgs/org/sigil_banner.png"}
+               ])
+
+(def live_tag_seed [{:tag_name "Bugs"
+                     :org_id 1
+                     :icon_30 (rand-nth db/default_icon_30)}])
+
+(def live_user_seed [{:email "cjcollazo@sigil.tech"
+                      :username "Nerve"
+                      :pass_hash (buddy.hashers/encrypt "Sigiltech1027!")
+                      :icon_100 (str (rand-nth db/default_icon_100))
+                      :roles [1 2]
+                      :org_id 1}
+                     {:email "dominiccox@sigil.tech"
+                      :username "Dominic"
+                      :pass_hash (buddy.hashers/encrypt "323232")
+                      :icon_100 (str (rand-nth db/default_icon_100))
+                      :roles [1 2]
+                      :org_id 1}])
 
 (defn live-seed-db
   []
