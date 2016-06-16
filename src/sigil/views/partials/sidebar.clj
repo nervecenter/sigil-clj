@@ -90,9 +90,9 @@
      [:a {:href "/legal"} "Legal"]
      " | "
      ;[:a {:href "mailto:contact@sigil.tech"} "Advertise"]
-     " | "
+     ;" | "
      ;[:a {:href "#"} "Twitter"]
-     " | "
+     ;" | "
      [:a {:href "https://www.facebook.com/Sigil-Technologies-Inc-1617420208509874/"
           :target "_blank"} "Facebook"]
      " | "
