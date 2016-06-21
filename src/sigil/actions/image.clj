@@ -12,16 +12,17 @@
   (:import [javax.imageio.ImageIO]
            [java.awt.image.BufferedImage]))
 
-(defn convert-image
-  "Takes in the original temp image from the form with the final width and height and save path"
-  [org-img w h new-img-str]
-  (let [img-type (java.awt.image.BufferedImage/TYPE_INT_ARGB) ;;PNG == ARGB
-        new-img (java.awt.image.BufferedImage. w h img-type)
-        tmp (.createGraphics new-img)]
-    (.drawImage tmp (javax.imageio.ImageIO/read (io/file org-img)) 0 0 w h nil)
-    (.dispose tmp)
-    (javax.imageio.ImageIO/write new-img "png" (io/file (format new-img-str)))
-    true))
+;; Original image function.
+;; (defn convert-image
+;;   "Takes in the original temp image from the form with the final width and height and save path"
+;;   [org-img w h new-img-str]
+;;   (let [img-type (java.awt.image.BufferedImage/TYPE_INT_ARGB) ;;PNG == ARGB
+;;         new-img (java.awt.image.BufferedImage. w h img-type)
+;;         tmp (.createGraphics new-img)]
+;;     (.drawImage tmp (javax.imageio.ImageIO/read (io/file org-img)) 0 0 w h nil)
+;;     (.dispose tmp)
+;;     (javax.imageio.ImageIO/write new-img "png" (io/file (format new-img-str)))
+;;     true))
 
 
 (defn update-user-icon

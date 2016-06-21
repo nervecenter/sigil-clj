@@ -32,27 +32,27 @@
   ;; List of comments on the issue
   ;; Each comment should have commenting user for icon, name
   (let [user (user-or-nil req)
-        issue (get-issue-with-poster-by-id (read-string (:issue_id (:route-params req))))
-        tag (get-tag-by-issue issue)
+        issue-and-poster (get-issue-with-poster-by-id (read-string (:issue_id (:route-params req))))
+        tag (get-tag-by-issue issue-and-poster)
         org (get-org-by-url (:org_url (:route-params req)))
-        in-constituency? (constituency? org (:poster issue))]
-    (do (sigil.db.core/db-trans [sigil.db.issues/issue-view-inc (:issue_id issue)])
+        in-constituency? (constituency? org (:poster issue-and-poster))]
+    (do (sigil.db.core/db-trans [sigil.db.issues/issue-view-inc (:issue_id issue-and-poster)])
       (layout/render
        req
        user
        (user-org-or-nil user)
-       (str "Sigil - " (:title issue))
+       (str "Sigil - " (:title issue-and-poster))
        (issue-page-body user
-                        issue
+                        issue-and-poster
                         tag
                         org
                         (some? user)
                         in-constituency?
                         (if (some? user)
-                          (user-voted-on-issue? user issue)
+                          (user-voted-on-issue? user issue-and-poster)
                           false)
-                        (get-responses-with-responders-by-issue issue)
-                        (get-comments-with-commenters-by-issue issue)
+                        (get-responses-with-responders-by-issue issue-and-poster)
+                        (get-comments-with-commenters-by-issue issue-and-poster)
                         )))))
 
 (defn issue-page-body
@@ -93,8 +93,8 @@
           (:tag_name tag)]]
         [:p.pull-right
          (str "Posted at " (clj-time.coerce/to-local-date (:created_at issue)) " by ")
-         [:img {:src (:icon_30 user)}]
-         (:username user)
+         [:img {:src (:icon_30 (:poster issue))}]
+         (:username (:poster issue))
          (when (some? user)
            (html
              " "

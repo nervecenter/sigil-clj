@@ -44,7 +44,7 @@
          'sigil.db.seed
          'sigil.actions.email
          '[clojure.tools.namespace.repl :as repl]
-         '[sigil.core :refer [server start-server stop-server restart-server]])
+         '[sigil.core :refer [server start-server-dev stop-server restart-server-dev]])
 
 ;; Define dirs for reloading
 (def dirs (get-env :directories))
@@ -53,18 +53,7 @@
 ;; Composes stopping server, reloading namespaces, and starting server
 (defn reload-server []
   (when-not (nil? @server)
-    (do (stop-server) (repl/refresh) (start-server))))
-
-;; (defn rebuild-and-seed
-;;   "Drops the current db tables and then rebuilds and seeds."
-;;   []
-;;   (sigil.db.seed/drop-create-seed))
-
-;; (defn build-and-seed
-;;   []
-;;   "Builds and seeds database tables"
-;;   (sigil.db.seed/drop-create-seed))
-
+    (do (stop-server) (repl/refresh) (start-server-dev))))
 
 (defn email-test
   [msg]

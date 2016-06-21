@@ -151,7 +151,8 @@
       (wrap-params)
       (wrap-multipart-params)))
 
-(def server-options {:port 80})
+(def live-server-options {:port 80})
+(def dev-server-options {:port 8080})
 
 (defonce server (atom nil))
 
@@ -160,14 +161,19 @@
     (@server :timeout 100)
     (reset! server nil)))
 
-(defn start-server []
+(defn start-server-dev []
   (when (nil? @server)
-    (reset! server (http/run-server #'app server-options))))
+    (reset! server (http/run-server #'app dev-server-options))))
 
-(defn restart-server []
+(defn restart-server-dev []
   (when-not (nil? @server)
-    (do (stop-server) (start-server))))
+    (do (stop-server) (start-server-dev))))
+
+(defn start-server-live []
+  (when (nil? @server)
+    (reset! server (http/run-server #'app live-server-options))))
+
 
 (defn -main
   [& args]
-  (start-server))
+  (start-server-live))
