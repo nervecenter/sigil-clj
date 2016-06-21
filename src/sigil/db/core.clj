@@ -10,9 +10,9 @@
 ;; (def db postgres-debug-db)
 
 ;; I wanted to alias this ns in the other model files but I didn't want it to be db/db everywhere
-(def spec "postgresql://localhost:5432/sigildb")
+(def spec-dev "postgresql://localhost:5432/sigildb")
 
-(def spec-dev {:subprotocol "postgresql"
+(def spec {:subprotocol "postgresql"
            :subname "//sigil-alpha-db.cjlqgk36ylxa.us-west-2.rds.amazonaws.com:5432/sigildb"
            :user "sigildbadmin"
            :password "Sigiltech1027!"})
