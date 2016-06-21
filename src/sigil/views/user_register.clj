@@ -4,8 +4,8 @@
             [sigil.views.layout :as layout]
             [sigil.views.partials.navbar :refer [navbar-partial]]
             [sigil.actions.register :as register]
-            [sigil.helpers :refer [get-return]]
-            [hiccup.page :refer [html5]])
+            [sigil.helpers :refer [get-return redirect]]
+            [hiccup.page :refer [html5 include-js]])
   (:use hiccup.form))
 
 (declare user-register-get user-register-post user-register-body user-register-page)
@@ -33,18 +33,17 @@
         return (register-data "return")]
     (cond
       (not= password confirm-password)
-      {:status 302
-       :headers {"Location" (str "register?invalid=m&return=" return)}}
+      (redirect (str "register?invalid=m&return=" return))
+
       (< (count username) 5)
-      {:status 302
-       :headers {"Location" (str "register?invalid=u&return=" return)}}
+      (redirect "register?invalid=u&return=" return)
+
       (< (count password) 6)
-      {:status 302
-       :headers {"Location" (str "register?invalid=p&return=" return)}}
+      (redirect (str "register?invalid=p&return=" return))
+
       (or (not (nil? (sigil.db.users/get-user-by-email email)))
           (not (nil? (sigil.db.users/get-user-by-username username))))
-      {:status 302
-       :headers {"Location" (str "regiser?invalid=e&return=" return)}}
+      (redirect (str "register?invalid=e&return=" return))
       :else
       (do
         ;; Add the user
@@ -83,7 +82,11 @@
                            passwords-not-match?
                            short-username?
                            short-password?
-                           user-exists?)]]]]))
+                           user-exists?)]]]]
+   (include-js "https://code.jquery.com/jquery-1.11.3.min.js"
+               "https://code.jquery.com/ui/1.9.2/jquery-ui.min.js"
+               "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+               "js/input-listeners.js")))
 
 (defn user-register-body [req return passwords-not-match? short-username? short-password? user-exists?]
   [:div.container.maxw-400
@@ -94,13 +97,13 @@
       [:div.panel-body
 
        (if passwords-not-match?
-         [:h3 {:style "color:red;"} "Password confirmation does not match."] nil)
+         [:h4 {:style "color:red;"} "Password confirmation does not match."] nil)
        (if short-username?
-         [:h3 {:style "color:red;"} "Username must be at least 5 characters."] nil)
+         [:h4 {:style "color:red;"} "Username must be at least 5 characters."] nil)
        (if short-password?
-         [:h3 {:style "color:red;"} "Password must be at least 6 characters."] nil)
+         [:h4 {:style "color:red;"} "Password must be at least 6 characters."] nil)
        (if user-exists?
-         [:h3 {:style "color:red;"} "A user with the provided email or username already exists. " [:a {:href "/login"} "Login"]])
+         [:h4 {:style "color:red;"} "A user with the provided email or username already exists. " [:a {:href "/login"} "Login"]])
 
        (form-to
         [:post "/register"]
@@ -110,25 +113,25 @@
          (label "email" "Email")
          (text-field {:id "email"
                       :placeholder "Email"
-                      :class "form-control"} "email")]
+                      :class "form-control register-field"} "email")]
 
         [:div.form-group
          (label "username" "Username")
          (text-field {:id "username"
                       :placeholder "Username"
-                      :class "form-control"} "username")]
+                      :class "form-control register-field"} "username")]
 
         [:div.form-group
          (label "password" "Password")
          (password-field {:id "password"
                           :placeholder "Password"
-                          :class "form-control"} "password")]
+                          :class "form-control register-field"} "password")]
 
         [:div.form-group
          (label "confirm-password" "Confirm password")
          (password-field {:id "confirm-password"
                           :placeholder "Confirm password"
-                          :class "form-control"} "confirm-password")]
+                          :class "form-control register-field"} "confirm-password")]
 
         [:div.checkbox
          (label "policy-accept"
@@ -150,4 +153,6 @@
 
         [:div.btn-group.btn-group-justified
          [:div.btn-group
-          (submit-button {:class "btn btn-primary disabled"} "Sign Up")]])]]]]])
+          (submit-button {:id "sign-up-button"
+                          :class "btn btn-primary disabled"
+                          :disabled "disabled"} "Sign Up")]])]]]]])
