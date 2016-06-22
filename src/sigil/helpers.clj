@@ -11,16 +11,13 @@
             [clojure.string :as str]
             [clj-time.jdbc]
             [clj-time.local :as local-time]
-            [clj-time.core :as time]))
+            [clj-time.core :as time]
+            [ring.util.response :refer [redirect]]))
 
 (defn get-return [req]
   (if (some? ((:query-params req) "return"))
     ((:query-params req) "return")
     "/"))
-
-(defn redirect [location]
-  {:status 302
-   :headers {"Location" location}})
 
 (defn error
   ([message] (db/create-error {:error_message message}))

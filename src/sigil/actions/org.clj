@@ -3,7 +3,8 @@
             [sigil.db.users :as users]
             [sigil.db.orgs :as orgs]
             [sigil.auth :as auth]
-            [sigil.helpers :refer [redirect error-redirect]]
+            [ring.util.response :refer [redirect]]
+            [sigil.helpers :refer [error-redirect]]
             [sigil.views.internal-error :refer [internal-error-handler]]))
 
 (defn add-org-zip-code

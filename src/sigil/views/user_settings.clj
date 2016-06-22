@@ -3,7 +3,7 @@
             [sigil.views.layout :as layout]
             [sigil.db.issues :as issues]
             [sigil.views.partials.issue :refer [issue-partial]]
-            [sigil.helpers :refer [redirect]])
+            [ring.util.response :refer [redirect]])
   (:use [hiccup.form]))
 
 (declare user-settings-handler user-settings-page)
