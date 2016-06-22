@@ -51,10 +51,18 @@
           [:media-body
            [:div.media-heading (:org_name o)]
            (for [k (keys o)]
-             (html
-              [:span {:style "font-size:12px;"}
-               [:b k] ": " (str (k o))]
-              [:br]))]]
+             (if (= k :views)
+               (html
+                [:span {:style "font-size:12px;"}
+                 [:b "Total Views"] ": " (count (k o))]
+                [:br]
+                [:span {:style "font-size:12px;"}
+                 [:b "Last View"] ": " (str (last (k o)))]
+                [:br])
+               (html
+                [:span {:style "font-size:12px;"}
+                 [:b k] ": " (str (k o))]
+                [:br])))]]
          (if (:org_approved o)
            [:a.btn.btn-block.btn-success "Activate"]
            [:a.btn.btn-block.btn-danger "Deactivate"])]])]
