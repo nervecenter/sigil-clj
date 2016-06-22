@@ -39,7 +39,7 @@
         org (get-org-by-id (read-string (:orgid (:params req))))
         tagid (read-string (:tagid (:params req)))
         term (:term (:params req))]
-    (println (:tag_name (get-tag-by-id tagid)))
+    ;(println (:tag_name (get-tag-by-id tagid)))
     (if (= term "")
       (let [all-issues (issues/get-issues-by-org org)]
           (reduce str (map #(html (issue-partial (str "/" (:org_url org))
