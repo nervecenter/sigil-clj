@@ -52,13 +52,21 @@ $("#zip").keyup(function () {
     }
 });
 
-$("#policy-accept").change(function () {
-  var checked = $(this).prop("checked");
-  if (checked) {
-    $("#sign-up-button").removeClass("disabled").prop("disabled", false);
-  } else {
-    $("#sign-up-button").addClass("disabled").prop("disabled", true);
-  }
+$("#policy-accept, .register-field").each(function () {
+    $(this).change(function () {
+        var email = $("#email").val();
+        var username = $("#username").val();
+        var pass = $("#password").val();
+        var confpass = $("#confirm-password").val();
+        var accepted = $("#policy-accept").prop("checked");
+        var $submit = $("#sign-up-button");
+
+        if (email != "" && username != "" && pass != "" && confpass != "" && accepted && $submit.hasClass("disabled")) {
+            $submit.removeClass("disabled").prop("disabled", false).addClass("btn-success");
+        } else if (((email == "") || (username == "") || (pass == "") || (confpass == "") || !accepted) && !$submit.hasClass("disabled")) {
+            $submit.removeClass("btn-success").addClass("disabled").prop("disabled", true);
+        }
+    });
 });
 
 function AddChangeTagForm (event) {
@@ -161,7 +169,6 @@ $(".delete-tag").each(function() {
         $(".to-tag:enabled").first().prop("selected", true);
         $("#tagid-field").val(tagid);
         $("#delete-tag-modal").modal('toggle');
-      
 })});
 
 /*$('input[type="submit"]').each(function () {
