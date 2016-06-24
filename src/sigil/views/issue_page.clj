@@ -78,7 +78,7 @@
                                         :data-issueid (:issue_id issue)}]
             [:img.vote-button.voteup {:src "/images/notvoted.png"
                                       :data-issueid (:issue_id issue)}])
-       [:a {:href (str "login?return=" (:org_url org) "/" (:issue_id issue))}
+       [:a {:href (str "/login?return=" (:org_url org) "/" (:issue_id issue))}
           [:img.votelogin {:src "/images/notvoted.png"}]])
         [:br]
         [:span.voteamount

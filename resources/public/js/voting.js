@@ -1,6 +1,6 @@
 ﻿// DEFINE our simple redirect function for when the user is not logged in
 function redirectToLogin() {
-    window.location = "/login";
+    window.location = "login";
 }
 
 /*
@@ -65,15 +65,19 @@ $(".unvoteup").each(function () {
     $(this).click({ $button: $(this), issueid: $(this).data("issueid") }, unvoteup);
 });
 
-$(".vote-button").popover({ trigger: "hover",
-			    title: "Vote up this post!",
-			    content: "If you agree or would like to see a response.",
-			    placement: "top" });
+$(".vote-button").popover(
+    { trigger: "hover",
+      title: "Vote up this post!",
+      content: "If you agree or would like to see a response.",
+      placement: "top" }
+);
 
-$(".votelogin").popover({ trigger: "hover",
-			  title: "Login or register to vote",
-			  content: "Help contribute to the discussion on Sigil!",
-			  placement: "top" });
+$(".votelogin").popover(
+    { trigger: "hover",
+      title: "Login or register to vote",
+      content: "Help contribute to the discussion on Sigil!",
+      placement: "top" }
+);
 
 
 /*
@@ -110,7 +114,9 @@ $(".reported").each(function () {
  * Popover for report
  */
 
-$('.report-flag').popover({ trigger: "hover",
-			    title: "Report this post",
-			    content: "This post is toxic or subtracts value from the discussion.",
-			    placement: "bottom" });
+$('.report-flag').popover(
+    { trigger: "hover",
+      title: "Report this post",
+      content: "This post is toxic or subtracts value from the discussion.",
+      placement: "bottom" }
+);
