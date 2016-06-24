@@ -103,6 +103,9 @@
                 :span.glyphicon.glyphicon-flag.report-flag.unreported)
               {:data-issueid (:issue_id issue)
                :aria-hidden "true"}]))]]]]
+     (if in-constituency?
+       [:h5.constituent "This user is a constituent."]
+       [:h5.non-constituent "This user is not a constituent or has not specified."])
      [:div.panel-body (:text issue)]]
     (for [r responses]
       [:div.panel.panel-primary
