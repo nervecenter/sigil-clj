@@ -28,7 +28,7 @@
        [:img.img-rounded {:src (:icon_100 user)
                           :style "height:40px;"}]]
       [:p.empty-home-text "You can find some of the latest feedback across Sigil below."]
-      [:p.empty-home-text "You can use the " [:b "search bar"] " up top, or just " [:b [:a {:href "/companies"} "check out all organizations on Sigil"]] "."]]]
+      [:p.empty-home-text "You can use the " [:b "search bar"] " up top, or just " [:b [:a {:href "/orgs"} "check out all organizations on Sigil"]] "."]]]
     (for [box issue-boxes]
       (html
          [:h4 [:a {:href (str "/" (:org_url (:org box)))}
