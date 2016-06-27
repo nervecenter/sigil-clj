@@ -3,7 +3,8 @@
             [sigil.db.core :as db]
             [sigil.db.orgs :refer [get-org-by-id]]
             [sigil.auth :refer [user-or-nil user-org-or-nil]]
-            [sigil.helpers :refer [redirect error-redirect]]
+            [ring.util.response :refer [redirect]]
+            [sigil.helpers :refer [error-redirect]]
             [sigil.views.internal-error :refer [internal-error-handler]]))
 
 (defn add-tag
