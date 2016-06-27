@@ -3,7 +3,7 @@
             [sigil.db.orgs :as orgs]
             [sigil.db.core :as db]
             [sigil.auth :as auth]
-            [sigil.helpers :refer [redirect]]
+            [ring.util.response :refer [redirect]]
             [clj-time.jdbc]
             [clj-time.core :as time]
             [clj-time.local :as local-time]

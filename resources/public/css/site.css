@@ -1,3 +1,16 @@
+.constituent, .non-constituent {
+    text-align: center;
+    margin: 0 auto 0;
+}
+
+.constituent {
+    color: green;
+}
+
+.non-constituent {
+    color: red;
+}
+
 .validation {
     text-align: center;
 }

@@ -4,7 +4,8 @@
             [sigil.views.layout :as layout]
             [sigil.views.partials.navbar :refer [navbar-partial]]
             [sigil.actions.register :as register]
-            [sigil.helpers :refer [get-return redirect]]
+            [ring.util.response :refer [redirect]]
+            [sigil.helpers :refer [get-return]]
             [hiccup.page :refer [html5 include-js]])
   (:use hiccup.form))
 
