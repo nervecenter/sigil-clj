@@ -6,10 +6,10 @@
 ; Queries
 
 (defn get-petitions []
-  (sql/query db/spec ["SELECT * FROM petitions ORDER BY created_at DESC;"]))
+  (sql/query @db/spec ["SELECT * FROM petitions ORDER BY created_at DESC;"]))
 
 (defn issue-petitioned? [issue]
-  (if (not-empty (sql/query db/spec ["SELECT * FROM petitions WHERE issue_id = ?;"(:issue_id issue)]))
+  (if (not-empty (sql/query @db/spec ["SELECT * FROM petitions WHERE issue_id = ?;"(:issue_id issue)]))
     true
     false))
 

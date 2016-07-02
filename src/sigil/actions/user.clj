@@ -19,7 +19,6 @@
    [users/create-user
     (assoc user :icon_100 (rand-nth db/default_icon_100))]))
 
-
 (defn change-user-password
   [req]
   (let [user (auth/user-or-nil req)

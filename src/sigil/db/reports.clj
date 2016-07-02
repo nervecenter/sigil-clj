@@ -6,16 +6,16 @@
 ; Queries
 
 (defn get-reports-by-issue [issue]
-  (first (sql/query db/spec ["SELECT * FROM reports WHERE issue_id = ?;" (:issue_id issue)])))
+  (first (sql/query @db/spec ["SELECT * FROM reports WHERE issue_id = ?;" (:issue_id issue)])))
 
 (defn get-number-reports-by-issue [issue]
-  (:count (first (sql/query db/spec ["SELECT COUNT(*) FROM reports WHERE issue_id = ?;" (:issue_id issue)]))))
+  (:count (first (sql/query @db/spec ["SELECT COUNT(*) FROM reports WHERE issue_id = ?;" (:issue_id issue)]))))
 
 (defn get-report-by-user-and-issue [user issue]
-  (first (sql/query db/spec ["SELECT * FROM reports WHERE user_id = ? AND issue_id = ?;" (:user_id user) (:issue_id issue)])))
+  (first (sql/query @db/spec ["SELECT * FROM reports WHERE user_id = ? AND issue_id = ?;" (:user_id user) (:issue_id issue)])))
 
 (defn user-reported-issue? [user issue]
-  (if (not-empty (sql/query db/spec ["SELECT * FROM reports WHERE user_id = ? AND issue_id = ?;" (:user_id user) (:issue_id issue)]))
+  (if (not-empty (sql/query @db/spec ["SELECT * FROM reports WHERE user_id = ? AND issue_id = ?;" (:user_id user) (:issue_id issue)]))
     true
     false))
 

@@ -10,24 +10,24 @@
 
 (defn get-comment-by-id
   [id]
-  (first (sql/query db/spec ["SELECT * FROM comments WHERE comment_id = ?" id])))
+  (first (sql/query @db/spec ["SELECT * FROM comments WHERE comment_id = ?" id])))
 
 (defn get-comments-by-issue
   [issue]
-  (into [] (sql/query db/spec ["SELECT * FROM comments WHERE issue_id = ?" (:issue_id issue)])))
+  (into [] (sql/query @db/spec ["SELECT * FROM comments WHERE issue_id = ?" (:issue_id issue)])))
 
 (defn get-comments-by-user
   [user]
-  (into [] (sql/query db/spec ["SELECT * FROM comments WHERE user_id = ?" (:user_id user)])))
+  (into [] (sql/query @db/spec ["SELECT * FROM comments WHERE user_id = ?" (:user_id user)])))
 
 (defn get-last-user-comment-id
   [user]
-  (:comment_id (first (sql/query db/spec ["SELECT * FROM comments WHERE user_id = ? ORDER BY created_at DESC" (:user_id user)]))))
+  (:comment_id (first (sql/query @db/spec ["SELECT * FROM comments WHERE user_id = ? ORDER BY created_at DESC" (:user_id user)]))))
 
 
 (defn get-org-comments
   [org]
-  (into [] (sql/query db/spec ["SELECT comments.comment_id, comments.created_at FROM comments INNER JOIN issues ON (comments.issue_id = issues.issue_id AND issues.org_id = ?)" (:org_id org)])))
+  (into [] (sql/query @db/spec ["SELECT comments.comment_id, comments.created_at FROM comments INNER JOIN issues ON (comments.issue_id = issues.issue_id AND issues.org_id = ?)" (:org_id org)])))
 
 (defn get-comments-with-commenters-by-issue
   [issue]
@@ -38,7 +38,7 @@
 
 (defn get-users-by-issue-comments
   [issue]
-  (set (into [] (sql/query db/spec ["SELECT user_id FROM comments WHERE issue_id = ?" (:issue_id issue)]))))
+  (set (into [] (sql/query @db/spec ["SELECT user_id FROM comments WHERE issue_id = ?" (:issue_id issue)]))))
 ;;----------------------------------------------------------------
 ; Updates/Inserts/Deletes
 
@@ -60,8 +60,8 @@
   ([comment] (delete-comment comment false))
   ([comment perm]
    (if perm
-     (sql/delete! db/spec :comments ["comment_id = ?" (:comment_id comment)])
-     (sql/update! db/spec :comments {:user_id 0
+     (sql/delete! @db/spec :comments ["comment_id = ?" (:comment_id comment)])
+     (sql/update! @db/spec :comments {:user_id 0
                                      :edited_at (time/local-now)} ["comment_id = ?" (:comment_id comment)]))))
 
 (defn comment_model

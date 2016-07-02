@@ -42,7 +42,10 @@
 (require 'sigil.db.migrations
          'sigil.db.seed
          '[clojure.tools.namespace.repl :as repl]
-         '[sigil.core :refer [server start-server stop-server restart-server]])
+         '[sigil.core :refer [server start-server stop-server restart-server]]
+         '[sigil.db.core :refer [db-dev db-live]]
+         '[sigil.db.seed :refer [seed-db-dev rebase-db-dev]]
+         '[sigil.db.migrations :as migrations])
 
 ;; Define dirs for reloading
 (def dirs (get-env :directories))
@@ -52,25 +55,6 @@
 (defn reload-server []
   (when-not (nil? @server)
     (do (stop-server) (repl/refresh) (start-server))))
-
-;; (defn rebuild-and-seed
-;;   "Drops the current db tables and then rebuilds and seeds."
-;;   []
-;;   (sigil.db.seed/drop-create-seed))
-
-;; (defn build-and-seed
-;;   []
-;;   "Builds and seeds database tables"
-;;   (sigil.db.seed/drop-create-seed))
-
-
-(defn live-create-and-seed
-  []
-  (sigil.db.seed/live-create-and-seed))
-
-(defn live-seed-db
-  []
-  (sigil.db.seed/live-seed-db))
 
 (def default-sigil-map
   {:sigil-root "src/sigil"})

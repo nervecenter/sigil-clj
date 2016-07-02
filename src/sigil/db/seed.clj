@@ -16,7 +16,7 @@
 
 (def ipsum "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer tristique sagittis purus a mollis. Vestibulum non consectetur arcu. Aliquam ultricies, ex at cursus dictum, ex quam aliquam metus, eget mollis leo quam vel est. Nulla ac pharetra est. Aliquam sit amet gravida turpis. Donec vulputate pellentesque lectus sit amet cursus. Aenean pulvinar ex nec placerat varius. Aliquam erat volutpat. Nulla a tempor neque. Vestibulum a mattis nibh.")
 
-(def org_seed [{;:org_id 1
+(def org-seed-dev [{;:org_id 1
                 :org_url "sigil"
                 :org_name "Sigil"
                 :website "sigil.tech"
@@ -78,12 +78,10 @@
                 :banner "/db_imgs/org/gusbilirakis_banner.png"}
                ])
 
-
-
-(def role_seed [{:role_name "org-admin"}
+(def role-seed [{:role_name "org-admin"}
                 {:role_name "site-admin"}])
 
-(def tag_seed [{;:tag_id 0
+(def tag-seed-dev [{;:tag_id 0
                 :tag_name "DEFAULT TAG"
                 :org_id 1
                 :icon_30 (rand-nth db/default_icon_30)}
@@ -133,7 +131,7 @@
                 :icon_30 (rand-nth db/default_icon_30)}
                ])
 
-(def issue_seed [;; Sigil
+(def issue-seed-dev [;; Sigil
                  {:org_id 1
                   :user_id 1
                   :title "I need a button that gives me bacon."
@@ -208,7 +206,7 @@
                   :text ipsum}
                  ])
 
-(def comment_seed
+(def comment-seed-dev
   [{:issue_id 1
     :user_id 1
     :text "Yea a bacon button would increase my quality of life"}
@@ -242,7 +240,7 @@
    ])
 
 ;;There needs be a matching vote seed for every issue seed
-(def vote_seed [{:user_id 1
+(def vote-seed-dev [{:user_id 1
                  :issue_id 1
                  :org_id 1}
                 {:user_id 2
@@ -280,7 +278,7 @@
                  :org_id 5}
                  ])
 
-(def user_seed [{:email "cjcollazo@sigil.tech"
+(def user-seed-dev [{:email "cjcollazo@sigil.tech"
                  :username "Nerve"
                  :pass_hash (buddy.hashers/encrypt "Sigiltech1027!")
                  :icon_100 (str (rand-nth db/default_icon_100))
@@ -310,31 +308,44 @@
                  :org_id 3}
                 ])
 
-(def topic_seed [{:topic_url "testtopic"
-                  :topic_name "TestTopic"
-                  :banner (str (rand-nth db/default_banner))}])
+;(def topic-seed [{:topic_url "testtopic"
+;                  :topic_name "TestTopic"
+;                  :banner (str (rand-nth db/default_banner))}])
 
+;; rofl
+(assert (= (count issue-seed-dev) (count vote-seed-dev)) "EACH ISSUE NEEDS A VOTE YOU DUMMY")
 
-(assert (= (count issue_seed) (count vote_seed)) "EACH ISSUE NEEDS A VOTE YOU DUMMY")
+;; DEV Functions
 
-(defn seed-orgs
+(defn seed-orgs-dev
   []
-  (apply #(db/db-trans [create-org %]) org_seed))
+  (apply #(db/db-trans [create-org %]) org-seed-dev))
 
-(defn seed-db
+(defn seed-db-dev
   []
   (do
-    (doall (map #(db/db-trans [create-org %]) org_seed))
-    (doall (map #(db/db-trans [create-role %]) role_seed))
-    (doall (map #(db/db-trans [create-user %]) user_seed))
-    (doall (map #(db/db-trans [create-tag %]) tag_seed))
-    (doall (map #(db/db-trans [create-issue %]) issue_seed))
-    (doall (map #(db/db-trans [create-comment %]) comment_seed))
-    (doall (map #(db/db-trans [create-topic %]) topic_seed))
-    (doall (map #(db/db-trans [create-vote %]) vote_seed))))
+    (doall (map #(db/db-trans [create-org %]) org-seed-dev))
+    (doall (map #(db/db-trans [create-role %]) role-seed))
+    (doall (map #(db/db-trans [create-user %]) user-seed-dev))
+    (doall (map #(db/db-trans [create-tag %]) tag-seed-dev))
+    (doall (map #(db/db-trans [create-issue %]) issue-seed-dev))
+    (doall (map #(db/db-trans [create-comment %]) comment-seed-dev))
+    ;(doall (map #(db/db-trans [create-topic %]) topic_seed))
+    (doall (map #(db/db-trans [create-vote %]) vote-seed-dev))))
 
+(defn rebase-db-dev
+  "Drops live database, creates new database, creates tables and then seeds with live data. "
+  []
+  (try
+    (do
+      (migrate/drop-create-db)
+      (migrate/create-db-tables)
+      (seed-db-dev))
+    (catch Exception e (.getNextException e))))
 
-(def live_org_seed [{;:org_id 1
+;; LIVE Functions
+
+(def org-seed-live [{;:org_id 1
                 :org_url "sigil"
                 :org_name "Sigil"
                 :website "sigil.tech"
@@ -348,11 +359,11 @@
                 :banner "/db_imgs/org/sigil_banner.png"}
                ])
 
-(def live_tag_seed [{:tag_name "Bugs"
+(def tag-seed-live [{:tag_name "Bugs"
                      :org_id 1
                      :icon_30 (rand-nth db/default_icon_30)}])
 
-(def live_user_seed [{:email "cjcollazo@sigil.tech"
+(def user-seed-live [{:email "cjcollazo@sigil.tech"
                       :username "Nerve"
                       :pass_hash (buddy.hashers/encrypt "Sigiltech1027!")
                       :icon_100 (str (rand-nth db/default_icon_100))
@@ -365,32 +376,32 @@
                       :roles [1 2]
                       :org_id 1}])
 
-(defn live-seed-db
+(defn seed-db-live
   "Seeds db with live site settings."
   []
   (do
-    (doall (map #(db/db-trans [create-org %]) live_org_seed))
-    (doall (map #(db/db-trans [create-role %]) role_seed))
-    (doall (map #(db/db-trans [create-user %]) live_user_seed))
-    (doall (map #(db/db-trans [create-tag %]) live_tag_seed))))
+    (doall (map #(db/db-trans [create-org %]) org-seed-live))
+    (doall (map #(db/db-trans [create-role %]) role-seed))
+    (doall (map #(db/db-trans [create-user %]) user-seed-live))
+    (doall (map #(db/db-trans [create-tag %]) tag-seed-live))))
 
-(defn live-create-and-seed
+(defn fill-existing-db-live
   "Creates db tables in db and seeds with live data"
   []
   (do
     (migrate/create-db-tables)
-    (live-seed-db)))
+    (seed-db-live)))
 
-(defn live-drop-create-seed
+(defn rebase-db-live
   "Drops live database, creates new database, creates tables and then seeds with live data. "
   []
   (do
     (migrate/drop-create-db)
     (migrate/create-db-tables)
-    (live-seed-db)))
+    (seed-db-live)))
 
-(defn create-and-seed
-  []
-  (do
-    (migrate/create-db)
-    (seed-db)))
+;(defn create-and-seed
+;  []
+;  (do
+;    (migrate/create-db)
+;    (seed-db)))

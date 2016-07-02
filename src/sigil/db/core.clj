@@ -3,25 +3,29 @@
             [clj-time.core :as t])
   (import java.sql.SQLException))
 
-;; (def postgres-debug-db {:subprotocol "postgresql"
-;;                         :classname "org.postgresql.Driver"
-;;                         :subname "//localhost:5432/sigildb"})
+;;--------------------------- DB Maps and functions --------------------------------
 
-;; (def db postgres-debug-db)
-
-;; I wanted to alias this ns in the other model files but I didn't want it to be db/db everywhere
-(def spec "postgresql://localhost:5432/sigildb")
+(def spec-dev {:subprotocol "postgresql"
+                :subname "//localhost:5432/sigildb"
+                :user "sigildbadmin"
+                :password "Sigiltech1027!"} )
 
 (def spec-live {:subprotocol "postgresql"
-           :subname "//sigil-alpha-db.cjlqgk36ylxa.us-west-2.rds.amazonaws.com:5432/sigildb"
-           :user "sigildbadmin"
-           :password "Sigiltech1027!"})
+                :subname "//sigil-alpha-db.cjlqgk36ylxa.us-west-2.rds.amazonaws.com:5432/sigildb"
+                :user "sigildbadmin"
+                :password "Sigiltech1027!"})
 
-;; (def spec     {:subprotocol "postgresql"
-;;                :subname "//localhost:5432/template1"
-;;                :user "power_user"
-;;                :password "Sigiltech1027!"})
+(def spec (atom nil))
 
+(defn db-dev []
+  (when (or (nil? @spec)
+            (= @spec spec-live))
+    (reset! spec spec-dev)))
+
+(defn db-live []
+  (when (or (nil? @spec)
+            (= @spec spec-dev))
+    (reset! spec spec-live)))
 
 ;;--------------------------- Site Settings ----------------------------------------
 (def default_icon_30 ["/db_imgs/default/default_30.png"])
@@ -62,7 +66,7 @@
                [sigil.db.orgs/org-visit-inc])"
   [& fs]
   (try
-    (sql/with-db-transaction [db-conn spec]
+    (sql/with-db-transaction [db-conn @spec]
       (if (= (count fs)
              (count
               (flatten
@@ -92,7 +96,7 @@
 
 (defn create-error
   ([{:as new-error}]
-   (sql/insert! spec
+   (sql/insert! @spec
                 :errors
                 new-error)))
 

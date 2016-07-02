@@ -7,19 +7,19 @@
 
 (defn get-all-tags
   []
-  (into [] (sql/query db/spec ["SELECT * FROM tags"])))
+  (into [] (sql/query @db/spec ["SELECT * FROM tags"])))
 
 (defn get-tag-by-id
   [id]
-  (first (sql/query db/spec ["SELECT * FROM tags WHERE tag_id = ?" id])))
+  (first (sql/query @db/spec ["SELECT * FROM tags WHERE tag_id = ?" id])))
 
 (defn get-tags-by-org
   [org]
-  (into [] (sql/query db/spec ["SELECT * FROM tags WHERE org_id = ?" (:org_id org)])))
+  (into [] (sql/query @db/spec ["SELECT * FROM tags WHERE org_id = ?" (:org_id org)])))
 
 (defn get-tag-by-issue
   [issue]
-  (first (sql/query db/spec ["SELECT * FROM tags WHERE tag_id = ? LIMIT 1" (:tag_id issue)])))
+  (first (sql/query @db/spec ["SELECT * FROM tags WHERE tag_id = ? LIMIT 1" (:tag_id issue)])))
 
 ;;---------------------------------------------------------------------
 ; Updates/Inserts/Deletes
@@ -35,11 +35,11 @@
 ;;  ([tag] (delete-tag tag false))
 ;;  ([tag perm]
 ;;   (if perm
-;;     (sql/delete! db/spec :tags ["tag_id = ?" (:tag_id tag)])
-;;     (sql/update! db/spec :tags {:tag_is_active false} ["tag_id = ?" (:tag_id tag)]))))
+;;     (sql/delete! @db/spec :tags ["tag_id = ?" (:tag_id tag)])
+;;     (sql/update! @db/spec :tags {:tag_is_active false} ["tag_id = ?" (:tag_id tag)]))))
 
 (defn delete-tag [db-conn [tag]]
-  (sql/delete! db/spec :tags ["tag_id = ?" (:tag_id tag)]))
+  (sql/delete! @db/spec :tags ["tag_id = ?" (:tag_id tag)]))
 
 (defn update-tag
   [db-conn [tag updated-rows]]

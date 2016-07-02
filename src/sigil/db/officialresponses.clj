@@ -10,15 +10,15 @@
 
 (defn get-official-response-by-id
   [id]
-  (first (sql/query db/spec ["SELECT * FROM official_responses WHERE comment_id = ?" id])))
+  (first (sql/query @db/spec ["SELECT * FROM official_responses WHERE comment_id = ?" id])))
 
 (defn get-official-responses-by-issue
   [issue]
-  (into [] (sql/query db/spec ["SELECT * FROM official_responses WHERE issue_id = ?" (:issue_id issue)])))
+  (into [] (sql/query @db/spec ["SELECT * FROM official_responses WHERE issue_id = ?" (:issue_id issue)])))
 
 (defn get-latest-official-response-by-issue
   [issue]
-  (first (sql/query db/spec ["SELECT * FROM official_responses WHERE issue_id = ? ORDER BY edited_at DESC LIMIT 1" (:issue_id issue)])))
+  (first (sql/query @db/spec ["SELECT * FROM official_responses WHERE issue_id = ? ORDER BY edited_at DESC LIMIT 1" (:issue_id issue)])))
 
 (defn get-responses-with-responders-by-issue
   [issue]
@@ -28,7 +28,7 @@
 
 (defn get-official-responses-by-org
   [org]
-  (into [] (sql/query db/spec ["SELECT * FROM official_responses WHERE org_id = ?" (:org_id org)])))
+  (into [] (sql/query @db/spec ["SELECT * FROM official_responses WHERE org_id = ?" (:org_id org)])))
 
 ;;--------------------------------------------------------------
 ; Inserts/Updates/Deletes
@@ -59,8 +59,8 @@
   ([off_res] (delete-official-response off_res false))
   ([off_res perm]
    (if perm
-     (sql/delete! db/spec :official_responses ["official_response_id = ?" (:official_response_id off_res)])
-     (sql/update! db/spec :official_responses {:user_id 0
+     (sql/delete! @db/spec :official_responses ["official_response_id = ?" (:official_response_id off_res)])
+     (sql/update! @db/spec :official_responses {:user_id 0
                                                :edited_at (time/local-now)}))))
 
 (defn official_response_model
