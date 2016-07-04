@@ -13,17 +13,10 @@
 
 (defn user-register-get [req]
   (let [return (get-return req)
-        validations ((:query-params req) "invalid")
-        passwords-not-match? (if (= validations "m") true false)
-        short-username? (if (= validations "u") true false)
-        short-password? (if (= validations "p") true false)
-        user-exists? (if (= validations "e") true false)]
+        validation ((:query-params req) "v")]
     (user-register-page req
                         return
-                        passwords-not-match?
-                        short-username?
-                        short-password?
-                        user-exists?)))
+                        validation)))
 
 (defn user-register-post [req]
   (let [register-data (:form-params req)
@@ -34,17 +27,17 @@
         return (register-data "return")]
     (cond
       (not= password confirm-password)
-      (redirect (str "register?invalid=m&return=" return))
+      (redirect (str "/register?v=m&return=" return))
 
       (< (count username) 5)
-      (redirect "register?invalid=u&return=" return)
+      (redirect (str "/register?v=u&return=" return))
 
       (< (count password) 6)
-      (redirect (str "register?invalid=p&return=" return))
+      (redirect (str "/register?v=p&return=" return))
 
       (or (not (nil? (sigil.db.users/get-user-by-email email)))
           (not (nil? (sigil.db.users/get-user-by-username username))))
-      (redirect (str "register?invalid=e&return=" return))
+      (redirect (str "/register?v=e&return=" return))
       :else
       (do
         ;; Add the user
@@ -53,24 +46,12 @@
           :email email
           :pass_hash (buddy.hashers/encrypt password)})
         ;; Give them their token with a redirect to the return
-        (let [user (sigil.db.users/get-user-by-email email)]
-          {:status 302
-           :headers {"Location" return}
-           :body ""
-           :cookies {:user {:value (sigil.auth/make-user-token user)
-                            :max-age 2628000
-                            ;;:secure true
-                            ;;:http-only true
-                            ;;:domain ".sigil.tech"
-                            }}})))))
+        (redirect "/login?v=r")))))
 
 (defn user-register-page
   [req
    return
-   passwords-not-match?
-   short-username?
-   short-password?
-   user-exists?]
+   validation]
   (html5
    (layout/head "Sigil - Register")
    [:body.page
@@ -80,31 +61,25 @@
       [:div.row
        (user-register-body req
                            return
-                           passwords-not-match?
-                           short-username?
-                           short-password?
-                           user-exists?)]]]]
+                           validation)]]]]
    (include-js "https://code.jquery.com/jquery-1.11.3.min.js"
                "https://code.jquery.com/ui/1.9.2/jquery-ui.min.js"
                "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
                "js/input-listeners.js")))
 
-(defn user-register-body [req return passwords-not-match? short-username? short-password? user-exists?]
+(defn user-register-body [req return validation]
   [:div.container.maxw-400
    [:h2 "Join Sigil today"]
    [:div.row
     [:div.col-lg-12
      [:div.panel.panel-default
       [:div.panel-body
-
-       (if passwords-not-match?
-         [:h4 {:style "color:red;"} "Password confirmation does not match."] nil)
-       (if short-username?
-         [:h4 {:style "color:red;"} "Username must be at least 5 characters."] nil)
-       (if short-password?
-         [:h4 {:style "color:red;"} "Password must be at least 6 characters."] nil)
-       (if user-exists?
-         [:h4 {:style "color:red;"} "A user with the provided email or username already exists. " [:a {:href "/login"} "Login"]])
+       (condp = validation
+         "m" [:h4 {:style "color:red;"} "Password confirmation does not match."]
+         "u" [:h4 {:style "color:red;"} "Username must be at least 5 characters."]
+         "p" [:h4 {:style "color:red;"} "Password must be at least 6 characters."]
+         "e" [:h4 {:style "color:red;"} "A user with the provided email or username already exists. " [:a {:href "/login"} "Login"]]
+         nil)
 
        (form-to
         [:post "/register"]
