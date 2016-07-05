@@ -7,8 +7,9 @@
 
 (def spec-dev {:subprotocol "postgresql"
                 :subname "//localhost:5432/sigildb"
-                :user "sigildbadmin"
-                :password "Sigiltech1027!"} )
+                ;:user "sigildbadmin"
+               ; :password "Sigiltech1027!"
+               } )
 
 (def spec-live {:subprotocol "postgresql"
            :subname "//sigil-alpha-db.cjlqgk36ylxa.us-west-2.rds.amazonaws.com:5432/sigildb"

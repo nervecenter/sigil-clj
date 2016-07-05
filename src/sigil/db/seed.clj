@@ -339,8 +339,11 @@
   (try
     (do
       (migrate/drop-create-db)
+      (.println System/out "Db droped and Created.")
       (migrate/create-db-tables)
-      (seed-db-dev))
+      (.println System/out "Tables created.")
+      (seed-db-dev)
+      (.println System/out "Db Seeded"))
     (catch Exception e (.getNextException e))))
 
 ;; LIVE Functions

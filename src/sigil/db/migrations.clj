@@ -26,7 +26,7 @@
   (sql/with-db-connection [conn ;@spec
                            (assoc @spec
                                        :subname
-                                       (clojure.string/replace (:subname @spec) #"/sigildb" "/"))
+                                       (clojure.string/replace (:subname @spec) #"/sigildb" "/postgres"))
                            ]
     (with-open [s (.createStatement (:connection conn))]
       (.addBatch s (str "drop database sigildb;"))
@@ -44,7 +44,7 @@
   "Drops and then creates the DB on the spec's connection."
   (sql/with-db-connection [conn (assoc @spec
                                        :subname
-                                       (clojure.string/replace (:subname @spec) #"/sigildb" "/"))]
+                                       (clojure.string/replace (:subname @spec) #"/sigildb" "/postgres"))]
     (with-open [s (.createStatement (:connection conn))]
       (.addBatch s (str "drop database sigildb;"))
       (.addBatch s (str "create database sigildb;"))
