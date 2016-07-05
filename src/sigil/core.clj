@@ -181,4 +181,5 @@
 
 (defn -main
   [& args]
-  (start-server-live))
+  (do (sigil.db.core/db-live)
+    (start-server-live)))
