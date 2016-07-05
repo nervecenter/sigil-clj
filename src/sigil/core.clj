@@ -44,7 +44,7 @@
             [sigil.actions.org :as org-actions]
             [sigil.db.core :as db]
 
-            [ring.util.response :refer [file-response]]
+            [ring.util.response :refer [redirect]]
 
             [ring.middleware.resource :refer [wrap-resource]]
             [ring.middleware.file :refer [wrap-file]]
@@ -103,9 +103,9 @@
                              {:status 403}))
   (GET "/siteadmin" req (site-admin-handler req))
   (GET "/register" req (user-register-get req))
-  (GET "/terms" req (file-response "Sigil Terms of Use.pdf" {:root "private"}))
-  (GET "/acceptableuse" req (file-response "Sigil Acceptable Use.pdf" {:root "private"}))
-  (GET "/privacy" req (file-response "Sigil Privacy Policy.pdf" {:root "private"}))
+  (GET "/terms" req (redirect "/docs/Sigil Terms of Use.pdf"))
+  (GET "/acceptableuse" req (redirect "/docs/Sigil Acceptable Use.pdf"))
+  (GET "/privacy" req (redirect "/docs/Sigil Privacy Policy.pdf"))
   (POST "/userpasschange" req (user-actions/change-user-password req))
   (POST "/userzip" req (user-actions/change-user-zip-code req))
   (POST "/postissue" req (issue-actions/add-issue-post req))

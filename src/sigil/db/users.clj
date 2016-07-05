@@ -6,24 +6,24 @@
 ; Querys
 
 (defn get-user-by-id [id]
-  (first (sql/query db/spec ["SELECT * FROM users WHERE user_id = ?;" id])))
+  (first (sql/query @db/spec ["SELECT * FROM users WHERE user_id = ?;" id])))
 
 (defn get-user-by-email [email]
-  (first (sql/query db/spec ["SELECT * FROM users WHERE email = ?;" email])))
+  (first (sql/query @db/spec ["SELECT * FROM users WHERE email = ?;" email])))
 
 (defn get-user-by-issue [issue]
-  (first (sql/query db/spec ["SELECT * FROM users WHERE user_id = ?;" (:user_id issue)])))
+  (first (sql/query @db/spec ["SELECT * FROM users WHERE user_id = ?;" (:user_id issue)])))
 
 (defn get-user-favorites [user]
-  (first (sql/query db/spec ["SELECT favorites FROM users WHERE user_id = ?" (:user_id user)])))
+  (first (sql/query @db/spec ["SELECT favorites FROM users WHERE user_id = ?" (:user_id user)])))
 
 (defn get-user-by-username
   [username]
-  (first (sql/query db/spec ["SELECT * FROM users WHERE username = ?" username])))
+  (first (sql/query @db/spec ["SELECT * FROM users WHERE username = ?" username])))
 
 (defn get-user-roles
   [user]
-  (first (sql/query db/spec ["SELECT roles FROM users WHERE user_id = ?" (:user_id user)])))
+  (first (sql/query @db/spec ["SELECT roles FROM users WHERE user_id = ?" (:user_id user)])))
 
 ;;--------------------------------------------------------------
 ; Updates/Inserts/Deletes
@@ -50,8 +50,8 @@
   ([user] (delete-user user false))
   ([user perm]
    (if perm
-     (sql/delete! db/spec :users ["user_id = ?" (:user_id user)])
-     (sql/update! db/spec :users {:user_is_active false} ["user_id = ?" (:user_id user)]))))
+     (sql/delete! @db/spec :users ["user_id = ?" (:user_id user)])
+     (sql/update! @db/spec :users {:user_is_active false} ["user_id = ?" (:user_id user)]))))
 
 
 (defn users_model

@@ -8,16 +8,16 @@
 
 (defn get-site-admin-role
   []
-  (first (sql/query db/spec ["SELECT * FROM roles WHERE role_name = 'site-admin'"])))
+  (first (sql/query @db/spec ["SELECT * FROM roles WHERE role_name = 'site-admin'"])))
 
 (defn get-org-admin-role
    []
-  (first (sql/query db/spec ["SELECT * FROM roles WHERE role_name = 'org-admin'"])))
+  (first (sql/query @db/spec ["SELECT * FROM roles WHERE role_name = 'org-admin'"])))
 
 
 (defn get-all-roles
   []
-  (into [] (sql/query db/spec ["SELECT * FROM roles"])))
+  (into [] (sql/query @db/spec ["SELECT * FROM roles"])))
 
 
 ;;--------------------------------------------------------------------

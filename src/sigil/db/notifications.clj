@@ -11,16 +11,16 @@
 
 (defn get-notification-by-id
   [id]
-  (first (sql/query db/spec ["SELECT * FROM notifications WHERE note_id = ?" id])))
+  (first (sql/query @db/spec ["SELECT * FROM notifications WHERE note_id = ?" id])))
 
 (defn get-user-notifications
   [user]
-  (into [] (sql/query db/spec ["SELECT * FROM notifications WHERE user_id = ? AND archived = FALSE" (:user_id user)])))
+  (into [] (sql/query @db/spec ["SELECT * FROM notifications WHERE user_id = ? AND archived = FALSE" (:user_id user)])))
 
 (defn get-number-notifications-by-user
   [user]
   (if (some? user)
-    (:count (first (sql/query db/spec ["SELECT COUNT(*) FROM notifications WHERE user_id = ? AND archived = FALSE" (:user_id user)])))
+    (:count (first (sql/query @db/spec ["SELECT COUNT(*) FROM notifications WHERE user_id = ? AND archived = FALSE" (:user_id user)])))
     0))
 
 ;;-----------------------------------------------------------------
@@ -36,14 +36,14 @@
 
 (defn archive-notification
   [note]
-  (sql/update! db/spec :notifications {:archived true
+  (sql/update! @db/spec :notifications {:archived true
                                        :viewed_at (time/local-now)} ["note_id = ?" (:note_id note)]))
 
 (defn delete-notification
   ([note] (delete-notification note false))
   ([note perm]
    (if perm
-     (sql/delete! db/spec :notifications ["note_id = ?" (:note_id note)])
+     (sql/delete! @db/spec :notifications ["note_id = ?" (:note_id note)])
      (archive-notification note))))
 
 (defn notification_model

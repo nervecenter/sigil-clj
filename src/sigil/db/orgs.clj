@@ -1,6 +1,6 @@
 (ns sigil.db.orgs
   (:require [clojure.java.jdbc :as sql]
-            [sigil.db.core :as db]))
+            [sigil.db.core :refer [spec]]))
 
 
 ;;-----------------------------------------------------
@@ -8,35 +8,35 @@
 
 (defn get-org-by-id
   [id]
-  (first (sql/query db/spec ["SELECT * FROM orgs WHERE org_id = ?;" id])))
+  (first (sql/query @spec ["SELECT * FROM orgs WHERE org_id = ?;" id])))
 
 (defn get-all-orgs
   []
-  (into [] (sql/query db/spec ["SELECT * FROM orgs"])))
+  (into [] (sql/query @spec ["SELECT * FROM orgs"])))
 
 (defn get-five-orgs-by-term
   [term]
-  (sql/query db/spec ["SELECT *, levenshtein(org_name, ?) FROM orgs ORDER BY levenshtein(org_name, ?) ASC LIMIT 5;" term term]))
+  (sql/query @spec ["SELECT *, levenshtein(org_name, ?) FROM orgs ORDER BY levenshtein(org_name, ?) ASC LIMIT 5;" term term]))
 
 (defn get-org-by-name
   [name]
-  (first (sql/query db/spec ["SELECT * FROM orgs WHERE org_name = ?" name])))
+  (first (sql/query @spec ["SELECT * FROM orgs WHERE org_name = ?" name])))
 
 (defn get-org-by-url
   [url]
-  (first (sql/query db/spec ["SELECT * FROM orgs WHERE org_url = ?;" url])))
+  (first (sql/query @spec ["SELECT * FROM orgs WHERE org_url = ?;" url])))
 
 (defn get-org-by-user [user]
   (if (= (:org_id user) 0)
     nil
-    (first (sql/query db/spec ["SELECT * FROM orgs WHERE org_id = ?" (:org_id user)]))))
+    (first (sql/query @spec ["SELECT * FROM orgs WHERE org_id = ?" (:org_id user)]))))
 
 (defn get-org-by-issue
   [issue]
-  (first (sql/query db/spec ["SELECT * FROM orgs WHERE org_id = ?;" (:org_id issue)])))
+  (first (sql/query @spec ["SELECT * FROM orgs WHERE org_id = ?;" (:org_id issue)])))
 
 (defn get-twelve-random-orgs []
-  (into [] (sql/query db/spec ["SELECT * FROM orgs ORDER BY random() LIMIT 12;"])))
+  (into [] (sql/query @spec ["SELECT * FROM orgs ORDER BY random() LIMIT 12;"])))
 
 ;;-----------------------------------------------------
 ; Updates/Inserts
@@ -61,8 +61,8 @@
   ([org] (delete-org org false))
   ([org perm]
    (if perm
-     (sql/delete! db/spec :orgs ["org_id = ?" (:org_id org)])
-     (sql/update! db/spec :orgs {:org_is_active false} ["org_id = ?" (:org_id org)]))))
+     (sql/delete! @spec :orgs ["org_id = ?" (:org_id org)])
+     (sql/update! @spec :orgs {:org_is_active false} ["org_id = ?" (:org_id org)]))))
 
 (defn orgs_model
   "Defines the org model in the db"
@@ -88,6 +88,3 @@
    [:phone :text]
    [:org_is_active :boolean "NOT NULL" "DEFAULT TRUE"]
    [:org_approved :boolean "NOT NULL" "DEFAULT FALSE"]))
-
-
-

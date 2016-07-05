@@ -25,7 +25,6 @@
                           ;;[speclj "3.3.1"]                     ;; Test and behavior suite, may use later
                           ;;[fresh "1.0.1"]                      ;; Live reloads src files on save, may use later
                           [ez-image "1.0.4"]                     ;; Image conversion and saving
-                          [com.draines/postal "1.11.3"]          ;; for email
                           ])
 
 (task-options! pom {:project (get-env :project)
@@ -42,9 +41,11 @@
 ;; for access to namespace reloading stuff
 (require 'sigil.db.migrations
          'sigil.db.seed
-         'sigil.actions.email
          '[clojure.tools.namespace.repl :as repl]
-         '[sigil.core :refer [server start-server-dev stop-server restart-server-dev]])
+         '[sigil.core :refer [server start-server stop-server restart-server]]
+         '[sigil.db.core :refer [db-dev db-live]]
+         '[sigil.db.seed :refer [seed-db-dev rebase-db-dev]]
+         '[sigil.db.migrations :as migrations])
 
 ;; Define dirs for reloading
 (def dirs (get-env :directories))
@@ -53,11 +54,18 @@
 ;; Composes stopping server, reloading namespaces, and starting server
 (defn reload-server []
   (when-not (nil? @server)
-    (do (stop-server) (repl/refresh) (start-server-dev))))
+    (do (stop-server) (repl/refresh) (start-server))))
 
-(defn email-test
-  [msg]
-  (sigil.actions.email/send-email "dominicacox@gmail.com" "Test Sigil" msg))
+;; (defn rebuild-and-seed
+;;   "Drops the current db tables and then rebuilds and seeds."
+;;   []
+;;   (sigil.db.seed/drop-create-seed))
+
+;; (defn build-and-seed
+;;   []
+;;   "Builds and seeds database tables"
+;;   (sigil.db.seed/drop-create-seed))
+
 
 (defn live-create-and-seed
   []

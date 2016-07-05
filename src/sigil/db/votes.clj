@@ -9,31 +9,31 @@
 
 (defn user-voted-on-issue?
   [user issue]
-   (not-empty? (sql/query db/spec ["SELECT * FROM votes WHERE user_id = ? AND issue_id = ? AND comment_id IS NULL" (:user_id user) (:issue_id issue)] )))
+   (not-empty? (sql/query @db/spec ["SELECT * FROM votes WHERE user_id = ? AND issue_id = ? AND comment_id IS NULL" (:user_id user) (:issue_id issue)] )))
 
 (defn user-voted-on-comment?
   [user comment]
-  (empty? (into [] (sql/query db/spec ["SELECT * FROM votes WHERE user_id = ? AND comment_id = ?" (:user_id user) (:comment_id comment)] ))))
+  (empty? (into [] (sql/query @db/spec ["SELECT * FROM votes WHERE user_id = ? AND comment_id = ?" (:user_id user) (:comment_id comment)] ))))
 
 (defn get-user-votes
   [user]
-  (into [] (sql/query db/spec ["SELECT * FROM votes WHERE user_id = ?" (:user_id user)])))
+  (into [] (sql/query @db/spec ["SELECT * FROM votes WHERE user_id = ?" (:user_id user)])))
 
 (defn get-user-issue-vote
   [user issue]
-  (first (sql/query db/spec ["SELECT * FROM votes WHERE user_id = ? AND issue_id = ? AND comment_id IS NULL" (:user_id user) (:issue_id issue)])))
+  (first (sql/query @db/spec ["SELECT * FROM votes WHERE user_id = ? AND issue_id = ? AND comment_id IS NULL" (:user_id user) (:issue_id issue)])))
 
 (defn get-user-comment-vote
   [user comment]
-  (first (sql/query db/spec ["SELECT * FROM votes WHERE user_id = ? AND comment_id = ?" (:user_id user) (:comment_id comment)])))
+  (first (sql/query @db/spec ["SELECT * FROM votes WHERE user_id = ? AND comment_id = ?" (:user_id user) (:comment_id comment)])))
 
 (defn get-users-who-voted-issue
   [issue]
-  (set (into [] (sql/query db/spec ["SELECT user_id FROM votes WHERE issue_id = ?" (:issue_id issue)]))))
+  (set (into [] (sql/query @db/spec ["SELECT user_id FROM votes WHERE issue_id = ?" (:issue_id issue)]))))
 
 (defn get-votes-by-org
   [org]
-  (into [] (sql/query db/spec ["SELECT * FROM votes WHERE org_id = ?" (:org_id org)])))
+  (into [] (sql/query @db/spec ["SELECT * FROM votes WHERE org_id = ?" (:org_id org)])))
 
 ;;----------------------------------------------------------------
 ; Updates/Inserts/Deletes
