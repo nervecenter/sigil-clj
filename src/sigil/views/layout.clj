@@ -1,6 +1,8 @@
 (ns sigil.views.layout
-  (require [sigil.views.partial.navbar :as navbar]
-           [sigil.views.partial.footer :as footer])
+  (require [sigil.views.partials.navbar :refer [navbar-partial]]
+           [sigil.views.partials.footer :as footer]
+           [sigil.auth :refer [user-has-role?]]
+           [sigil.db.notifications :refer [get-number-notifications-by-user]])
   (use hiccup.core
        hiccup.page
        hiccup.form))
@@ -12,37 +14,39 @@
            :content "width=device-width, initial-scale=1.0"}]
 
    [:link {:rel "shortcut icon"
-           :href "images/favicon.png"}]
+           :href "/images/favicon.png"}]
 
-   (include-css "css/jquery-ui-1.9.2.custom.css"
-                "css/bootstrap-flatly.css"
-                "css/site.css")
+   (include-css "https://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css"
+                "https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/flatly/bootstrap.min.css"
+                "/css/site.css")
 
    [:title title]])
 
 (defn render
-  "Render the default layout with the given page title and body. The body will be placed within the main container, navbar above and footer below. The sidebar is rendered by the calling page."
-  [title body]
+  "Renders the default layout with navbar and footer. Expects the request, the current user or nil, the user's org or nil, the title of the page, and the body of the page usually rendered somewhere in the page view."
+  [req user user-org title body]
+
   (html5
-
    (head title)
-
    [:body.page
     [:div.wrap
-     (navbar/navbar)
+     (navbar-partial req user user-org)
      [:div.container.main-container
       [:div.row
        body]]]
-
     [:br.clear]
-
     footer/footer
-
-    (include-js "js/jquery-1.11.3.js"
-                "js/jquery-ui-1.9.2.custom.min.js"
-                "js/bootstrap.js"
-                "js/input-listeners.js"
-                "js/voting.js"
-                "js/subscriptions.js"
-                "js/search.js"
-                "js/notifications.js")]))
+    (include-js "https://code.jquery.com/jquery-1.11.3.min.js"
+                "https://code.jquery.com/ui/1.9.2/jquery-ui.min.js"
+                "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+                "/js/input-listeners.js"
+                "/js/voting.js"
+                "/js/subscriptions.js"
+                "/js/search.js"
+                "/js/notifications.js"
+                "/js/petition.js"
+                "/js/issue-form.js"
+                "/js/bootstrap-datepicker.js"
+                "https://www.google.com/jsapi"
+                "/js/graph.js"
+                "/js/ganalytics.js")]))

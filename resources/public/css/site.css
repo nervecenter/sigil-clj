@@ -1,9 +1,59 @@
+.constituent, .non-constituent {
+    text-align: center;
+    margin: 0 auto 0;
+}
+
+.constituent {
+    color: green;
+}
+
+.non-constituent {
+    color: red;
+}
+
+.validation {
+    text-align: center;
+}
+
+@media (min-width: 768px) {
+    #settings-anchor {
+        padding: 17px 0 10px;
+    }
+}
+
+#user-settings-cog {
+    color: #FFF;
+    font-size: 25px;
+}
+
+.disabled-option {
+    text-decoration:line-through;
+    color:maroon;
+}
+
+.petition-form {
+    margin-top: 20px;
+}
+
+.reported {
+    color: red;
+}
+
+.tiny-hr {
+    margin: 5px auto 5px;
+}
+
+.glyphicon-remove-sign:hover {
+    cursor: hand;
+    cursor: pointer;
+}
+
 .navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus {
     color: #FFF;
     background-color: transparent;
 }
 
-.panel-footer {
+.panel-info > .panel-footer {
     background-color: rgba(99, 178, 198, 0.62);
 }
 
@@ -81,6 +131,14 @@
     min-width: 100%;
 }
 
+textarea.petition-input-box {
+    height: 115px;
+    min-height: 115px;
+    max-width: 100%;
+    min-width: 100%;
+    margin-top: 10px;
+}
+
 textarea.org-feedback-input-box {
     height: 50px;
     min-height: 50px;
@@ -149,18 +207,21 @@ textarea.org-feedback-input-box {
     width: 25%;
 }
 
-.issue-panel-icon {
-    width:15px; 
+.issue-panel-icon, .tag-icon {
+    width:15px;
     height:15px;
     margin-right: 4px;
+}
+
+.issue-panel-icon {
     vertical-align: -3px;
 }
 
 .sub-org-icon {
-    width:15px; 
+    width:15px;
     height:15px;
-	vertical-align: -1px;
-	margin-right: 4px;
+    vertical-align: -1px;
+    margin-right: 4px;
 }
 
 .votebutton-box {
@@ -172,12 +233,61 @@ textarea.org-feedback-input-box {
 .splash {
     padding: 80px 0 40px;
     background-color: rgba(70, 72, 82, 0.7);
-	  background-image: url("/images/splash.jpg");
+    background-image: url("/images/splash.jpg");
     background-size: cover;
     background-attachment: fixed;
     color: #FFF;
     text-align: center;
     height: 300px;
+}
+
+.features-splash {
+    padding: 80px 0 40px;
+    background-color: rgba(70, 72, 82, 0.7);
+    background-size: cover;
+    background-attachment: fixed;
+    color: #FFF;
+    text-align: center;
+    /*box-shadow: 0px -2px 15px 0px #000;*/
+}
+
+.features-splash .container {
+    max-width: 1500px;
+}
+
+.features-splash-1 {
+    /*background-color: rgba(33, 33, 82, 0.7);*/
+    background-image: url("/images/fsplash1.jpg");
+    height: 100vh;
+    padding-top: 38vh;
+}
+
+.features-splash-2 {
+    /*background-color: rgba(78, 66, 25, 0.7);*/
+    background-image: url("/images/fsplash2.jpg");
+    height: 100vh;
+    padding-top: 35vh;
+}
+
+.features-splash-3 {
+    /*background-color: rgba(10, 88, 50, 0.7);*/
+    background-image: url("/images/fsplash3.jpg");
+    height: 100vh;
+    padding-top: 35vh;
+}
+
+.features-splash-4 {
+    /*background-color: rgba(78, 70, 76, 0.7);*/
+    background-image: url("/images/fsplash4.jpg");
+    height: 100vh;
+    padding-top: 35vh;
+}
+
+.features-splash-5 {
+    /*background-color: rgba(15, 20, 25, 0.7);*/
+    background-image: url("/images/fsplash5.jpg");
+    height: 100vh;
+    padding-top: 35vh;
 }
 
 .splash-landing {
@@ -212,23 +322,23 @@ textarea.org-feedback-input-box {
 }
 
 /*.splash {
-	height: 440px;
-	position: relative;
-	margin-top: -5em;
+    height: 440px;
+    position: relative;
+    margin-top: -5em;
 }
 
 .splash-back-darken {
-	width: 100%;
-	height: 100%;
-	background: rgba(70, 72, 82, 0.7);
-	position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(70, 72, 82, 0.7);
+    position: absolute;
 }
 
 .splash-back {
     background: url("/Content/Images/splash.jpg") no-repeat center center fixed;
     background-size: cover;
-	width: 100%;
-	height: 100%;
+    width: 100%;
+    height: 100%;
 }
 .splash-back-2 {
     background: url("/Content/Images/splash2.jpg") no-repeat center center fixed;
@@ -272,7 +382,7 @@ textarea.org-feedback-input-box {
 }
 
 .header-user-icon {
-	height:40px;
+    height:40px;
     margin-top:10px;
 }
 
@@ -332,8 +442,8 @@ textarea.org-feedback-input-box {
 }
 
 .main-container {
-	max-width: 1000px;
-	margin-top: 80px;
+    max-width: 1000px;
+    margin-top: 80px;
 }
 
 .wrap {
@@ -355,38 +465,38 @@ textarea.org-feedback-input-box {
 }
 
 .footer-list {
-	list-style: outside none none;
-	line-height: 1.5em;
+    list-style: outside none none;
+    line-height: 1.5em;
 }
 
 .footer-link {
-	font-size: 0.9em;
-	text-decoration: none;
-	color: #e6e6e6;
+    font-size: 0.9em;
+    text-decoration: none;
+    color: #e6e6e6;
 }
 
 .footer-link:hover {
-	text-decoration: none;
-	color: #e6e6e6;
+    text-decoration: none;
+    color: #e6e6e6;
 }
 
 .landing-container {
     max-width: 1200px;
-    margin-top: 30px;
+    margin-top: 15px;
     margin-bottom: 20px;
     min-height: 70vh;
 }
 
 .media-object {
-	width: 64px;
+    width: 64px;
 }
 
 .org-banner-small {
-	margin-bottom: 20px;
+    margin-bottom: 20px;
 }
 
 .sidebar-button {
-	margin-bottom: 20px;
+    margin-bottom: 20px;
 }
 
 .issue-add-comment {
@@ -396,41 +506,41 @@ textarea.org-feedback-input-box {
 /* Old CSS to keep */
 
 html, body {
-	height: 100%;
-	margin: 0;
-	padding: 0;
-	font-family: 'Tahoma', Geneva, Verdana, sans-serif;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Tahoma', Geneva, Verdana, sans-serif;
 }
 
 a {
-	text-decoration: none;
-	color: #267C89;
+    text-decoration: none;
+    color: #267C89;
 }
 
 a:hover {
-	text-decoration: none;
-	color: #267C89;
+    text-decoration: none;
+    color: #267C89;
 }
 
 .page {
-	background-color: #E5E5E5;
+    background-color: #E5E5E5;
 }
 
 .issue-text {
-	margin: 0px 25px 20px 25px;
+    margin: 0px 25px 20px 25px;
 }
 
 /* Bootstrap Navbar Recolor */
 
 .navbar-custom {
-  background-color: #494949;
-  border-color: #383838;
-  /*background-image: -webkit-gradient(linear, left 0%, left 100%, from(#626262), to(#494949));
-  background-image: -webkit-linear-gradient(top, #626262, 0%, #494949, 100%);
-  background-image: -moz-linear-gradient(top, #626262 0%, #494949 100%);
-  background-image: linear-gradient(to bottom, #626262 0%, #494949 100%);*/
-  background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff626262', endColorstr='#ff494949', GradientType=0);
+    background-color: #494949;
+    border-color: #383838;
+    /*background-image: -webkit-gradient(linear, left 0%, left 100%, from(#626262), to(#494949));
+    background-image: -webkit-linear-gradient(top, #626262, 0%, #494949, 100%);
+    background-image: -moz-linear-gradient(top, #626262 0%, #494949 100%);
+    background-image: linear-gradient(to bottom, #626262 0%, #494949 100%);*/
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff626262', endColorstr='#ff494949', GradientType=0);
 }
 .navbar-custom .navbar-brand {
   color: #ffffff;
