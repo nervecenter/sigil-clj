@@ -2,8 +2,8 @@
 ## sigil-clj
 
 Sigil was a customer recommendation and interaction forum for organizations.
-Users could vote on suggestions for implementation by businesses, organizations,
-or governments.
+Users could vote on suggestions and feature requests for implementation by
+businesses, organizations, or governments.
 
 Two versions were implemented: First, a C# ASP.NET version, which quickly manifested
 typical OOP shared-state and architectural issues which would make it difficult to
